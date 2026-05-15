@@ -1,9 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
@@ -18,6 +22,7 @@ import {
   CheckCircle,
   Users,
   Building2,
+  Send,
 } from "lucide-react";
 
 const features = [
@@ -89,6 +94,16 @@ const stats = [
 ];
 
 export default function LandingPage() {
+  const [devisOpen, setDevisOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const [devisSent, setDevisSent] = useState(false);
+
+  const openDevis = (planName: string) => {
+    setSelectedPlan(planName);
+    setDevisSent(false);
+    setDevisOpen(true);
+  };
+
   return (
     <div className="min-h-screen overflow-hidden">
       {/* Header */}
@@ -115,7 +130,6 @@ export default function LandingPage() {
             </a>
           </nav>
           <div className="flex items-center gap-3">
-            <ThemeToggle />
             <Link href="/login">
               <Button variant="ghost" size="sm">Se connecter</Button>
             </Link>
@@ -125,6 +139,7 @@ export default function LandingPage() {
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </Link>
+            <ThemeToggle />
           </div>
         </div>
       </header>
@@ -218,9 +233,9 @@ export default function LandingPage() {
           <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map((feature) => (
               <StaggerItem key={feature.title}>
-                <GlowCard>
+                <GlowCard className="h-full">
                   <Card className="h-full transition-all duration-300 hover:border-rht-violet/20">
-                    <CardContent className="p-6">
+                    <CardContent className="flex h-full flex-col p-6">
                       <motion.div
                         whileHover={{ scale: 1.05, rotate: 3 }}
                         transition={{ type: "spring", stiffness: 400 }}
@@ -229,7 +244,7 @@ export default function LandingPage() {
                         <feature.icon className="h-6 w-6 text-rht-violet-light" />
                       </motion.div>
                       <h3 className="mb-2 font-semibold">{feature.title}</h3>
-                      <p className="text-sm leading-relaxed text-muted-foreground">
+                      <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
                         {feature.description}
                       </p>
                     </CardContent>
@@ -259,17 +274,17 @@ export default function LandingPage() {
             {plans.map((plan) => (
               <StaggerItem key={plan.name}>
                 <GlowCard className="h-full">
-                  <Card className={`relative h-full transition-all duration-300 ${
+                  <Card className={`relative h-full overflow-visible transition-all duration-300 ${
                     plan.popular ? "border-rht-violet/30 glow-violet-sm" : ""
                   }`}>
                     {plan.popular && (
-                      <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white animate-pulse-glow">
+                      <div className="absolute -top-3.5 left-1/2 z-10 -translate-x-1/2">
+                        <Badge className="bg-gradient-to-r from-rht-violet to-rht-violet-light px-3 py-1 text-white animate-pulse-glow">
                           Populaire
                         </Badge>
                       </div>
                     )}
-                    <CardContent className="p-6">
+                    <CardContent className={`p-6 ${plan.popular ? "pt-8" : ""}`}>
                       <h3 className="text-lg font-bold">{plan.name}</h3>
                       <p className="text-sm text-muted-foreground">{plan.description}</p>
                       <p className="mt-2 text-xs font-medium text-rht-violet-light">{plan.employees}</p>
@@ -283,6 +298,7 @@ export default function LandingPage() {
                       </ul>
                       <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                         <Button
+                          onClick={() => openDevis(plan.name)}
                           className={`mt-6 w-full rounded-full ${
                             plan.popular
                               ? "bg-gradient-to-r from-rht-orange to-rht-orange-light text-white glow-orange-sm hover:opacity-90"
@@ -336,14 +352,14 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t bg-sidebar py-10 text-sidebar-foreground">
+      <footer className="border-t bg-secondary/50 py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row">
           <div className="flex items-center gap-2">
             <Shield className="h-5 w-5 text-rht-violet-light" />
             <span className="font-bold">CyberSense</span>
-            <span className="text-xs opacity-30">by Rostel High-Tech</span>
+            <span className="text-xs text-muted-foreground">by Rostel High-Tech</span>
           </div>
-          <p className="text-xs opacity-30">
+          <p className="text-xs text-muted-foreground">
             &copy; 2026 Rostel High-Tech. Tous droits réservés. Dakar, Sénégal.
           </p>
           <a
@@ -356,6 +372,53 @@ export default function LandingPage() {
           </a>
         </div>
       </footer>
+
+      {/* Devis Dialog */}
+      <Dialog open={devisOpen} onOpenChange={setDevisOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Demander un devis — {selectedPlan}</DialogTitle>
+            <DialogDescription>
+              Remplissez le formulaire et notre équipe vous contactera sous 24h.
+            </DialogDescription>
+          </DialogHeader>
+          {devisSent ? (
+            <div className="py-8 text-center">
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300 }}>
+                <CheckCircle className="mx-auto mb-4 h-12 w-12 text-cyber-green" />
+              </motion.div>
+              <p className="font-semibold">Demande envoyée !</p>
+              <p className="mt-1 text-sm text-muted-foreground">Nous vous répondrons très rapidement.</p>
+            </div>
+          ) : (
+            <form
+              onSubmit={(e) => { e.preventDefault(); setDevisSent(true); }}
+              className="space-y-4"
+            >
+              <div className="space-y-2">
+                <Label htmlFor="devis-name">Nom complet</Label>
+                <Input id="devis-name" placeholder="Fatou Sow" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="devis-email">Email professionnel</Label>
+                <Input id="devis-email" type="email" placeholder="fatou@entreprise.com" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="devis-org">Organisation</Label>
+                <Input id="devis-org" placeholder="Nom de votre entreprise" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="devis-employees">Nombre d&apos;employés</Label>
+                <Input id="devis-employees" type="number" placeholder="50" required />
+              </div>
+              <Button type="submit" className="w-full bg-gradient-to-r from-rht-orange to-rht-orange-light text-white hover:opacity-90">
+                <Send className="mr-2 h-4 w-4" />
+                Envoyer la demande
+              </Button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
