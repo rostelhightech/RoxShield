@@ -1,52 +1,172 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Shield, Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { FaApple, FaGoogle, FaXTwitter } from "react-icons/fa6";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { motion } from "framer-motion";
 
-function CyberGrid() {
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(156,30,153,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(156,30,153,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+interface Particle {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  opacity: number;
+}
 
-      <motion.div
-        animate={{ opacity: [0.15, 0.3, 0.15], scale: [1, 1.1, 1] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-rht-violet/20 blur-[120px]"
-      />
-      <motion.div
-        animate={{ opacity: [0.1, 0.25, 0.1], scale: [1, 1.15, 1] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-rht-orange/15 blur-[120px]"
-      />
-      <motion.div
-        animate={{ opacity: [0.05, 0.15, 0.05] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-        className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rht-violet-light/10 blur-[100px]"
-      />
+function ParticleNetwork() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const particlesRef = useRef<Particle[]>([]);
+  const animRef = useRef<number>(0);
 
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={i}
-          animate={{ y: [0, -30, 0], opacity: [0, 0.6, 0] }}
-          transition={{ duration: 4 + i * 0.8, repeat: Infinity, delay: i * 1.2, ease: "easeInOut" }}
-          className="absolute h-1 w-1 rounded-full bg-rht-violet-light"
-          style={{ left: `${15 + i * 15}%`, top: `${20 + (i % 3) * 25}%` }}
-        />
-      ))}
+  const initParticles = useCallback((w: number, h: number) => {
+    const count = Math.floor((w * h) / 12000);
+    const particles: Particle[] = [];
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.5 + 0.2,
+      });
+    }
+    particlesRef.current = particles;
+  }, []);
 
-      <motion.div
-        animate={{ top: ["-5%", "105%"] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-rht-violet-light/20 to-transparent"
-      />
-    </div>
-  );
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      if (particlesRef.current.length === 0) {
+        initParticles(canvas.width, canvas.height);
+      }
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const onMouse = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
+    const onLeave = () => {
+      mouseRef.current = { x: -1000, y: -1000 };
+    };
+    window.addEventListener("mousemove", onMouse);
+    window.addEventListener("mouseleave", onLeave);
+
+    const connectionDist = 150;
+    const mouseDist = 200;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const particles = particlesRef.current;
+      const mouse = mouseRef.current;
+
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+        const dxM = mouse.x - p.x;
+        const dyM = mouse.y - p.y;
+        const distM = Math.sqrt(dxM * dxM + dyM * dyM);
+
+        if (distM < mouseDist) {
+          const force = (mouseDist - distM) / mouseDist;
+          p.vx += (dxM / distM) * force * 0.02;
+          p.vy += (dyM / distM) * force * 0.02;
+        }
+
+        const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+        if (speed > 1.5) {
+          p.vx *= 0.98;
+          p.vy *= 0.98;
+        }
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < connectionDist) {
+            const alpha = (1 - dist / connectionDist) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(156, 30, 153, ${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const dxM = mouse.x - particles[i].x;
+        const dyM = mouse.y - particles[i].y;
+        const distM = Math.sqrt(dxM * dxM + dyM * dyM);
+
+        if (distM < mouseDist) {
+          const alpha = (1 - distM / mouseDist) * 0.4;
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y);
+          ctx.lineTo(particles[i].x, particles[i].y);
+          ctx.strokeStyle = `rgba(196, 40, 192, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+
+      for (const p of particles) {
+        const dxM = mouse.x - p.x;
+        const dyM = mouse.y - p.y;
+        const distM = Math.sqrt(dxM * dxM + dyM * dyM);
+        const glow = distM < mouseDist ? 1 + (1 - distM / mouseDist) * 2 : 1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius * glow, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(196, 40, 192, ${p.opacity * glow * 0.8})`;
+        ctx.fill();
+      }
+
+      // Mouse cursor glow
+      if (mouse.x > 0 && mouse.y > 0) {
+        const gradient = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 80);
+        gradient.addColorStop(0, "rgba(156, 30, 153, 0.08)");
+        gradient.addColorStop(1, "rgba(156, 30, 153, 0)");
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 80, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+      }
+
+      animRef.current = requestAnimationFrame(draw);
+    };
+
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouse);
+      window.removeEventListener("mouseleave", onLeave);
+    };
+  }, [initParticles]);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
 }
 
 function HexagonIcon() {
@@ -93,12 +213,31 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#0a0810] p-4">
-      <CyberGrid />
-
-      <div className="absolute right-4 top-4 z-20">
-        <ThemeToggle />
+      {/* Glowing orbs */}
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <motion.div
+          animate={{ opacity: [0.15, 0.3, 0.15], scale: [1, 1.1, 1] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-rht-violet/20 blur-[120px]"
+        />
+        <motion.div
+          animate={{ opacity: [0.1, 0.25, 0.1], scale: [1, 1.15, 1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute -bottom-32 -right-32 h-96 w-96 rounded-full bg-rht-orange/15 blur-[120px]"
+        />
       </div>
 
+      {/* Interactive particle network */}
+      <ParticleNetwork />
+
+      {/* Scan line */}
+      <motion.div
+        animate={{ top: ["-5%", "105%"] }}
+        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        className="pointer-events-none absolute left-0 right-0 z-[1] h-px bg-gradient-to-r from-transparent via-rht-violet-light/20 to-transparent"
+      />
+
+      {/* Back to home */}
       <motion.a
         href="/"
         initial={{ opacity: 0 }}
@@ -110,6 +249,7 @@ export default function LoginPage() {
         <span>CyberSense</span>
       </motion.a>
 
+      {/* Login card */}
       <motion.div
         initial={{ opacity: 0, y: 30, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -200,24 +340,9 @@ export default function LoginPage() {
 
           <div className="flex justify-center gap-3">
             {[
-              { icon: (
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M16.365 1.43c0 1.14-.493 2.27-1.177 3.08-.744.9-1.99 1.57-2.987 1.57-.12 0-.23-.02-.3-.03-.01-.06-.04-.22-.04-.39 0-1.15.572-2.27 1.206-2.98.804-.94 2.142-1.64 3.248-1.68.03.13.05.28.05.43zm2.033 17.6c-.02.03-.7 1.22-2.312 1.22-1.222 0-1.634-.72-3.052-.72-1.456 0-1.99.7-3.122.74-1.342.05-2.362-1.32-3.382-2.63-2.093-2.7-2.423-5.87-1.07-7.55.958-1.19 2.478-1.93 3.868-1.93 1.438 0 2.34.72 3.528.72 1.152 0 1.856-.72 3.518-.72 1.222 0 2.582.66 3.538 1.8-3.108 1.7-2.602 6.13.486 7.32z" />
-                </svg>
-              ), label: "Apple" },
-              { icon: (
-                <svg className="h-4 w-4" viewBox="0 0 24 24">
-                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4" />
-                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" />
-                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-                </svg>
-              ), label: "Google" },
-              { icon: (
-                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                </svg>
-              ), label: "X" },
+              { icon: <FaApple className="h-4 w-4" />, label: "Apple" },
+              { icon: <FaGoogle className="h-4 w-4" />, label: "Google" },
+              { icon: <FaXTwitter className="h-4 w-4" />, label: "X" },
             ].map((provider) => (
               <motion.button
                 key={provider.label}
@@ -244,7 +369,7 @@ export default function LoginPage() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1 }}
-        className="absolute bottom-4 text-[10px] text-white/15"
+        className="absolute bottom-4 z-10 text-[10px] text-white/15"
       >
         Rostel High-Tech — www.rostelhightech.com
       </motion.p>
