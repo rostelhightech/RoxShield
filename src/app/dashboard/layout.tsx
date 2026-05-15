@@ -1,14 +1,32 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 import { Sidebar } from "@/components/layout/sidebar";
+import { Onboarding } from "@/components/onboarding";
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const key = "cybersense_onboarding_admin-client";
+    if (!sessionStorage.getItem(key)) {
+      setShowOnboarding(true);
+      sessionStorage.setItem(key, "done");
+    }
+  }, []);
+
   return (
     <div className="flex min-h-screen">
+      <AnimatePresence>
+        {showOnboarding && (
+          <Onboarding role="admin-client" onComplete={() => setShowOnboarding(false)} />
+        )}
+      </AnimatePresence>
       <Sidebar />
       <main className="ml-[260px] flex-1 transition-all duration-300">
         {children}

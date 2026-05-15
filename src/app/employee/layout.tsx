@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
+import { Onboarding } from "@/components/onboarding";
 import {
   LayoutDashboard,
   GraduationCap,
@@ -27,9 +29,23 @@ const navItems = [
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  useEffect(() => {
+    const key = "cybersense_onboarding_employee";
+    if (!sessionStorage.getItem(key)) {
+      setShowOnboarding(true);
+      sessionStorage.setItem(key, "done");
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen">
+      <AnimatePresence>
+        {showOnboarding && (
+          <Onboarding role="employee" onComplete={() => setShowOnboarding(false)} />
+        )}
+      </AnimatePresence>
       <aside
         className={`fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300 ${
           collapsed ? "w-[70px]" : "w-[260px]"
