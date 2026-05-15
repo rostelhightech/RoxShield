@@ -8,6 +8,8 @@ import {
   GraduationCap,
   Crosshair,
   UserCircle,
+  FileBarChart,
+  Settings,
   LogOut,
   Shield,
   ChevronLeft,
@@ -24,7 +26,9 @@ const navItems = [
   { label: "Employés", href: "/dashboard/employees", icon: Users },
   { label: "Formations", href: "/dashboard/training", icon: GraduationCap },
   { label: "Simulations", href: "/dashboard/simulations", icon: Crosshair },
+  { label: "Rapports", href: "/dashboard/reports", icon: FileBarChart },
   { label: "Mon espace", href: "/dashboard/user-dashboard", icon: UserCircle },
+  { label: "Paramètres", href: "/dashboard/settings", icon: Settings },
 ];
 
 export function Sidebar() {
