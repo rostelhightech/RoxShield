@@ -130,16 +130,18 @@ export function Sidebar() {
 
         <div className="p-3">
           <div className={`flex items-center gap-3 rounded-xl px-3 py-2.5 ${collapsed ? "justify-center" : ""}`}>
-            <Avatar className="h-8 w-8 shrink-0">
-              <AvatarFallback className="bg-gradient-to-br from-rht-violet to-rht-violet-light text-[11px] text-white">
-                {currentUser.name.split(" ").map((n) => n[0]).join("")}
-              </AvatarFallback>
-            </Avatar>
+            <Link href="/dashboard/profile">
+              <Avatar className="h-8 w-8 shrink-0 cursor-pointer transition-opacity hover:opacity-80">
+                <AvatarFallback className="bg-gradient-to-br from-rht-violet to-rht-violet-light text-[11px] text-white">
+                  {currentUser.name.split(" ").map((n) => n[0]).join("")}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
             {!collapsed && (
-              <div className="flex-1 overflow-hidden">
+              <Link href="/dashboard/profile" className="flex-1 overflow-hidden transition-opacity hover:opacity-80">
                 <p className="truncate text-sm font-medium">{currentUser.name}</p>
                 <p className="truncate text-[11px] opacity-40">{currentUser.email}</p>
-              </div>
+              </Link>
             )}
             {!collapsed && (
               <Link href="/login">
