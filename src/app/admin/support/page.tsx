@@ -45,17 +45,17 @@ export default function SupportPage() {
 
         <StaggerContainer className="grid gap-4 sm:grid-cols-3">
           {[
-            { icon: Clock, label: "Tickets ouverts", value: open, color: "rht-violet" },
-            { icon: AlertTriangle, label: "En cours", value: inProgress, color: "rht-orange" },
-            { icon: CheckCircle, label: "Résolus", value: resolved, color: "cyber-green" },
+            { icon: Clock, label: "Tickets ouverts", value: open, bg: "bg-rht-violet/10", text: "text-rht-violet" },
+            { icon: AlertTriangle, label: "En cours", value: inProgress, bg: "bg-rht-orange/10", text: "text-rht-orange" },
+            { icon: CheckCircle, label: "Résolus", value: resolved, bg: "bg-cyber-green/10", text: "text-cyber-green" },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <GlowCard>
                 <Card className="transition-all duration-300 hover:border-rht-orange/20">
                   <CardContent className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-${s.color}/10`}>
-                        <s.icon className={`h-5 w-5 text-${s.color}`} />
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>
+                        <s.icon className={`h-5 w-5 ${s.text}`} />
                       </div>
                       <div>
                         <p className="text-2xl font-bold">{s.value}</p>
