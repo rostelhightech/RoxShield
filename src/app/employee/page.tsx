@@ -16,11 +16,39 @@ import {
   Clock,
   Lock,
   ArrowRight,
+  AlertTriangle,
+  GraduationCap,
+  Flame,
 } from "lucide-react";
 import { currentUser, trainingModules, badges } from "@/lib/mock-data";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
 import Link from "next/link";
+
+const progressHistory = [
+  { month: "Jan", score: 72 },
+  { month: "Fév", score: 65 },
+  { month: "Mar", score: 58 },
+  { month: "Avr", score: 50 },
+  { month: "Mai", score: 45 },
+];
+
+const activityLog = [
+  { text: "Module « Sécurité des mots de passe » complété", date: "Aujourd'hui", icon: GraduationCap, color: "text-cyber-green", bg: "bg-cyber-green/10" },
+  { text: "Email de phishing signalé correctement", date: "Hier", icon: CheckCircle, color: "text-cyber-green", bg: "bg-cyber-green/10" },
+  { text: "Clic sur simulation « Virement urgent »", date: "Il y a 3j", icon: AlertTriangle, color: "text-cyber-red", bg: "bg-cyber-red/10" },
+  { text: "Badge « Vigilant » obtenu", date: "Il y a 5j", icon: Award, color: "text-rht-orange", bg: "bg-rht-orange/10" },
+  { text: "Module « Phishing 101 » complété", date: "Il y a 1sem", icon: GraduationCap, color: "text-cyber-green", bg: "bg-cyber-green/10" },
+];
 
 const userProgress = {
   riskScore: 45,
@@ -213,6 +241,82 @@ export default function EmployeeDashboardPage() {
               </Card>
             </FadeIn>
           </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <FadeIn delay={0.25}>
+            <Card>
+              <CardHeader className="pb-2">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-sm font-semibold">Ma progression</CardTitle>
+                  <div className="flex items-center gap-1 text-xs text-cyber-green">
+                    <Flame className="h-3 w-3" />
+                    {userProgress.streak} jours d&apos;affilée
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[220px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={progressHistory}>
+                      <defs>
+                        <linearGradient id="empGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#25d366" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#25d366" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+                      <XAxis dataKey="month" tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
+                      <YAxis domain={[0, 100]} tick={{ fill: "var(--muted-foreground)", fontSize: 11 }} />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: "var(--card)",
+                          border: "1px solid var(--border)",
+                          borderRadius: "12px",
+                          fontSize: "12px",
+                          color: "var(--foreground)",
+                        }}
+                        formatter={(value) => [`${value}%`, "Score de risque"]}
+                      />
+                      <Area type="monotone" dataKey="score" stroke="#25d366" fill="url(#empGrad)" strokeWidth={2} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
+                <p className="mt-2 text-center text-xs text-muted-foreground">
+                  Votre score de risque baisse — continuez comme ça !
+                </p>
+              </CardContent>
+            </Card>
+          </FadeIn>
+
+          <FadeIn delay={0.3}>
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-semibold">Activité récente</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {activityLog.map((activity, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.06 }}
+                      className="flex items-start gap-3"
+                    >
+                      <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${activity.bg}`}>
+                        <activity.icon className={`h-3.5 w-3.5 ${activity.color}`} />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm">{activity.text}</p>
+                        <p className="text-[10px] text-muted-foreground">{activity.date}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </FadeIn>
         </div>
       </div>
     </div>

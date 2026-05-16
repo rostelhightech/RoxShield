@@ -93,6 +93,41 @@ export default function ReportsPage() {
     }, 1000);
   };
 
+  const handleCSV = () => {
+    const headers = ["Nom", "Email", "Département", "Rôle", "Score de risque", "Formations complétées", "Total formations", "Statut"];
+    const rows = employees.map((e) => [
+      e.name,
+      e.email,
+      e.department,
+      e.role,
+      e.riskScore,
+      e.trainingsCompleted,
+      e.totalTrainings,
+      e.status,
+    ]);
+    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cybersense-rapport-employes-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleDeptCSV = () => {
+    const headers = ["Département", "Employés", "Score de risque", "Complétion (%)"];
+    const rows = deptCompletion.map((d) => [d.name, departmentStats.find((ds) => ds.name === d.name)?.employees ?? 0, d.risk, d.completion]);
+    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
+    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cybersense-rapport-departements-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <Header title="Rapports & Analytics" />
@@ -102,21 +137,27 @@ export default function ReportsPage() {
             <p className="text-sm text-muted-foreground">
               Suivez l&apos;évolution de la posture de sécurité de votre organisation
             </p>
-            <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-              <Button
-                className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90"
-                onClick={handleExport}
-                disabled={exporting}
-              >
-                {exporting ? (
-                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Génération...</>
-                ) : exported ? (
-                  <><CheckCircle className="mr-2 h-4 w-4" />Exporté !</>
-                ) : (
-                  <><Download className="mr-2 h-4 w-4" />Exporter PDF</>
-                )}
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={handleCSV}>
+                <Download className="mr-2 h-4 w-4" />
+                Export CSV
               </Button>
-            </motion.div>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                <Button
+                  className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90"
+                  onClick={handleExport}
+                  disabled={exporting}
+                >
+                  {exporting ? (
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Génération...</>
+                  ) : exported ? (
+                    <><CheckCircle className="mr-2 h-4 w-4" />Exporté !</>
+                  ) : (
+                    <><Download className="mr-2 h-4 w-4" />Exporter PDF</>
+                  )}
+                </Button>
+              </motion.div>
+            </div>
           </div>
         </FadeIn>
 
@@ -347,6 +388,12 @@ export default function ReportsPage() {
 
           <TabsContent value="departments" className="space-y-6">
             <FadeIn>
+              <div className="flex justify-end">
+                <Button variant="outline" size="sm" onClick={handleDeptCSV}>
+                  <Download className="mr-2 h-3 w-3" />
+                  CSV départements
+                </Button>
+              </div>
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-semibold">Risque vs Complétion par département</CardTitle>
