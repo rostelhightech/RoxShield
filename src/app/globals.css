@@ -190,3 +190,22 @@
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+@media print {
+  aside, nav, .fixed, button, [data-slot="dialog-overlay"], [data-slot="dialog-content"] {
+    display: none !important;
+  }
+  main {
+    margin-left: 0 !important;
+    padding-top: 0 !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -85,17 +85,17 @@ export default function EmployeeResultsPage() {
       <div className="space-y-6 p-6">
         <StaggerContainer className="grid gap-4 sm:grid-cols-3">
           {[
-            { icon: Shield, label: "Score de risque actuel", value: "45%", sub: "-27 pts depuis janvier", color: "rht-orange" },
-            { icon: Target, label: "Simulations détectées", value: `${detected}/${simulations.length}`, sub: `${Math.round((detected / simulations.length) * 100)}% de réussite`, color: "cyber-green" },
-            { icon: BarChart3, label: "Score quiz moyen", value: `${avgQuiz}%`, sub: "Sur 6 modules", color: "rht-violet-light" },
+            { icon: Shield, label: "Score de risque actuel", value: "45%", sub: "-27 pts depuis janvier", bg: "bg-rht-orange/10", text: "text-rht-orange" },
+            { icon: Target, label: "Simulations détectées", value: `${detected}/${simulations.length}`, sub: `${Math.round((detected / simulations.length) * 100)}% de réussite`, bg: "bg-cyber-green/10", text: "text-cyber-green" },
+            { icon: BarChart3, label: "Score quiz moyen", value: `${avgQuiz}%`, sub: "Sur 6 modules", bg: "bg-rht-violet-light/10", text: "text-rht-violet-light" },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <GlowCard>
                 <Card className="transition-all duration-300 hover:border-cyber-green/20">
                   <CardContent className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-${s.color}/10`}>
-                        <s.icon className={`h-5 w-5 text-${s.color}`} />
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>
+                        <s.icon className={`h-5 w-5 ${s.text}`} />
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">{s.label}</p>

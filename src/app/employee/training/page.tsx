@@ -15,6 +15,7 @@ import {
 import { trainingModules } from "@/lib/mock-data";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const userCompleted = 6;
 
@@ -95,15 +96,19 @@ export default function EmployeeTrainingPage() {
 
                         <div className="flex items-center gap-3 sm:shrink-0">
                           {completed ? (
-                            <div className="flex items-center gap-2 text-cyber-green">
-                              <CheckCircle className="h-5 w-5" />
-                              <span className="text-sm font-medium">Terminé</span>
-                            </div>
+                            <Link href={`/dashboard/training/${module.id}`}>
+                              <div className="flex items-center gap-2 text-cyber-green">
+                                <CheckCircle className="h-5 w-5" />
+                                <span className="text-sm font-medium">Revoir</span>
+                              </div>
+                            </Link>
                           ) : current ? (
-                            <Button className="bg-gradient-to-r from-cyber-green/90 to-cyber-green text-white hover:opacity-90">
-                              <PlayCircle className="mr-2 h-4 w-4" />
-                              Continuer
-                            </Button>
+                            <Link href={`/dashboard/training/${module.id}`}>
+                              <Button className="bg-gradient-to-r from-cyber-green/90 to-cyber-green text-white hover:opacity-90">
+                                <PlayCircle className="mr-2 h-4 w-4" />
+                                Continuer
+                              </Button>
+                            </Link>
                           ) : (
                             <div className="flex items-center gap-2 text-muted-foreground/40">
                               <Lock className="h-4 w-4" />

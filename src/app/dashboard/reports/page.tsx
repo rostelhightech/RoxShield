@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,8 @@ import {
   Shield,
   Users,
   AlertTriangle,
+  CheckCircle,
+  Loader2,
 } from "lucide-react";
 import {
   AreaChart,
@@ -69,6 +72,9 @@ const reports = [
 ];
 
 export default function ReportsPage() {
+  const [exporting, setExporting] = useState(false);
+  const [exported, setExported] = useState(false);
+
   const avgRisk = Math.round(employees.reduce((a, e) => a + e.riskScore, 0) / employees.length);
   const avgCompletion = Math.round(
     employees.reduce((a, e) => a + (e.trainingsCompleted / e.totalTrainings) * 100, 0) / employees.length
@@ -76,6 +82,16 @@ export default function ReportsPage() {
   const totalSimClicks = simulationResults.reduce((a, s) => a + s.clicked, 0);
   const totalSimTargets = simulationResults.reduce((a, s) => a + s.totalTargets, 0);
   const clickRate = Math.round((totalSimClicks / totalSimTargets) * 100);
+
+  const handleExport = () => {
+    setExporting(true);
+    setTimeout(() => {
+      setExporting(false);
+      setExported(true);
+      window.print();
+      setTimeout(() => setExported(false), 2000);
+    }, 1000);
+  };
 
   return (
     <div>
@@ -87,9 +103,18 @@ export default function ReportsPage() {
               Suivez l&apos;évolution de la posture de sécurité de votre organisation
             </p>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-              <Button className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90">
-                <Download className="mr-2 h-4 w-4" />
-                Exporter PDF
+              <Button
+                className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90"
+                onClick={handleExport}
+                disabled={exporting}
+              >
+                {exporting ? (
+                  <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Génération...</>
+                ) : exported ? (
+                  <><CheckCircle className="mr-2 h-4 w-4" />Exporté !</>
+                ) : (
+                  <><Download className="mr-2 h-4 w-4" />Exporter PDF</>
+                )}
               </Button>
             </motion.div>
           </div>
@@ -103,7 +128,8 @@ export default function ReportsPage() {
               value: avgRisk + "%",
               trend: "-26% depuis Jan",
               trendDown: true,
-              color: "rht-orange",
+              bg: "bg-rht-orange/10",
+              text: "text-rht-orange",
             },
             {
               icon: Users,
@@ -111,7 +137,8 @@ export default function ReportsPage() {
               value: avgCompletion + "%",
               trend: "+35% depuis Jan",
               trendDown: false,
-              color: "cyber-green",
+              bg: "bg-cyber-green/10",
+              text: "text-cyber-green",
             },
             {
               icon: AlertTriangle,
@@ -119,7 +146,8 @@ export default function ReportsPage() {
               value: clickRate + "%",
               trend: "-62% depuis Jan",
               trendDown: true,
-              color: "cyber-red",
+              bg: "bg-cyber-red/10",
+              text: "text-cyber-red",
             },
             {
               icon: FileBarChart,
@@ -127,7 +155,8 @@ export default function ReportsPage() {
               value: reports.length.toString(),
               trend: "Ce mois-ci : 2",
               trendDown: false,
-              color: "rht-violet",
+              bg: "bg-rht-violet/10",
+              text: "text-rht-violet",
             },
           ].map((s) => (
             <StaggerItem key={s.label}>
@@ -135,8 +164,8 @@ export default function ReportsPage() {
                 <Card className="transition-all duration-300 hover:border-rht-violet/20">
                   <CardContent className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-${s.color}/10`}>
-                        <s.icon className={`h-5 w-5 text-${s.color}`} />
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>
+                        <s.icon className={`h-5 w-5 ${s.text}`} />
                       </div>
                       <div className="flex-1">
                         <p className="text-xs text-muted-foreground">{s.label}</p>

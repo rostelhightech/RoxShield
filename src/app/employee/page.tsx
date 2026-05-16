@@ -76,22 +76,22 @@ export default function EmployeeDashboardPage() {
 
         <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Shield, label: "Mon score de risque", value: userProgress.riskScore + "%", color: "rht-orange", textColor: "text-rht-orange" },
-            { icon: TrendingUp, label: "Classement", value: `#${userProgress.rank}`, suffix: `/${userProgress.totalEmployees}`, color: "cyber-green", textColor: "" },
-            { icon: Target, label: "Phishing détectés", value: `${userProgress.simulationsDetected}/${userProgress.simulationsTotal}`, color: "rht-violet", textColor: "text-rht-violet-light" },
-            { icon: BookOpen, label: "Score quiz moyen", value: userProgress.quizAvgScore + "%", color: "rht-violet-light", textColor: "" },
+            { icon: Shield, label: "Mon score de risque", value: userProgress.riskScore + "%", bg: "bg-rht-orange/10", text: "text-rht-orange" },
+            { icon: TrendingUp, label: "Classement", value: `#${userProgress.rank}`, suffix: `/${userProgress.totalEmployees}`, bg: "bg-cyber-green/10", text: "text-cyber-green" },
+            { icon: Target, label: "Phishing détectés", value: `${userProgress.simulationsDetected}/${userProgress.simulationsTotal}`, bg: "bg-rht-violet/10", text: "text-rht-violet-light" },
+            { icon: BookOpen, label: "Score quiz moyen", value: userProgress.quizAvgScore + "%", bg: "bg-rht-violet-light/10", text: "text-rht-violet-light" },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <GlowCard>
                 <Card className="transition-all duration-300 hover:border-cyber-green/20">
                   <CardContent className="p-5">
                     <div className="flex items-center gap-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl bg-${s.color}/10`}>
-                        <s.icon className={`h-5 w-5 text-${s.color}`} />
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${s.bg}`}>
+                        <s.icon className={`h-5 w-5 ${s.text}`} />
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">{s.label}</p>
-                        <p className={`text-2xl font-bold ${s.textColor}`}>
+                        <p className={`text-2xl font-bold ${s.text}`}>
                           {s.value}
                           {s.suffix && <span className="text-sm font-normal text-muted-foreground">{s.suffix}</span>}
                         </p>
