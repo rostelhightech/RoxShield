@@ -198,6 +198,61 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* How it works */}
+      <section className="border-b py-20" id="how-it-works">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn className="mb-12 text-center">
+            <Badge variant="outline" className="mb-4 border-cyber-green/30 text-cyber-green">
+              Comment ça marche
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight">
+              3 étapes pour sécuriser vos équipes
+            </h2>
+          </FadeIn>
+          <StaggerContainer className="grid gap-8 lg:grid-cols-3">
+            {[
+              {
+                step: "01",
+                icon: Users,
+                title: "Inscrivez vos employés",
+                description: "Importez votre équipe en quelques clics. Chaque employé reçoit un accès personnalisé à son espace de formation.",
+                color: "from-rht-violet to-rht-violet-light",
+              },
+              {
+                step: "02",
+                icon: Crosshair,
+                title: "Lancez des simulations",
+                description: "Envoyez des campagnes de phishing réalistes adaptées au contexte africain. Mesurez les réactions de vos équipes.",
+                color: "from-rht-orange to-rht-orange-light",
+              },
+              {
+                step: "03",
+                icon: BarChart3,
+                title: "Suivez les progrès",
+                description: "Visualisez l'évolution du risque par employé et département. Les formations se personnalisent automatiquement.",
+                color: "from-cyber-green to-cyber-green",
+              },
+            ].map((item) => (
+              <StaggerItem key={item.step}>
+                <div className="relative text-center">
+                  <motion.div
+                    whileHover={{ scale: 1.05, y: -4 }}
+                    className={`mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${item.color} shadow-lg`}
+                  >
+                    <item.icon className="h-7 w-7 text-white" />
+                  </motion.div>
+                  <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted-foreground/40">
+                    Étape {item.step}
+                  </span>
+                  <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+                </div>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
       {/* Stats */}
       <section className="border-b bg-secondary/50 py-16" id="stats">
         <div className="mx-auto max-w-6xl px-4">
@@ -312,6 +367,64 @@ export default function LandingPage() {
                     </CardContent>
                   </Card>
                 </GlowCard>
+              </StaggerItem>
+            ))}
+          </StaggerContainer>
+        </div>
+      </section>
+
+      {/* Témoignages */}
+      <section className="py-20">
+        <div className="mx-auto max-w-6xl px-4">
+          <FadeIn className="mb-12 text-center">
+            <Badge variant="outline" className="mb-4 border-cyber-green/30 text-cyber-green">
+              Témoignages
+            </Badge>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Ils nous font confiance
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
+              Des organisations africaines qui renforcent leur sécurité humaine au quotidien.
+            </p>
+          </FadeIn>
+          <StaggerContainer className="grid gap-6 md:grid-cols-3">
+            {[
+              {
+                quote: "En 3 mois, notre taux de clic sur les emails de phishing est passé de 45% à 12%. Impressionnant.",
+                name: "Fatou Sow",
+                role: "DSI, Banque Atlantique Sénégal",
+                initials: "FS",
+              },
+              {
+                quote: "Les modules de formation sont courts et ludiques — nos employés les adorent. Le dashboard nous donne une vue claire.",
+                name: "Kouamé Assi",
+                role: "RSSI, Moov Africa CI",
+                initials: "KA",
+              },
+              {
+                quote: "CyberSense nous a permis d'identifier nos départements les plus vulnérables et de cibler les formations.",
+                name: "Amina Diallo",
+                role: "DRH, Port Autonome de Dakar",
+                initials: "AD",
+              },
+            ].map((t, i) => (
+              <StaggerItem key={i}>
+                <Card className="h-full transition-all duration-300 hover:border-rht-violet/20">
+                  <CardContent className="flex h-full flex-col p-6">
+                    <p className="flex-1 text-sm italic text-muted-foreground">
+                      &ldquo;{t.quote}&rdquo;
+                    </p>
+                    <div className="mt-4 flex items-center gap-3 border-t pt-4">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-rht-violet to-rht-violet-light text-xs font-bold text-white">
+                        {t.initials}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold">{t.name}</p>
+                        <p className="text-xs text-muted-foreground">{t.role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </StaggerItem>
             ))}
           </StaggerContainer>
