@@ -14,6 +14,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Crown,
+  Menu,
+  X,
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -29,6 +31,7 @@ const navItems = [
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
@@ -39,6 +42,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     }
   }, []);
 
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
   return (
     <div className="flex min-h-screen">
       <AnimatePresence>
@@ -46,10 +53,30 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Onboarding role="super-admin" onComplete={() => setShowOnboarding(false)} />
         )}
       </AnimatePresence>
+
+      {/* Mobile header */}
+      <div className="fixed left-0 right-0 top-0 z-50 flex h-14 items-center gap-3 border-b border-sidebar-border bg-sidebar px-4 text-sidebar-foreground md:hidden">
+        <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setMobileOpen(true)}>
+          <Menu className="h-5 w-5" />
+        </Button>
+        <div className="flex items-center gap-2">
+          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-rht-orange to-rht-orange-light">
+            <Shield className="h-3.5 w-3.5 text-white" />
+          </div>
+          <span className="text-sm font-bold"><span className="font-normal opacity-60">Rostel</span> CyberSense</span>
+        </div>
+      </div>
+
+      {/* Mobile overlay */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 bg-black/50 md:hidden" onClick={() => setMobileOpen(false)} />
+      )}
+
       <aside
-        className={`fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300 ${
-          collapsed ? "w-[70px]" : "w-[260px]"
-        }`}
+        className={`fixed left-0 top-0 z-50 flex h-screen flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300
+          ${collapsed ? "w-[70px]" : "w-[260px]"}
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          md:translate-x-0`}
       >
         <div className="flex items-center gap-3 px-4 py-5">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-rht-orange to-rht-orange-light shadow-[0_4px_15px_rgba(250,153,14,0.3)]">
@@ -64,10 +91,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Button
             variant="ghost"
             size="icon"
-            className="ml-auto h-7 w-7 opacity-40 hover:bg-sidebar-accent hover:opacity-100"
+            className="ml-auto h-7 w-7 opacity-40 hover:bg-sidebar-accent hover:opacity-100 hidden md:flex"
             onClick={() => setCollapsed(!collapsed)}
           >
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-auto h-7 w-7 opacity-40 hover:bg-sidebar-accent hover:opacity-100 md:hidden"
+            onClick={() => setMobileOpen(false)}
+          >
+            <X className="h-4 w-4" />
           </Button>
         </div>
 
@@ -85,7 +120,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </div>
         )}
 
-        <nav className="flex-1 space-y-1 px-3 py-2">
+        <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-2">
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -143,7 +178,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </div>
       </aside>
 
-      <main className={`flex-1 transition-all duration-300 ${collapsed ? "ml-[70px]" : "ml-[260px]"}`}>
+      <main className={`flex-1 pt-14 md:pt-0 transition-all duration-300 ${collapsed ? "md:ml-[70px]" : "md:ml-[260px]"}`}>
         {children}
       </main>
     </div>

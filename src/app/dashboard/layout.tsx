@@ -28,7 +28,7 @@ export default function DashboardLayout({
         )}
       </AnimatePresence>
       <Sidebar />
-      <main className="ml-[260px] flex-1 transition-all duration-300">
+      <main className="flex-1 pt-14 md:ml-[260px] md:pt-0 transition-all duration-300">
         {children}
       </main>
     </div>
