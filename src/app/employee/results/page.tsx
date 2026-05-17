@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/lib/i18n";
 import {
   AreaChart,
   Area,
@@ -76,12 +77,13 @@ const resultStyle = {
 } as const;
 
 export default function EmployeeResultsPage() {
+  const { t } = useTranslation();
   const avgQuiz = Math.round(quizResults.reduce((a, q) => a + q.score, 0) / quizResults.length);
   const detected = simulations.filter((s) => s.result === "detected").length;
 
   return (
     <div>
-      <Header title="Mes résultats" />
+      <Header title={t("nav.results")} />
       <div className="space-y-6 p-6">
         <StaggerContainer className="grid gap-4 sm:grid-cols-3">
           {[

@@ -15,6 +15,7 @@ import {
 import { trainingModules } from "@/lib/mock-data";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/lib/i18n";
 import Link from "next/link";
 
 const userCompleted = 6;
@@ -26,11 +27,12 @@ const difficultyStyle = {
 } as const;
 
 export default function EmployeeTrainingPage() {
+  const { t } = useTranslation();
   const completionPct = (userCompleted / trainingModules.length) * 100;
 
   return (
     <div>
-      <Header title="Mes formations" />
+      <Header title={t("training.title")} />
       <div className="space-y-6 p-6">
         <FadeIn>
           <Card>
@@ -106,7 +108,7 @@ export default function EmployeeTrainingPage() {
                             <Link href={`/dashboard/training/${module.id}`}>
                               <Button className="bg-gradient-to-r from-cyber-green/90 to-cyber-green text-white hover:opacity-90">
                                 <PlayCircle className="mr-2 h-4 w-4" />
-                                Continuer
+                                {t("training.continue")}
                               </Button>
                             </Link>
                           ) : (
