@@ -9,8 +9,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { AnimatedCounter } from "@/components/animated-counter";
+import { useTranslation } from "@/lib/i18n";
 import { motion } from "framer-motion";
 import {
   Shield,
@@ -26,78 +28,54 @@ import {
   Send,
 } from "lucide-react";
 
-const features = [
-  {
-    icon: Crosshair,
-    title: "Simulations de phishing",
-    description:
-      "Faux emails RH, PDG, fournisseurs, WhatsApp — testez la vigilance de vos équipes avec des scénarios réalistes adaptés au contexte africain.",
-  },
-  {
-    icon: GraduationCap,
-    title: "Micro-formations gamifiées",
-    description:
-      "Modules de 5 à 10 minutes avec quiz interactifs, vidéos et cas pratiques. Vos employés apprennent en s'entraînant.",
-  },
-  {
-    icon: BarChart3,
-    title: "Dashboard de risque humain",
-    description:
-      "Visualisez le score de risque par employé, département et organisation. Identifiez les profils vulnérables en un coup d'œil.",
-  },
-  {
-    icon: Brain,
-    title: "IA de détection",
-    description:
-      "Notre intelligence artificielle identifie les profils à risque et personnalise automatiquement les parcours de formation.",
-  },
-  {
-    icon: Users,
-    title: "Gamification & Badges",
-    description:
-      "Classements internes, badges Cyber Defender et Phishing Hunter, certificats de sensibilisation pour motiver vos équipes.",
-  },
-  {
-    icon: Globe,
-    title: "Conçu pour l'Afrique",
-    description:
-      "Cas pratiques locaux, arnaques Mobile Money, fraude WhatsApp, tarifs adaptés et interface en français.",
-  },
-];
+const featureIcons = [Crosshair, GraduationCap, BarChart3, Brain, Users, Globe];
 
-const plans = [
-  {
-    name: "Starter",
-    description: "Pour les petites équipes",
-    employees: "Jusqu'à 25 employés",
-    features: ["6 modules de formation", "Quiz interactifs", "Dashboard basique", "Rapports mensuels"],
-  },
-  {
-    name: "Business",
-    description: "Pour les entreprises en croissance",
-    employees: "Jusqu'à 100 employés",
-    popular: true,
-    features: ["Tout Starter +", "Simulations de phishing", "Gamification complète", "Rapports avancés", "Support prioritaire"],
-  },
-  {
-    name: "Enterprise",
-    description: "Pour les grandes organisations",
-    employees: "Employés illimités",
-    features: ["Tout Business +", "IA de personnalisation", "Scénarios sur mesure", "API & intégrations", "Account manager dédié"],
-  },
-];
-
-const stats = [
-  { value: "90%", label: "des cyberattaques commencent par une erreur humaine" },
-  { value: "5 min", label: "de micro-formation par jour suffisent" },
-  { value: "-60%", label: "de clics sur le phishing après 3 mois" },
-  { value: "6", label: "modules de formation disponibles" },
-];
+const statValues = ["90%", "5 min", "-60%", "6"];
 
 export default function LandingPage() {
+  const { t, locale } = useTranslation();
   const [devisOpen, setDevisOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [devisSent, setDevisSent] = useState(false);
+
+  const features = featureIcons.map((icon, i) => ({
+    icon,
+    title: t(`landing.feat${i + 1}.title` as any),
+    description: t(`landing.feat${i + 1}.desc` as any),
+  }));
+
+  const stats = statValues.map((value, i) => ({
+    value,
+    label: t(`landing.stat${i + 1}` as any),
+  }));
+
+  const plans = [
+    {
+      name: "Starter",
+      description: locale === "en" ? "For small teams" : "Pour les petites équipes",
+      employees: locale === "en" ? "Up to 25 employees" : "Jusqu'à 25 employés",
+      features: locale === "en"
+        ? ["6 training modules", "Interactive quizzes", "Basic dashboard", "Monthly reports"]
+        : ["6 modules de formation", "Quiz interactifs", "Dashboard basique", "Rapports mensuels"],
+    },
+    {
+      name: "Business",
+      description: locale === "en" ? "For growing businesses" : "Pour les entreprises en croissance",
+      employees: locale === "en" ? "Up to 100 employees" : "Jusqu'à 100 employés",
+      popular: true,
+      features: locale === "en"
+        ? ["Everything in Starter +", "Phishing simulations", "Full gamification", "Advanced reports", "Priority support"]
+        : ["Tout Starter +", "Simulations de phishing", "Gamification complète", "Rapports avancés", "Support prioritaire"],
+    },
+    {
+      name: "Enterprise",
+      description: locale === "en" ? "For large organizations" : "Pour les grandes organisations",
+      employees: locale === "en" ? "Unlimited employees" : "Employés illimités",
+      features: locale === "en"
+        ? ["Everything in Business +", "AI personalization", "Custom scenarios", "API & integrations", "Dedicated account manager"]
+        : ["Tout Business +", "IA de personnalisation", "Scénarios sur mesure", "API & intégrations", "Account manager dédié"],
+    },
+  ];
 
   const openDevis = (planName: string) => {
     setSelectedPlan(planName);
@@ -118,28 +96,29 @@ export default function LandingPage() {
           </div>
           <nav className="hidden items-center gap-6 text-sm md:flex">
             <a href="#features" className="text-muted-foreground transition-colors hover:text-foreground">
-              Fonctionnalités
+              {t("landing.nav.features")}
             </a>
             <a href="#stats" className="text-muted-foreground transition-colors hover:text-foreground">
-              Chiffres
+              {t("landing.nav.stats")}
             </a>
             <a href="#pricing" className="text-muted-foreground transition-colors hover:text-foreground">
-              Tarifs
+              {t("landing.nav.pricing")}
             </a>
             <Link href="/about" className="text-muted-foreground transition-colors hover:text-foreground">
-              À propos
+              {t("nav.about")}
             </Link>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost" size="sm">Se connecter</Button>
+              <Button variant="ghost" size="sm">{t("landing.nav.login")}</Button>
             </Link>
             <Link href="/login">
               <Button size="sm" className="rounded-full bg-gradient-to-r from-rht-orange to-rht-orange-light text-white glow-orange-sm hover:opacity-90">
-                Démo gratuite
+                {t("landing.nav.freeDemo")}
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </Link>
+            <LanguageSwitcher />
             <ThemeToggle />
           </div>
         </div>
@@ -157,17 +136,15 @@ export default function LandingPage() {
           </FadeIn>
           <FadeIn delay={0.1}>
             <h1 className="mx-auto max-w-3xl text-4xl font-bold tracking-tight lg:text-6xl">
-              Transformez vos employés en{" "}
+              {t("landing.hero.title1")}{" "}
               <span className="bg-gradient-to-r from-rht-violet-light to-rht-orange bg-clip-text text-transparent">
-                première ligne de défense
+                {t("landing.hero.title2")}
               </span>
             </h1>
           </FadeIn>
           <FadeIn delay={0.2}>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-              Rostel CyberSense aide les entreprises africaines à réduire le
-              risque humain grâce aux simulations de phishing, micro-formations
-              gamifiées et tableaux de bord intelligents.
+              {t("landing.hero.subtitle")}
             </p>
           </FadeIn>
           <FadeIn delay={0.3}>
@@ -175,7 +152,7 @@ export default function LandingPage() {
               <Link href="/login">
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                   <Button size="lg" className="h-12 rounded-full bg-gradient-to-r from-rht-orange to-rht-orange-light px-8 text-base font-semibold text-white glow-orange hover:opacity-90">
-                    Essayer la démo
+                    {t("landing.hero.cta")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </motion.div>
@@ -183,7 +160,7 @@ export default function LandingPage() {
               <Link href="/dashboard">
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                   <Button variant="outline" size="lg" className="h-12 rounded-full px-8 text-base transition-all hover:border-rht-violet/30 hover:shadow-[0_0_15px_rgba(156,30,153,0.1)]">
-                    Voir le dashboard
+                    {t("landing.hero.ctaSecondary")}
                   </Button>
                 </motion.div>
               </Link>
@@ -204,10 +181,10 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="mb-12 text-center">
             <Badge variant="outline" className="mb-4 border-cyber-green/30 text-cyber-green">
-              Comment ça marche
+              {t("landing.howItWorks")}
             </Badge>
             <h2 className="text-3xl font-bold tracking-tight">
-              3 étapes pour sécuriser vos équipes
+              {t("landing.howItWorks.title")}
             </h2>
           </FadeIn>
           <StaggerContainer className="grid gap-8 lg:grid-cols-3">
@@ -215,22 +192,22 @@ export default function LandingPage() {
               {
                 step: "01",
                 icon: Users,
-                title: "Inscrivez vos employés",
-                description: "Importez votre équipe en quelques clics. Chaque employé reçoit un accès personnalisé à son espace de formation.",
+                title: t("landing.step1.title"),
+                description: t("landing.step1.desc"),
                 color: "from-rht-violet to-rht-violet-light",
               },
               {
                 step: "02",
                 icon: Crosshair,
-                title: "Lancez des simulations",
-                description: "Envoyez des campagnes de phishing réalistes adaptées au contexte africain. Mesurez les réactions de vos équipes.",
+                title: t("landing.step2.title"),
+                description: t("landing.step2.desc"),
                 color: "from-rht-orange to-rht-orange-light",
               },
               {
                 step: "03",
                 icon: BarChart3,
-                title: "Suivez les progrès",
-                description: "Visualisez l'évolution du risque par employé et département. Les formations se personnalisent automatiquement.",
+                title: t("landing.step3.title"),
+                description: t("landing.step3.desc"),
                 color: "from-cyber-green to-cyber-green",
               },
             ].map((item) => (
@@ -278,13 +255,13 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="mb-12 text-center">
             <Badge variant="outline" className="mb-4 border-rht-violet/30 text-rht-violet-light">
-              Fonctionnalités
+              {t("landing.features.badge")}
             </Badge>
             <h2 className="text-3xl font-bold tracking-tight">
-              Tout ce qu&apos;il faut pour sécuriser le facteur humain
+              {t("landing.features.title")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-              Une plateforme complète de sensibilisation, formation et simulation en cybersécurité.
+              {t("landing.features.subtitle")}
             </p>
           </FadeIn>
           <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -318,13 +295,13 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="mb-12 text-center">
             <Badge variant="outline" className="mb-4 border-rht-orange/30 text-rht-orange">
-              Tarifs
+              {t("landing.pricing")}
             </Badge>
             <h2 className="text-3xl font-bold tracking-tight">
-              Des plans adaptés à chaque organisation
+              {t("landing.pricing.title")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-              Abonnement mensuel ou annuel. Tarifs éducatifs disponibles pour les écoles et universités.
+              {t("landing.pricing.subtitle")}
             </p>
           </FadeIn>
           <StaggerContainer className="grid gap-6 lg:grid-cols-3">
@@ -337,7 +314,7 @@ export default function LandingPage() {
                     {plan.popular && (
                       <div className="absolute -top-3.5 left-1/2 z-10 -translate-x-1/2">
                         <Badge className="bg-gradient-to-r from-rht-violet to-rht-violet-light px-3 py-1 text-white animate-pulse-glow">
-                          Populaire
+                          {t("landing.pricing.popular")}
                         </Badge>
                       </div>
                     )}
@@ -363,7 +340,7 @@ export default function LandingPage() {
                           }`}
                           variant={plan.popular ? "default" : "outline"}
                         >
-                          Demander un devis
+                          {t("landing.pricing.cta")}
                         </Button>
                       </motion.div>
                     </CardContent>
@@ -380,13 +357,13 @@ export default function LandingPage() {
         <div className="mx-auto max-w-6xl px-4">
           <FadeIn className="mb-12 text-center">
             <Badge variant="outline" className="mb-4 border-cyber-green/30 text-cyber-green">
-              Témoignages
+              {t("landing.testimonials")}
             </Badge>
             <h2 className="text-3xl font-bold tracking-tight">
-              Ils nous font confiance
+              {t("landing.testimonials.title")}
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-muted-foreground">
-              Des organisations africaines qui renforcent leur sécurité humaine au quotidien.
+              {t("landing.testimonials.subtitle")}
             </p>
           </FadeIn>
           <StaggerContainer className="grid gap-6 md:grid-cols-3">
@@ -446,17 +423,16 @@ export default function LandingPage() {
               <Shield className="h-8 w-8 text-white" />
             </motion.div>
             <h2 className="text-3xl font-bold tracking-tight">
-              Prêt à sécuriser vos équipes ?
+              {t("landing.cta.title")}
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Rejoignez les entreprises africaines qui transforment leurs employés
-              en première ligne de défense contre les cyberattaques.
+              {t("landing.cta.subtitle")}
             </p>
             <div className="mt-8">
               <Link href="/login">
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }} className="inline-block">
                   <Button size="lg" className="h-12 rounded-full bg-gradient-to-r from-rht-orange to-rht-orange-light px-8 text-base font-semibold text-white glow-orange hover:opacity-90">
-                    Commencer maintenant
+                    {t("landing.cta.button")}
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </motion.div>
@@ -475,10 +451,10 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-4">
             <Link href="/about" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              À propos
+              {t("nav.about")}
             </Link>
             <p className="text-xs text-muted-foreground">
-              &copy; 2026 Rostel High-Tech. Tous droits réservés.
+              &copy; 2026 Rostel High-Tech. {t("landing.footer.rights")}
             </p>
           </div>
           <a
@@ -496,9 +472,9 @@ export default function LandingPage() {
       <Dialog open={devisOpen} onOpenChange={setDevisOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Demander un devis — {selectedPlan}</DialogTitle>
+            <DialogTitle>{t("landing.devis.title")} — {selectedPlan}</DialogTitle>
             <DialogDescription>
-              Remplissez le formulaire et notre équipe vous contactera sous 24h.
+              {t("landing.devis.subtitle")}
             </DialogDescription>
           </DialogHeader>
           {devisSent ? (
@@ -506,8 +482,8 @@ export default function LandingPage() {
               <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300 }}>
                 <CheckCircle className="mx-auto mb-4 h-12 w-12 text-cyber-green" />
               </motion.div>
-              <p className="font-semibold">Demande envoyée !</p>
-              <p className="mt-1 text-sm text-muted-foreground">Nous vous répondrons très rapidement.</p>
+              <p className="font-semibold">{t("landing.devis.sent")}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{t("landing.devis.sentDesc")}</p>
             </div>
           ) : (
             <form
@@ -515,24 +491,24 @@ export default function LandingPage() {
               className="space-y-4"
             >
               <div className="space-y-2">
-                <Label htmlFor="devis-name">Nom complet</Label>
+                <Label htmlFor="devis-name">{t("landing.devis.name")}</Label>
                 <Input id="devis-name" placeholder="Fatou Sow" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="devis-email">Email professionnel</Label>
+                <Label htmlFor="devis-email">{t("landing.devis.email")}</Label>
                 <Input id="devis-email" type="email" placeholder="fatou@entreprise.com" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="devis-org">Organisation</Label>
+                <Label htmlFor="devis-org">{t("landing.devis.org")}</Label>
                 <Input id="devis-org" placeholder="Nom de votre entreprise" required />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="devis-employees">Nombre d&apos;employés</Label>
+                <Label htmlFor="devis-employees">{t("landing.devis.employees")}</Label>
                 <Input id="devis-employees" type="number" placeholder="50" required />
               </div>
               <Button type="submit" className="w-full bg-gradient-to-r from-rht-orange to-rht-orange-light text-white hover:opacity-90">
                 <Send className="mr-2 h-4 w-4" />
-                Envoyer la demande
+                {t("landing.devis.submit")}
               </Button>
             </form>
           )}
