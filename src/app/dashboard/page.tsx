@@ -33,6 +33,7 @@ import {
   Cell,
 } from "recharts";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
+import { useTranslation } from "@/lib/i18n";
 
 const avgRisk = Math.round(employees.reduce((acc, e) => acc + e.riskScore, 0) / employees.length);
 const atRiskCount = employees.filter((e) => e.status === "at-risk").length;
@@ -52,9 +53,10 @@ function getBarColor(score: number) {
 }
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
   return (
     <div>
-      <Header title="Dashboard" />
+      <Header title={t("dashboard.title")} />
       <div className="space-y-6 p-6">
         <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StaggerItem>
@@ -63,7 +65,7 @@ export default function DashboardPage() {
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-muted-foreground">Score de risque moyen</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t("dashboard.riskScore")}</p>
                       <p className={`mt-1 text-3xl font-bold ${getRiskColor(avgRisk)}`}>{avgRisk}%</p>
                     </div>
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rht-orange/10">
@@ -85,7 +87,7 @@ export default function DashboardPage() {
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-muted-foreground">Employés à risque</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t("dashboard.atRiskEmployees")}</p>
                       <p className="mt-1 text-3xl font-bold text-cyber-red">{atRiskCount}</p>
                     </div>
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-cyber-red/10">
@@ -104,7 +106,7 @@ export default function DashboardPage() {
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-muted-foreground">Formations complétées</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t("dashboard.trainingsCompleted")}</p>
                       <p className="mt-1 text-3xl font-bold text-rht-violet-light">{avgCompletion}%</p>
                     </div>
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rht-violet/10">
@@ -126,7 +128,7 @@ export default function DashboardPage() {
                 <CardContent className="p-5">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-xs font-medium text-muted-foreground">Total employés</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t("dashboard.totalEmployees")}</p>
                       <p className="mt-1 text-3xl font-bold">{employees.length}</p>
                     </div>
                     <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rht-violet/10">
@@ -147,7 +149,7 @@ export default function DashboardPage() {
           <FadeIn className="lg:col-span-2">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold">Évolution du risque humain</CardTitle>
+                <CardTitle className="text-sm font-semibold">{t("dashboard.riskEvolution")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-[280px]">
@@ -182,7 +184,7 @@ export default function DashboardPage() {
           <FadeIn delay={0.1}>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold">Risque par département</CardTitle>
+                <CardTitle className="text-sm font-semibold">{t("dashboard.riskByDept")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-[280px]">
@@ -209,7 +211,7 @@ export default function DashboardPage() {
           <FadeIn>
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold">Employés à risque élevé</CardTitle>
+                <CardTitle className="text-sm font-semibold">{t("dashboard.highRiskEmployees")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">

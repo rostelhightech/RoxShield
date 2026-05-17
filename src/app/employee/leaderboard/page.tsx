@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/lib/i18n";
 
 const leaderboard = [
   { rank: 1, name: "Aminata Diallo", dept: "Comptabilité", points: 920, streak: 12, trend: "up", badges: 7 },
@@ -46,9 +47,10 @@ function RankDisplay({ rank }: { rank: number }) {
 }
 
 export default function LeaderboardPage() {
+  const { t } = useTranslation();
   return (
     <div>
-      <Header title="Classement" />
+      <Header title={t("leaderboard.title")} />
       <div className="space-y-6 p-6">
         {/* Current user position */}
         <FadeIn>
@@ -58,7 +60,7 @@ export default function LeaderboardPage() {
                 <Trophy className="h-7 w-7 text-white" />
               </div>
               <div className="flex-1">
-                <p className="text-sm text-muted-foreground">Votre position</p>
+                <p className="text-sm text-muted-foreground">{t("leaderboard.yourPosition")}</p>
                 <p className="text-2xl font-bold">
                   {currentUser.rank}<sup className="text-sm">e</sup> / {leaderboard.length}
                 </p>
@@ -66,11 +68,11 @@ export default function LeaderboardPage() {
               <div className="hidden gap-6 sm:flex">
                 <div className="text-center">
                   <p className="text-2xl font-bold text-rht-violet-light">{currentUser.points}</p>
-                  <p className="text-xs text-muted-foreground">Points</p>
+                  <p className="text-xs text-muted-foreground">{t("leaderboard.points")}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-bold text-rht-orange">{currentUser.streak}</p>
-                  <p className="text-xs text-muted-foreground">Jours série</p>
+                  <p className="text-xs text-muted-foreground">{t("leaderboard.streakDays")}</p>
                 </div>
                 <div className="text-center">
                   <p className="text-2xl font-bold text-cyber-green">{currentUser.badges}</p>
@@ -122,7 +124,7 @@ export default function LeaderboardPage() {
             <CardHeader className="pb-2">
               <CardTitle className="flex items-center gap-2 text-sm font-semibold">
                 <Shield className="h-4 w-4 text-rht-violet-light" />
-                Classement complet
+                {t("leaderboard.fullRanking")}
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
@@ -150,7 +152,7 @@ export default function LeaderboardPage() {
                         <p className="text-sm font-medium truncate">
                           {user.name}
                           {user.isCurrentUser && (
-                            <span className="ml-2 text-[10px] text-cyber-green">(vous)</span>
+                            <span className="ml-2 text-[10px] text-cyber-green">({t("leaderboard.you")})</span>
                           )}
                         </p>
                       </div>
@@ -180,15 +182,15 @@ export default function LeaderboardPage() {
         <FadeIn delay={0.3}>
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold">Comment gagner des points ?</CardTitle>
+              <CardTitle className="text-sm font-semibold">{t("leaderboard.howToEarn")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {[
-                  { action: "Détecter un phishing", points: "+50", color: "text-cyber-green" },
-                  { action: "Terminer une formation", points: "+30", color: "text-rht-violet-light" },
-                  { action: "Série quotidienne", points: "+10/jour", color: "text-rht-orange" },
-                  { action: "Obtenir un badge", points: "+100", color: "text-yellow-500" },
+                  { action: t("leaderboard.detectPhishing"), points: "+50", color: "text-cyber-green" },
+                  { action: t("leaderboard.completeTraining"), points: "+30", color: "text-rht-violet-light" },
+                  { action: t("leaderboard.dailyStreak"), points: "+10/jour", color: "text-rht-orange" },
+                  { action: t("leaderboard.earnBadge"), points: "+100", color: "text-yellow-500" },
                 ].map((item) => (
                   <div key={item.action} className="flex items-center gap-3 rounded-xl border p-3">
                     <span className={`text-lg font-bold ${item.color}`}>{item.points}</span>

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { motion, AnimatePresence } from "framer-motion";
 
 const notifications = [
@@ -194,6 +195,7 @@ export function Header({ title }: { title: string }) {
           </AnimatePresence>
         </div>
 
+        <LanguageSwitcher />
         <ThemeToggle />
       </div>
     </header>
