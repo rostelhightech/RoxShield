@@ -12,10 +12,10 @@ import {
   X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { useTranslation } from "@/lib/i18n";
 import { motion, AnimatePresence } from "framer-motion";
 
 const notifications = [
@@ -72,6 +72,7 @@ const notifications = [
 ];
 
 export function Header({ title }: { title: string }) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [readIds, setReadIds] = useState<number[]>([]);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -100,13 +101,14 @@ export function Header({ title }: { title: string }) {
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
       <div className="flex items-center gap-3">
-        <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Rechercher..."
-            className="h-9 w-[240px] pl-9 text-sm"
-          />
-        </div>
+        <button
+          onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
+          className="hidden h-9 items-center gap-2 rounded-lg border bg-background px-3 text-sm text-muted-foreground transition-colors hover:bg-accent md:flex"
+        >
+          <Search className="h-4 w-4" />
+          <span>{t("notifications.search")}</span>
+          <kbd className="ml-4 rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium">⌘K</kbd>
+        </button>
 
         <div className="relative" ref={panelRef}>
           <Button
@@ -133,14 +135,14 @@ export function Header({ title }: { title: string }) {
                 className="absolute right-0 top-12 z-50 w-[360px] rounded-xl border bg-popover shadow-xl"
               >
                 <div className="flex items-center justify-between border-b px-4 py-3">
-                  <h3 className="text-sm font-semibold">Notifications</h3>
+                  <h3 className="text-sm font-semibold">{t("notifications.title")}</h3>
                   <div className="flex items-center gap-2">
                     {unreadCount > 0 && (
                       <button
                         onClick={markAllRead}
                         className="text-xs text-rht-violet-light hover:underline"
                       >
-                        Tout marquer comme lu
+                        {t("notifications.markAllRead")}
                       </button>
                     )}
                     <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
@@ -187,7 +189,7 @@ export function Header({ title }: { title: string }) {
 
                 <div className="border-t px-4 py-2.5 text-center">
                   <button className="text-xs text-rht-violet-light hover:underline">
-                    Voir toutes les notifications
+                    {t("notifications.viewAll")}
                   </button>
                 </div>
               </motion.div>

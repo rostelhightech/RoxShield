@@ -158,6 +158,12 @@ const dictionaries = {
     "leaderboard.earnBadge": "Obtenir un badge",
     "leaderboard.you": "vous",
 
+    // Notifications
+    "notifications.title": "Notifications",
+    "notifications.markAllRead": "Tout marquer comme lu",
+    "notifications.viewAll": "Voir toutes les notifications",
+    "notifications.search": "Rechercher...",
+
     // Landing
     "landing.hero.badge": "Plateforme de Human Security Training",
     "landing.hero.title1": "Transformez vos employés en",
@@ -321,6 +327,12 @@ const dictionaries = {
     "leaderboard.dailyStreak": "Daily streak",
     "leaderboard.earnBadge": "Earn a badge",
     "leaderboard.you": "you",
+
+    // Notifications
+    "notifications.title": "Notifications",
+    "notifications.markAllRead": "Mark all as read",
+    "notifications.viewAll": "View all notifications",
+    "notifications.search": "Search...",
 
     // Landing
     "landing.hero.badge": "Human Security Training Platform",

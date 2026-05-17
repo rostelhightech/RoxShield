@@ -24,8 +24,10 @@ import { currentUser } from "@/lib/mock-data";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { useTranslation } from "@/lib/i18n";
 
 export default function ProfilePage() {
+  const { t } = useTranslation();
   const [saved, setSaved] = useState(false);
   const [notifEmail, setNotifEmail] = useState(true);
   const [notifCampaign, setNotifCampaign] = useState(true);
@@ -39,7 +41,7 @@ export default function ProfilePage() {
 
   return (
     <div>
-      <Header title="Mon profil" />
+      <Header title={t("profile.title")} />
       <div className="space-y-6 p-6">
         <FadeIn>
           <Card>
@@ -80,40 +82,40 @@ export default function ProfilePage() {
               <CardHeader className="pb-3">
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4 text-rht-violet-light" />
-                  <CardTitle className="text-sm font-semibold">Informations personnelles</CardTitle>
+                  <CardTitle className="text-sm font-semibold">{t("profile.personalInfo")}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label className="text-xs">Prénom</Label>
+                    <Label className="text-xs">{t("profile.firstName")}</Label>
                     <Input defaultValue="Fatou" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs">Nom</Label>
+                    <Label className="text-xs">{t("profile.lastName")}</Label>
                     <Input defaultValue="Sow" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs">Adresse email</Label>
+                  <Label className="text-xs">{t("profile.email")}</Label>
                   <Input defaultValue={currentUser.email} type="email" />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs">Téléphone</Label>
+                  <Label className="text-xs">{t("profile.phone")}</Label>
                   <Input defaultValue="+221 7X XXX XX XX" type="tel" />
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label className="text-xs">Poste</Label>
+                    <Label className="text-xs">{t("profile.position")}</Label>
                     <Input defaultValue="Directrice des Systèmes d'Information" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs">Département</Label>
+                    <Label className="text-xs">{t("profile.department")}</Label>
                     <Input defaultValue="IT / Sécurité" />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-xs">Langue</Label>
+                  <Label className="text-xs">{t("profile.language")}</Label>
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm">Français</span>
@@ -129,7 +131,7 @@ export default function ProfilePage() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-2">
                     <Bell className="h-4 w-4 text-rht-orange" />
-                    <CardTitle className="text-sm font-semibold">Préférences de notification</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("profile.notificationPrefs")}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
@@ -166,26 +168,26 @@ export default function ProfilePage() {
                 <CardHeader className="pb-3">
                   <div className="flex items-center gap-2">
                     <Lock className="h-4 w-4 text-cyber-red" />
-                    <CardTitle className="text-sm font-semibold">Sécurité</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("profile.security")}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-xs">Mot de passe actuel</Label>
+                    <Label className="text-xs">{t("profile.currentPassword")}</Label>
                     <Input type="password" placeholder="••••••••" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs">Nouveau mot de passe</Label>
+                    <Label className="text-xs">{t("profile.newPassword")}</Label>
                     <Input type="password" placeholder="••••••••" />
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs">Confirmer</Label>
+                    <Label className="text-xs">{t("profile.confirmPassword")}</Label>
                     <Input type="password" placeholder="••••••••" />
                   </div>
                   <Separator />
                   <div className="flex items-center justify-between rounded-xl border p-3">
                     <div>
-                      <p className="text-sm font-medium">Authentification 2FA</p>
+                      <p className="text-sm font-medium">{t("profile.2fa")}</p>
                       <p className="text-xs text-muted-foreground">Sécurisez votre compte avec un second facteur</p>
                     </div>
                     <Badge className="border-0 bg-rht-orange/10 text-rht-orange text-[10px]">Bientôt</Badge>
@@ -198,7 +200,7 @@ export default function ProfilePage() {
 
         <FadeIn delay={0.25}>
           <div className="flex justify-end gap-3">
-            <Button variant="outline">Annuler</Button>
+            <Button variant="outline">{t("common.cancel")}</Button>
             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Button
                 onClick={handleSave}
@@ -207,10 +209,10 @@ export default function ProfilePage() {
                 {saved ? (
                   <span className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4" />
-                    Enregistré !
+                    {t("common.saved")}
                   </span>
                 ) : (
-                  "Enregistrer les modifications"
+                  t("common.save")
                 )}
               </Button>
             </motion.div>
