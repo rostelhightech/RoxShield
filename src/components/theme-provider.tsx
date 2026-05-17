@@ -8,6 +8,7 @@ import { BackToTop } from "@/components/back-to-top";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SkipToContent } from "@/components/skip-to-content";
 import { NetworkStatus } from "@/components/network-status";
+import { SessionTimeout } from "@/components/session-timeout";
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   return (
@@ -20,6 +21,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         <BackToTop />
         <ScrollProgress />
         <NetworkStatus />
+        <SessionTimeout />
       </I18nProvider>
     </NextThemesProvider>
   );

@@ -33,6 +33,7 @@ import {
   Cell,
 } from "recharts";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
+import { ActivityFeed } from "@/components/activity-feed";
 import { useTranslation } from "@/lib/i18n";
 
 const avgRisk = Math.round(employees.reduce((acc, e) => acc + e.riskScore, 0) / employees.length);
@@ -206,6 +207,10 @@ export default function DashboardPage() {
             </Card>
           </FadeIn>
         </div>
+
+        <FadeIn delay={0.15}>
+          <ActivityFeed />
+        </FadeIn>
 
         <div className="grid gap-6 lg:grid-cols-2">
           <FadeIn>

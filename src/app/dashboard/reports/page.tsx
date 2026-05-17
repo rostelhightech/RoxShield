@@ -39,6 +39,7 @@ import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/mo
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useTranslation } from "@/lib/i18n";
+import { exportCSV } from "@/lib/export-csv";
 
 const riskEvolution = monthlyStats.map((m) => ({
   month: m.month,
@@ -97,39 +98,34 @@ export default function ReportsPage() {
   };
 
   const handleCSV = () => {
-    const headers = ["Nom", "Email", "Département", "Rôle", "Score de risque", "Formations complétées", "Total formations", "Statut"];
-    const rows = employees.map((e) => [
-      e.name,
-      e.email,
-      e.department,
-      e.role,
-      e.riskScore,
-      e.trainingsCompleted,
-      e.totalTrainings,
-      e.status,
-    ]);
-    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `cybersense-rapport-employes-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    exportCSV({
+      filename: `cybersense-rapport-employes-${new Date().toISOString().slice(0, 10)}`,
+      headers: ["Nom", "Email", "Département", "Rôle", "Score de risque", "Formations complétées", "Total formations", "Statut"],
+      rows: employees.map((e) => [
+        e.name,
+        e.email,
+        e.department,
+        e.role,
+        e.riskScore,
+        e.trainingsCompleted,
+        e.totalTrainings,
+        e.status,
+      ]),
+    });
     toast.success("Export CSV employés téléchargé");
   };
 
   const handleDeptCSV = () => {
-    const headers = ["Département", "Employés", "Score de risque", "Complétion (%)"];
-    const rows = deptCompletion.map((d) => [d.name, departmentStats.find((ds) => ds.name === d.name)?.employees ?? 0, d.risk, d.completion]);
-    const csv = [headers, ...rows].map((r) => r.join(",")).join("\n");
-    const blob = new Blob(["﻿" + csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `cybersense-rapport-departements-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+    exportCSV({
+      filename: `cybersense-rapport-departements-${new Date().toISOString().slice(0, 10)}`,
+      headers: ["Département", "Employés", "Score de risque", "Complétion (%)"],
+      rows: deptCompletion.map((d) => [
+        d.name,
+        departmentStats.find((ds) => ds.name === d.name)?.employees ?? 0,
+        d.risk,
+        d.completion,
+      ]),
+    });
     toast.success("Export CSV départements téléchargé");
   };
 
