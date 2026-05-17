@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { useTranslation } from "@/lib/i18n";
+import { Breadcrumbs } from "@/components/breadcrumbs";
 import { motion, AnimatePresence } from "framer-motion";
 
 const notifications = [
@@ -99,7 +100,10 @@ export function Header({ title }: { title: string }) {
 
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/95 px-6 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+      <div className="flex flex-col justify-center">
+        <h1 className="text-lg font-semibold tracking-tight leading-tight">{title}</h1>
+        <Breadcrumbs />
+      </div>
       <div className="flex items-center gap-3">
         <button
           onClick={() => document.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
