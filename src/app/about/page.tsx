@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Footer } from "@/components/footer";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { motion } from "framer-motion";
 import {
@@ -263,18 +264,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-secondary/50 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row">
-          <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-rht-violet-light" />
-            <span className="font-bold"><span className="font-normal opacity-60">Rox</span>Shield</span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            &copy; 2026 Rostel High-Tech. Tous droits réservés.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

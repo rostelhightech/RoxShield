@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
+import { Footer } from "@/components/footer";
 import {
   Shield,
   Send,
@@ -263,6 +264,7 @@ export default function DemoPage() {
           </motion.div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

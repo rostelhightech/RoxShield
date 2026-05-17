@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { Footer } from "@/components/footer";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { useTranslation } from "@/lib/i18n";
@@ -26,6 +27,8 @@ import {
   Users,
   Building2,
   Send,
+  Menu,
+  X,
 } from "lucide-react";
 
 const featureIcons = [Crosshair, GraduationCap, BarChart3, Brain, Users, Globe];
@@ -37,6 +40,7 @@ export default function LandingPage() {
   const [devisOpen, setDevisOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [devisSent, setDevisSent] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const features = featureIcons.map((icon, i) => ({
     icon,
@@ -109,10 +113,10 @@ export default function LandingPage() {
             </Link>
           </nav>
           <div className="flex items-center gap-3">
-            <Link href="/login">
+            <Link href="/login" className="hidden sm:inline-flex">
               <Button variant="ghost" size="sm">{t("landing.nav.login")}</Button>
             </Link>
-            <Link href="/demo">
+            <Link href="/demo" className="hidden sm:inline-flex">
               <Button size="sm" className="rounded-full bg-gradient-to-r from-rht-orange to-rht-orange-light text-white glow-orange-sm hover:opacity-90">
                 {t("landing.nav.freeDemo")}
                 <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
@@ -120,9 +124,47 @@ export default function LandingPage() {
             </Link>
             <LanguageSwitcher />
             <ThemeToggle />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="flex h-9 w-9 items-center justify-center rounded-lg border border-border md:hidden"
+              aria-label="Menu"
+            >
+              {mobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            </button>
           </div>
         </div>
       </header>
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-x-0 top-16 z-40 border-b bg-background/95 backdrop-blur md:hidden">
+          <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-4">
+            <a href="#features" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              {t("landing.nav.features")}
+            </a>
+            <a href="#stats" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              {t("landing.nav.stats")}
+            </a>
+            <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              {t("landing.nav.pricing")}
+            </a>
+            <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+              {t("nav.about")}
+            </Link>
+            <div className="mt-3 flex flex-col gap-2 border-t pt-3">
+              <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                <Button variant="outline" size="sm" className="w-full">{t("landing.nav.login")}</Button>
+              </Link>
+              <Link href="/demo" onClick={() => setMobileMenuOpen(false)}>
+                <Button size="sm" className="w-full rounded-full bg-gradient-to-r from-rht-orange to-rht-orange-light text-white hover:opacity-90">
+                  {t("landing.nav.freeDemo")}
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Button>
+              </Link>
+            </div>
+          </nav>
+        </div>
+      )}
 
       {/* Hero */}
       <section className="relative overflow-hidden border-b bg-white dark:bg-[#0a0a0f]">
@@ -533,40 +575,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-secondary/50 py-10">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 sm:flex-row">
-          <div className="flex items-center gap-2">
-            <Shield className="h-5 w-5 text-rht-violet-light" />
-            <span className="font-bold"><span className="font-normal opacity-60">Rox</span>Shield</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link href="/about" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              {t("nav.about")}
-            </Link>
-            <Link href="/demo" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              {locale === "en" ? "Demo" : "Démo"}
-            </Link>
-            <Link href="/contact" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Contact
-            </Link>
-            <Link href="/legal" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              {locale === "en" ? "Legal" : "Mentions légales"}
-            </Link>
-            <p className="text-xs text-muted-foreground">
-              &copy; 2026 Rostel High-Tech. {t("landing.footer.rights")}
-            </p>
-          </div>
-          <a
-            href="https://www.rostelhightech.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-rht-violet-light hover:underline"
-          >
-            www.rostelhightech.com
-          </a>
-        </div>
-      </footer>
+      <Footer />
 
       {/* Devis Dialog */}
       <Dialog open={devisOpen} onOpenChange={setDevisOpen}>
