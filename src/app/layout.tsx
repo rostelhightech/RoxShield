@@ -17,6 +17,16 @@ export const metadata: Metadata = {
   },
   description:
     "Plateforme SaaS de sensibilisation, d'entraînement et de simulation en cybersécurité humaine pour les entreprises africaines. Par Rostel High-Tech.",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/icons/icon-192.svg",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "CyberSense",
+  },
   keywords: [
     "cybersécurité",
     "phishing",
@@ -56,6 +66,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr" className={`${montserrat.variable} h-full antialiased`} suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#9c1e99" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+      </head>
       <body className="min-h-full">
         <ThemeProvider>
           {children}
