@@ -11,6 +11,11 @@ import {
   Settings,
   LogOut,
   Shield,
+  ShieldCheck,
+  KeyRound,
+  Mail,
+  MessageSquareLock,
+  Lock,
   ChevronLeft,
   ChevronRight,
   Menu,
@@ -25,7 +30,7 @@ import { useTranslation } from "@/lib/i18n";
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -34,6 +39,11 @@ export function Sidebar() {
     { label: t("nav.employees"), href: "/dashboard/employees", icon: Users },
     { label: t("nav.training"), href: "/dashboard/training", icon: GraduationCap },
     { label: t("nav.simulations"), href: "/dashboard/simulations", icon: Crosshair },
+    { label: "GRC", href: "/dashboard/grc", icon: ShieldCheck },
+    { label: locale === "en" ? "Email Security" : "Securite Email", href: "/dashboard/email-security", icon: Mail },
+    { label: locale === "en" ? "Passwords" : "Mots de passe", href: "/dashboard/passwords", icon: KeyRound },
+    { label: "Shadow IT", href: "/dashboard/shadow-it", icon: MessageSquareLock },
+    { label: locale === "en" ? "Encryption" : "Chiffrement", href: "/dashboard/encryption", icon: Lock },
     { label: t("nav.reports"), href: "/dashboard/reports", icon: FileBarChart },
     { label: t("nav.settings"), href: "/dashboard/settings", icon: Settings },
   ];

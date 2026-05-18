@@ -29,9 +29,12 @@ import {
   Send,
   Menu,
   X,
+  ShieldCheck,
+  Mail,
+  Lock,
 } from "lucide-react";
 
-const featureIcons = [Crosshair, GraduationCap, BarChart3, Brain, Users, Globe];
+const featureIcons = [Crosshair, GraduationCap, BarChart3, Brain, Users, Globe, ShieldCheck, Mail, Lock];
 
 const statValues = ["90%", "5 min", "-60%", "6"];
 
