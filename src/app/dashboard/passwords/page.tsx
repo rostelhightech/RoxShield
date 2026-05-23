@@ -36,7 +36,7 @@ export default function PasswordsPage() {
   if (loading) {
     return (
       <div>
-        <Header title={t("passwords.title" as any)} />
+        <Header title={t("passwords.title")} />
         <div className="space-y-6 p-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
@@ -71,37 +71,37 @@ export default function PasswordsPage() {
   // Issues from audit JSON or derive from stats
   const issues = audit?.issues as any[] || [];
   const passwordIssues = issues.length > 0 ? issues : [
-    { issue: t("passwords.issue.short" as any), count: Math.round(stats.weakPercent * stats.totalAccounts / 100), severity: "critical" as const },
-    { issue: t("passwords.issue.reused" as any), count: Math.round(stats.reusedPercent * stats.totalAccounts / 100), severity: "high" as const },
-    { issue: t("passwords.issue.noSpecial" as any), count: Math.round(stats.weakPercent * stats.totalAccounts / 200), severity: "high" as const },
+    { issue: t("passwords.issue.short"), count: Math.round(stats.weakPercent * stats.totalAccounts / 100), severity: "critical" as const },
+    { issue: t("passwords.issue.reused"), count: Math.round(stats.reusedPercent * stats.totalAccounts / 100), severity: "high" as const },
+    { issue: t("passwords.issue.noSpecial"), count: Math.round(stats.weakPercent * stats.totalAccounts / 200), severity: "high" as const },
   ].filter((i) => i.count > 0);
 
   const recommendations = [
     {
-      title: t("passwords.rec.manager" as any),
-      desc: t("passwords.rec.manager.desc" as any),
-      priority: t("status.urgent" as any),
+      title: t("passwords.rec.manager"),
+      desc: t("passwords.rec.manager.desc"),
+      priority: t("status.urgent"),
       priorityKey: "urgent",
       link: "https://bitwarden.com",
     },
     {
-      title: t("passwords.rec.mfa" as any),
-      desc: t("passwords.rec.mfa.desc" as any),
-      priority: t("status.urgent" as any),
+      title: t("passwords.rec.mfa"),
+      desc: t("passwords.rec.mfa.desc"),
+      priority: t("status.urgent"),
       priorityKey: "urgent",
       link: null,
     },
     {
-      title: t("passwords.rec.training" as any),
-      desc: t("passwords.rec.training.desc" as any),
-      priority: t("status.important" as any),
+      title: t("passwords.rec.training"),
+      desc: t("passwords.rec.training.desc"),
+      priority: t("status.important"),
       priorityKey: "important",
       link: null,
     },
     {
-      title: t("passwords.rec.rotation" as any),
-      desc: t("passwords.rec.rotation.desc" as any),
-      priority: t("status.recommended" as any),
+      title: t("passwords.rec.rotation"),
+      desc: t("passwords.rec.rotation.desc"),
+      priority: t("status.recommended"),
       priorityKey: "recommended",
       link: null,
     },
@@ -109,16 +109,16 @@ export default function PasswordsPage() {
 
   return (
     <div>
-      <Header title={t("passwords.title" as any)} />
+      <Header title={t("passwords.title")} />
       <div className="space-y-6 p-6">
         {/* Stats */}
         <FadeIn>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { label: t("passwords.hygieneScore" as any), value: `${stats.hygieneScore}/100`, color: stats.hygieneScore < 50 ? "text-cyber-red" : "text-rht-orange" },
-              { label: t("passwords.weakDetected" as any), value: `${stats.weakPercent}%`, color: "text-cyber-red" },
-              { label: t("passwords.reused" as any), value: `${stats.reusedPercent}%`, color: "text-rht-orange" },
-              { label: t("passwords.mfaActive" as any), value: `${stats.mfaPercent}%`, color: stats.mfaPercent < 50 ? "text-rht-orange" : "text-cyber-green" },
+              { label: t("passwords.hygieneScore"), value: `${stats.hygieneScore}/100`, color: stats.hygieneScore < 50 ? "text-cyber-red" : "text-rht-orange" },
+              { label: t("passwords.weakDetected"), value: `${stats.weakPercent}%`, color: "text-cyber-red" },
+              { label: t("passwords.reused"), value: `${stats.reusedPercent}%`, color: "text-rht-orange" },
+              { label: t("passwords.mfaActive"), value: `${stats.mfaPercent}%`, color: stats.mfaPercent < 50 ? "text-rht-orange" : "text-cyber-green" },
             ].map((s) => (
               <Card key={s.label}>
                 <CardContent className="p-4">
@@ -137,12 +137,12 @@ export default function PasswordsPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <ShieldAlert className="h-4 w-4 text-cyber-red" />
-                  {t("passwords.issuesDetected" as any)}
+                  {t("passwords.issuesDetected")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 {passwordIssues.length === 0 ? (
-                  <p className="py-8 text-center text-sm text-muted-foreground">{t("passwords.noIssues" as any)}</p>
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("passwords.noIssues")}</p>
                 ) : (
                   <div className="space-y-3">
                     {passwordIssues.map((issue: any, idx: number) => (
@@ -156,7 +156,7 @@ export default function PasswordsPage() {
                           <span className="text-sm">{issue.issue}</span>
                         </div>
                         <Badge className={`text-[10px] ${sevStyle[issue.severity as keyof typeof sevStyle] || sevStyle.medium}`}>
-                          {issue.count} {t("common.employees" as any)}
+                          {issue.count} {t("common.employees")}
                         </Badge>
                       </div>
                     ))}
@@ -171,7 +171,7 @@ export default function PasswordsPage() {
             <FadeIn delay={0.15}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">{t("passwords.mfaAdoption" as any)}</CardTitle>
+                  <CardTitle className="text-base">{t("passwords.mfaAdoption")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-6">
@@ -190,14 +190,14 @@ export default function PasswordsPage() {
                     <div className="space-y-2">
                       <div className="flex items-center gap-2">
                         <div className="h-3 w-3 rounded-full bg-cyber-green" />
-                        <span className="text-sm">{t("passwords.mfaEnabled" as any)} — {mfaEnabled} ({stats.mfaPercent}%)</span>
+                        <span className="text-sm">{t("passwords.mfaEnabled")} — {mfaEnabled} ({stats.mfaPercent}%)</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="h-3 w-3 rounded-full bg-cyber-red" />
-                        <span className="text-sm">{t("passwords.mfaDisabled" as any)} — {noMfa} ({100 - stats.mfaPercent}%)</span>
+                        <span className="text-sm">{t("passwords.mfaDisabled")} — {noMfa} ({100 - stats.mfaPercent}%)</span>
                       </div>
                       <p className="mt-2 text-xs text-muted-foreground">
-                        {t("passwords.mfaGoal" as any)}
+                        {t("passwords.mfaGoal")}
                       </p>
                     </div>
                   </div>
@@ -208,7 +208,7 @@ export default function PasswordsPage() {
             <FadeIn delay={0.2}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">{t("passwords.recommendations" as any)}</CardTitle>
+                  <CardTitle className="text-base">{t("passwords.recommendations")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {recommendations.map((rec) => (
@@ -226,7 +226,7 @@ export default function PasswordsPage() {
                       <p className="mt-1 text-xs text-muted-foreground">{rec.desc}</p>
                       {rec.link && (
                         <a href={rec.link} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-xs text-rht-violet-light hover:underline">
-                          {t("passwords.learnMore" as any)} <ExternalLink className="h-3 w-3" />
+                          {t("passwords.learnMore")} <ExternalLink className="h-3 w-3" />
                         </a>
                       )}
                     </div>

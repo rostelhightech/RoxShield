@@ -81,13 +81,13 @@ export default function ProfilePage() {
         body: JSON.stringify({ name, phone, position, department }),
       });
       if (res.ok) {
-        toast.success(t("common.saved" as any));
+        toast.success(t("common.saved"));
         await refetch();
       } else {
-        toast.error(t("common.error" as any));
+        toast.error(t("common.error"));
       }
     } catch {
-      toast.error(t("common.error" as any));
+      toast.error(t("common.error"));
     } finally {
       setSaving(false);
     }
@@ -160,7 +160,7 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label className="text-xs">{t("profile.fullName" as any)}</Label>
+                  <Label className="text-xs">{t("profile.fullName")}</Label>
                   <Input value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
@@ -203,9 +203,9 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
-                    { label: t("profile.alertEmail" as any), desc: t("profile.alertEmailDesc" as any), state: notifEmail, toggle: setNotifEmail },
-                    { label: t("profile.campaignResults" as any), desc: t("profile.campaignResultsDesc" as any), state: notifCampaign, toggle: setNotifCampaign },
-                    { label: t("profile.monthlyReports" as any), desc: t("profile.monthlyReportsDesc" as any), state: notifReport, toggle: setNotifReport },
+                    { label: t("profile.alertEmail"), desc: t("profile.alertEmailDesc"), state: notifEmail, toggle: setNotifEmail },
+                    { label: t("profile.campaignResults"), desc: t("profile.campaignResultsDesc"), state: notifCampaign, toggle: setNotifCampaign },
+                    { label: t("profile.monthlyReports"), desc: t("profile.monthlyReportsDesc"), state: notifReport, toggle: setNotifReport },
                   ].map((item) => (
                     <div key={item.label} className="flex items-center justify-between rounded-xl border p-3">
                       <div>
@@ -255,9 +255,9 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between rounded-xl border p-3">
                     <div>
                       <p className="text-sm font-medium">{t("profile.2fa")}</p>
-                      <p className="text-xs text-muted-foreground">{t("profile.2faDesc" as any)}</p>
+                      <p className="text-xs text-muted-foreground">{t("profile.2faDesc")}</p>
                     </div>
-                    <Badge className="border-0 bg-rht-orange/10 text-rht-orange text-[10px]">{t("common.soon" as any)}</Badge>
+                    <Badge className="border-0 bg-rht-orange/10 text-rht-orange text-[10px]">{t("common.soon")}</Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -277,7 +277,7 @@ export default function ProfilePage() {
                 {saving ? (
                   <span className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 animate-spin" />
-                    {t("common.saving" as any)}
+                    {t("common.saving")}
                   </span>
                 ) : (
                   t("common.save")

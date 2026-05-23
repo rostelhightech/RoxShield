@@ -69,7 +69,7 @@ export default function ShadowITPage() {
   if (loading) {
     return (
       <div>
-        <Header title={t("shadowIt.title" as any)} />
+        <Header title={t("shadowIt.title")} />
         <div className="space-y-6 p-6">
           <Card><CardContent className="p-5"><Skeleton className="h-20 w-full" /></CardContent></Card>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -89,7 +89,7 @@ export default function ShadowITPage() {
 
   return (
     <div>
-      <Header title={t("shadowIt.title" as any)} />
+      <Header title={t("shadowIt.title")} />
       <div className="space-y-6 p-6">
         {/* Alerte principale */}
         {stats.highRiskCount > 0 && (
@@ -98,12 +98,12 @@ export default function ShadowITPage() {
               <CardContent className="flex items-start gap-4 p-5">
                 <ShieldAlert className="mt-0.5 h-6 w-6 shrink-0 text-cyber-red" />
                 <div>
-                  <h3 className="font-semibold text-cyber-red">{t("shadowIt.alertTitle" as any)}</h3>
+                  <h3 className="font-semibold text-cyber-red">{t("shadowIt.alertTitle")}</h3>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    {stats.highRiskCount} {t("shadowIt.highRiskAppsDetected" as any)}
+                    {stats.highRiskCount} {t("shadowIt.highRiskAppsDetected")}
                   </p>
                   <Button variant="outline" size="sm" className="mt-3 gap-2 border-cyber-red/30 text-cyber-red hover:bg-cyber-red/10">
-                    {t("shadowIt.launchTraining" as any)}
+                    {t("shadowIt.launchTraining")}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>
@@ -117,7 +117,7 @@ export default function ShadowITPage() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">{t("shadowIt.score" as any)}</p>
+                <p className="text-xs text-muted-foreground">{t("shadowIt.score")}</p>
                 <p className={`mt-1 text-2xl font-bold ${stats.shadowScore < 50 ? "text-cyber-red" : stats.shadowScore < 70 ? "text-rht-orange" : "text-cyber-green"}`}>
                   {stats.shadowScore}/100
                 </p>
@@ -125,20 +125,20 @@ export default function ShadowITPage() {
             </Card>
             <Card>
               <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">{t("shadowIt.unauthorizedApps" as any)}</p>
+                <p className="text-xs text-muted-foreground">{t("shadowIt.unauthorizedApps")}</p>
                 <p className="mt-1 text-2xl font-bold text-rht-orange">{stats.unapprovedCount}</p>
-                <p className="text-[11px] text-muted-foreground">{t("common.detected" as any)}</p>
+                <p className="text-[11px] text-muted-foreground">{t("common.detected")}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">{t("shadowIt.totalApps" as any)}</p>
+                <p className="text-xs text-muted-foreground">{t("shadowIt.totalApps")}</p>
                 <p className="mt-1 text-2xl font-bold">{stats.totalApps}</p>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">{t("shadowIt.highRiskApps" as any)}</p>
+                <p className="text-xs text-muted-foreground">{t("shadowIt.highRiskApps")}</p>
                 <p className="mt-1 text-2xl font-bold text-cyber-red">{stats.highRiskCount}</p>
               </CardContent>
             </Card>
@@ -152,12 +152,12 @@ export default function ShadowITPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <Smartphone className="h-4 w-4 text-rht-orange" />
-                  {t("shadowIt.riskApps" as any)}
+                  {t("shadowIt.riskApps")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {unapprovedApps.length === 0 ? (
-                  <p className="py-8 text-center text-sm text-muted-foreground">{t("shadowIt.noApps" as any)}</p>
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("shadowIt.noApps")}</p>
                 ) : (
                   unapprovedApps.map((app) => {
                     const usagePercent = stats.totalEmployees > 0 ? Math.round((app.usersCount / stats.totalEmployees) * 100) : 0;
@@ -170,13 +170,13 @@ export default function ShadowITPage() {
                               {riskLabels[app.riskLevel] || app.riskLevel}
                             </Badge>
                           </div>
-                          <span className="text-xs text-muted-foreground">{usagePercent}% {t("passwords.ofEmployees" as any)}</span>
+                          <span className="text-xs text-muted-foreground">{usagePercent}% {t("passwords.ofEmployees")}</span>
                         </div>
                         <Progress value={usagePercent} className="mt-2 h-1.5" />
                         {app.dataExposure && (
                           <p className="mt-2 text-[11px] text-muted-foreground">
                             <FileWarning className="mr-1 inline h-3 w-3" />
-                            {t("shadowIt.dataShared" as any)} : {app.dataExposure}
+                            {t("shadowIt.dataShared")} : {app.dataExposure}
                           </p>
                         )}
                       </div>
@@ -191,11 +191,11 @@ export default function ShadowITPage() {
           <FadeIn delay={0.15}>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("shadowIt.deptExposure" as any)}</CardTitle>
+                <CardTitle className="text-base">{t("shadowIt.deptExposure")}</CardTitle>
               </CardHeader>
               <CardContent>
                 {deptExposure.length === 0 ? (
-                  <p className="py-8 text-center text-sm text-muted-foreground">{t("shadowIt.noData" as any)}</p>
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("shadowIt.noData")}</p>
                 ) : (
                   <div className="h-52">
                     <ResponsiveContainer width="100%" height="100%">

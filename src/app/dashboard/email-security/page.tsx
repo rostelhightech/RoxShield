@@ -75,7 +75,7 @@ export default function EmailSecurityPage() {
   if (loading) {
     return (
       <div>
-        <Header title={t("emailSecurity.title" as any)} />
+        <Header title={t("emailSecurity.title")} />
         <div className="space-y-6 p-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
@@ -115,16 +115,16 @@ export default function EmailSecurityPage() {
 
   return (
     <div>
-      <Header title={t("emailSecurity.title" as any)} />
+      <Header title={t("emailSecurity.title")} />
       <div className="space-y-6 p-6">
         {/* Stats */}
         <FadeIn>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { label: t("emailSecurity.score" as any), value: `${emailScore}/100`, icon: Mail, color: emailScore >= 70 ? "text-cyber-green" : "text-rht-violet-light" },
-              { label: t("emailSecurity.threatsBlocked" as any), value: `${stats.blocked}/${stats.total}`, icon: ShieldAlert, color: "text-cyber-green", badge: `${stats.blockRate}%` },
-              { label: t("emailSecurity.criticalThreats" as any), value: String(stats.critical), icon: Users, color: "text-cyber-red" },
-              { label: t("emailSecurity.totalDetected" as any), value: String(stats.total), icon: TrendingDown, color: "text-rht-orange" },
+              { label: t("emailSecurity.score"), value: `${emailScore}/100`, icon: Mail, color: emailScore >= 70 ? "text-cyber-green" : "text-rht-violet-light" },
+              { label: t("emailSecurity.threatsBlocked"), value: `${stats.blocked}/${stats.total}`, icon: ShieldAlert, color: "text-cyber-green", badge: `${stats.blockRate}%` },
+              { label: t("emailSecurity.criticalThreats"), value: String(stats.critical), icon: Users, color: "text-cyber-red" },
+              { label: t("emailSecurity.totalDetected"), value: String(stats.total), icon: TrendingDown, color: "text-rht-orange" },
             ].map((stat) => (
               <Card key={stat.label}>
                 <CardContent className="flex items-center gap-4 p-4">
@@ -147,11 +147,11 @@ export default function EmailSecurityPage() {
           <FadeIn delay={0.1}>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("emailSecurity.threatTypes" as any)}</CardTitle>
+                <CardTitle className="text-base">{t("emailSecurity.threatTypes")}</CardTitle>
               </CardHeader>
               <CardContent>
                 {stats.byType.length === 0 ? (
-                  <p className="py-8 text-center text-sm text-muted-foreground">{t("emailSecurity.noThreats" as any)}</p>
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("emailSecurity.noThreats")}</p>
                 ) : (
                   <div className="space-y-4">
                     {stats.byType.map((threat) => {
@@ -162,7 +162,7 @@ export default function EmailSecurityPage() {
                           <div className="flex items-center justify-between text-sm">
                             <span className="font-medium">{typeLabels[threat.type] || threat.type}</span>
                             <span className="text-xs text-muted-foreground">
-                              {blocked}/{total} {t("emailSecurity.blocked" as any)}
+                              {blocked}/{total} {t("emailSecurity.blocked")}
                             </span>
                           </div>
                           <div className="mt-1.5 flex gap-1">
@@ -188,11 +188,11 @@ export default function EmailSecurityPage() {
           <FadeIn delay={0.15}>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("emailSecurity.deptScore" as any)}</CardTitle>
+                <CardTitle className="text-base">{t("emailSecurity.deptScore")}</CardTitle>
               </CardHeader>
               <CardContent>
                 {departmentData.length === 0 ? (
-                  <p className="py-8 text-center text-sm text-muted-foreground">{t("emailSecurity.noData" as any)}</p>
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("emailSecurity.noData")}</p>
                 ) : (
                   <div className="h-64">
                     <ResponsiveContainer width="100%" height="100%">
@@ -219,21 +219,21 @@ export default function EmailSecurityPage() {
         <FadeIn delay={0.2}>
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("emailSecurity.recentIncidents" as any)}</CardTitle>
+              <CardTitle className="text-base">{t("emailSecurity.recentIncidents")}</CardTitle>
             </CardHeader>
             <CardContent>
               {recentIncidents.length === 0 ? (
-                <p className="py-8 text-center text-sm text-muted-foreground">{t("emailSecurity.noIncidents" as any)}</p>
+                <p className="py-8 text-center text-sm text-muted-foreground">{t("emailSecurity.noIncidents")}</p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b text-left text-xs text-muted-foreground">
-                        <th className="pb-3 pr-4">{t("common.date" as any)}</th>
-                        <th className="pb-3 pr-4">{t("common.type" as any)}</th>
-                        <th className="pb-3 pr-4">{t("common.target" as any)}</th>
-                        <th className="pb-3 pr-4">{t("common.department" as any)}</th>
-                        <th className="pb-3">{t("common.status" as any)}</th>
+                        <th className="pb-3 pr-4">{t("common.date")}</th>
+                        <th className="pb-3 pr-4">{t("common.type")}</th>
+                        <th className="pb-3 pr-4">{t("common.target")}</th>
+                        <th className="pb-3 pr-4">{t("common.department")}</th>
+                        <th className="pb-3">{t("common.status")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">

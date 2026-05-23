@@ -75,7 +75,7 @@ export default function GRCPage() {
   if (loading) {
     return (
       <div>
-        <Header title={t("grc.title" as any)} />
+        <Header title={t("grc.title")} />
         <div className="space-y-6 p-6">
           <div className="grid gap-6 lg:grid-cols-2">
             <Card><CardContent className="p-6"><Skeleton className="h-40 w-full" /></CardContent></Card>
@@ -100,21 +100,21 @@ export default function GRCPage() {
   ].filter((d) => d.value > 0);
 
   const gapLabels: Record<string, string> = {
-    compliant: t("status.compliant" as any),
-    partial: t("status.partial" as any),
-    missing: t("status.missing" as any),
+    compliant: t("status.compliant"),
+    partial: t("status.partial"),
+    missing: t("status.missing"),
   };
 
   return (
     <div>
-      <Header title={t("grc.title" as any)} />
+      <Header title={t("grc.title")} />
       <div className="space-y-6 p-6">
         {/* Score + Gap */}
         <FadeIn>
           <div className="grid gap-6 lg:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("grc.maturityScore" as any)}</CardTitle>
+                <CardTitle className="text-base">{t("grc.maturityScore")}</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center gap-6">
                 <div className="h-40 w-40">
@@ -130,15 +130,15 @@ export default function GRCPage() {
                 <div>
                   <p className="text-4xl font-bold text-rht-violet-light">{maturityScore}<span className="text-lg text-muted-foreground">/100</span></p>
                   <Badge className={`mt-2 ${maturityScore >= 70 ? "bg-cyber-green/10 text-cyber-green" : maturityScore >= 40 ? "bg-rht-orange/10 text-rht-orange" : "bg-cyber-red/10 text-cyber-red"}`}>
-                    {maturityScore >= 70 ? t("status.good" as any) : maturityScore >= 40 ? t("status.intermediate" as any) : t("status.critical" as any)}
+                    {maturityScore >= 70 ? t("status.good") : maturityScore >= 40 ? t("status.intermediate") : t("status.critical")}
                   </Badge>
-                  <p className="mt-2 text-xs text-muted-foreground">{t("grc.level" as any)}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{t("grc.level")}</p>
                 </div>
               </CardContent>
             </Card>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("grc.gapAnalysis" as any)}</CardTitle>
+                <CardTitle className="text-base">{t("grc.gapAnalysis")}</CardTitle>
               </CardHeader>
               <CardContent className="flex items-center gap-6">
                 <div className="h-40 w-40">
@@ -161,7 +161,7 @@ export default function GRCPage() {
                       <span className="font-bold">{d.value}</span>
                     </div>
                   ))}
-                  <p className="mt-2 text-xs text-muted-foreground">{gap.total} {t("grc.controlsAnalyzed" as any)}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{gap.total} {t("grc.controlsAnalyzed")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -173,7 +173,7 @@ export default function GRCPage() {
           <FadeIn delay={0.1}>
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("grc.complianceFrameworks" as any)}</CardTitle>
+                <CardTitle className="text-base">{t("grc.complianceFrameworks")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <StaggerContainer className="grid gap-4 sm:grid-cols-2">
@@ -204,7 +204,7 @@ export default function GRCPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-base">
                   <AlertTriangle className="h-4 w-4 text-rht-orange" />
-                  {t("grc.riskRegister" as any)}
+                  {t("grc.riskRegister")}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -212,12 +212,12 @@ export default function GRCPage() {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b text-left text-xs text-muted-foreground">
-                        <th className="pb-3 pr-4">{t("grc.risk" as any)}</th>
-                        <th className="pb-3 pr-4">{t("grc.impact" as any)}</th>
-                        <th className="pb-3 pr-4">{t("grc.probability" as any)}</th>
-                        <th className="pb-3 pr-4">{t("common.score" as any)}</th>
-                        <th className="pb-3 pr-4">{t("grc.mitigation" as any)}</th>
-                        <th className="pb-3">{t("common.status" as any)}</th>
+                        <th className="pb-3 pr-4">{t("grc.risk")}</th>
+                        <th className="pb-3 pr-4">{t("grc.impact")}</th>
+                        <th className="pb-3 pr-4">{t("grc.probability")}</th>
+                        <th className="pb-3 pr-4">{t("common.score")}</th>
+                        <th className="pb-3 pr-4">{t("grc.mitigation")}</th>
+                        <th className="pb-3">{t("common.status")}</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y">
@@ -249,15 +249,15 @@ export default function GRCPage() {
         <FadeIn delay={0.2}>
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("grc.quickActions" as any)}</CardTitle>
+              <CardTitle className="text-base">{t("grc.quickActions")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                 {[
-                  { icon: Download, label: t("grc.exportPdf" as any), color: "text-rht-violet-light" },
-                  { icon: FileText, label: t("grc.generateAudit" as any), color: "text-cyber-green" },
-                  { icon: TrendingUp, label: t("grc.sectorBenchmark" as any), color: "text-rht-orange" },
-                  { icon: Search, label: t("grc.launchFullAudit" as any), color: "text-cyber-red" },
+                  { icon: Download, label: t("grc.exportPdf"), color: "text-rht-violet-light" },
+                  { icon: FileText, label: t("grc.generateAudit"), color: "text-cyber-green" },
+                  { icon: TrendingUp, label: t("grc.sectorBenchmark"), color: "text-rht-orange" },
+                  { icon: Search, label: t("grc.launchFullAudit"), color: "text-cyber-red" },
                 ].map((action) => (
                   <Button key={action.label} variant="outline" className="h-auto flex-col gap-2 p-4">
                     <action.icon className={`h-5 w-5 ${action.color}`} />

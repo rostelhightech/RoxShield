@@ -17,6 +17,9 @@ const dictionaries = {
     "common.edit": "Modifier",
     "common.add": "Ajouter",
     "common.close": "Fermer",
+    "common.all": "Tous",
+    "common.allDepartments": "Tous les départements",
+    "common.results": "résultats",
     "common.loading": "Chargement...",
     "common.saved": "Enregistré !",
     "common.yes": "Oui",
@@ -65,6 +68,11 @@ const dictionaries = {
     "employees.safe": "Sûr",
     "employees.moderate": "Modéré",
     "employees.atRisk": "À risque",
+    "employees.profileDesc": "Profil de l'employé — score de risque et formations",
+    "employees.assignTraining": "Assigner une formation",
+    "employees.includeCampaign": "Inclure dans une campagne",
+    "employees.allEmployees": "Tous les employés",
+    "employees.noResults": "Aucun employé trouvé",
 
     // Simulations
     "simulations.title": "Simulations de phishing",
@@ -433,6 +441,113 @@ const dictionaries = {
     "encryption.training.vpn": "VPN et connexions sécurisées",
     "encryption.training.e2e": "Chiffrement de bout en bout",
 
+    // Extra common
+    "common.active": "Actif",
+    "common.error": "Erreur",
+    "common.manage": "Gérer",
+    "common.notConfigured": "Non configuré",
+    "common.saving": "Enregistrement...",
+    "common.soon": "Bientôt",
+
+    // Extra employees
+    "employees.addEmployee": "Ajouter un employé",
+    "employees.addDesc": "Renseignez les informations du nouvel employé",
+    "employees.fullName": "Nom complet",
+    "employees.emailRequired": "Email *",
+    "employees.position": "Poste",
+    "employees.adding": "Ajout...",
+    "employees.deleteEmployee": "Supprimer cet employé",
+    "employees.deleting": "Suppression...",
+
+    // Extra simulations
+    "simulations.campaignHistory": "Historique des campagnes",
+    "simulations.campaignLaunched": "Campagne lancée",
+    "simulations.chooseTemplate": "Choisir un template",
+    "simulations.clicked": "Cliqué",
+    "simulations.description": "Lancez des campagnes de phishing pour tester vos employés",
+    "simulations.emailsSending": "Emails en cours d'envoi",
+    "simulations.highClickRate": "Taux de clic élevé",
+    "simulations.launch": "Lancer",
+    "simulations.launchNewCampaign": "Lancer une nouvelle campagne",
+    "simulations.noCampaigns": "Aucune campagne",
+    "simulations.recHighClick": "Formation urgente recommandée",
+    "simulations.recLowClick": "Bon niveau — continuez les simulations",
+    "simulations.recMediumClick": "Formation de rappel recommandée",
+    "simulations.recommendation": "Recommandation",
+    "simulations.reported": "Signalé",
+    "simulations.resultsByCampaign": "Résultats par campagne",
+    "simulations.sending": "Envoi...",
+    "simulations.sent": "Envoyé",
+
+    // Extra training
+    "training.availableModules": "Modules disponibles",
+    "training.avgCompletion": "Complétion moyenne",
+    "training.noModules": "Aucun module disponible",
+    "training.review": "Revoir",
+
+    // Extra reports
+    "reports.avgRiskScore": "Score de risque moyen",
+    "reports.completionRate": "Taux de complétion",
+    "reports.description": "Visualisez et exportez les rapports de sécurité",
+    "reports.exported": "Rapport exporté",
+    "reports.generating": "Génération...",
+    "reports.noDeptData": "Aucune donnée par département",
+    "reports.phishingClickRate": "Taux de clic phishing",
+    "reports.riskByDept": "Risque par département",
+    "reports.topModules": "Modules les plus complétés",
+    "reports.totalEmployees": "Total employés",
+
+    // Extra settings
+    "settings.accountSecurity": "Sécurité du compte",
+    "settings.adminPerms": "Permissions admin",
+    "settings.administrators": "Administrateurs",
+    "settings.campaignsMonth": "Campagnes / mois",
+    "settings.city": "Ville",
+    "settings.contactEmail": "Email de contact",
+    "settings.country": "Pays",
+    "settings.employeeCount": "Nombre d'employés",
+    "settings.employeePerms": "Permissions employé",
+    "settings.invite": "Inviter",
+    "settings.noAdmins": "Aucun administrateur",
+    "settings.notifPreferences": "Préférences de notification",
+    "settings.orgName": "Nom de l'organisation",
+    "settings.planSubscription": "Plan & Abonnement",
+    "settings.reportsStorage": "Stockage des rapports",
+    "settings.rolesPermissions": "Rôles & Permissions",
+    "settings.sector": "Secteur d'activité",
+    "settings.upTo": "Jusqu'à",
+    "settings.usedEmployees": "Employés utilisés",
+
+    // Extra profile
+    "profile.fullName": "Nom complet",
+    "profile.2faDesc": "Ajoutez une couche de sécurité supplémentaire à votre compte",
+    "profile.alertEmail": "Alertes email",
+    "profile.alertEmailDesc": "Recevez des alertes pour les activités suspectes",
+    "profile.campaignResults": "Résultats de campagne",
+    "profile.campaignResultsDesc": "Soyez notifié des résultats de vos campagnes",
+    "profile.monthlyReports": "Rapports mensuels",
+    "profile.monthlyReportsDesc": "Recevez un résumé mensuel par email",
+
+    // Extra email security
+    "emailSecurity.criticalThreats": "Menaces critiques",
+    "emailSecurity.noData": "Aucune donnée disponible",
+    "emailSecurity.noIncidents": "Aucun incident récent",
+    "emailSecurity.noThreats": "Aucune menace détectée",
+    "emailSecurity.totalDetected": "Total détectées",
+
+    // Extra encryption
+    "encryption.noAudits": "Aucun audit disponible",
+
+    // Extra passwords
+    "passwords.noIssues": "Aucun problème détecté",
+
+    // Extra shadow IT
+    "shadowIt.highRiskApps": "Applications à risque élevé",
+    "shadowIt.highRiskAppsDetected": "applications à risque élevé détectées",
+    "shadowIt.noApps": "Aucune application détectée",
+    "shadowIt.noData": "Aucune donnée disponible",
+    "shadowIt.totalApps": "Applications détectées",
+
     // Header notifications
     "header.notifications": "Notifications",
     "header.notif1.title": "Taux de clic élevé",
@@ -454,6 +569,9 @@ const dictionaries = {
     "common.edit": "Edit",
     "common.add": "Add",
     "common.close": "Close",
+    "common.all": "All",
+    "common.allDepartments": "All departments",
+    "common.results": "results",
     "common.loading": "Loading...",
     "common.saved": "Saved!",
     "common.yes": "Yes",
@@ -502,6 +620,11 @@ const dictionaries = {
     "employees.safe": "Safe",
     "employees.moderate": "Moderate",
     "employees.atRisk": "At risk",
+    "employees.profileDesc": "Employee profile — risk score and trainings",
+    "employees.assignTraining": "Assign training",
+    "employees.includeCampaign": "Include in campaign",
+    "employees.allEmployees": "All employees",
+    "employees.noResults": "No employees found",
 
     // Simulations
     "simulations.title": "Phishing simulations",
@@ -869,6 +992,113 @@ const dictionaries = {
     "encryption.training.protectFiles": "Protect sensitive files",
     "encryption.training.vpn": "VPN and secure connections",
     "encryption.training.e2e": "End-to-end encryption",
+
+    // Extra common
+    "common.active": "Active",
+    "common.error": "Error",
+    "common.manage": "Manage",
+    "common.notConfigured": "Not configured",
+    "common.saving": "Saving...",
+    "common.soon": "Coming soon",
+
+    // Extra employees
+    "employees.addEmployee": "Add employee",
+    "employees.addDesc": "Enter the new employee's information",
+    "employees.fullName": "Full name",
+    "employees.emailRequired": "Email *",
+    "employees.position": "Position",
+    "employees.adding": "Adding...",
+    "employees.deleteEmployee": "Delete this employee",
+    "employees.deleting": "Deleting...",
+
+    // Extra simulations
+    "simulations.campaignHistory": "Campaign history",
+    "simulations.campaignLaunched": "Campaign launched",
+    "simulations.chooseTemplate": "Choose a template",
+    "simulations.clicked": "Clicked",
+    "simulations.description": "Launch phishing campaigns to test your employees",
+    "simulations.emailsSending": "Emails being sent",
+    "simulations.highClickRate": "High click rate",
+    "simulations.launch": "Launch",
+    "simulations.launchNewCampaign": "Launch a new campaign",
+    "simulations.noCampaigns": "No campaigns",
+    "simulations.recHighClick": "Urgent training recommended",
+    "simulations.recLowClick": "Good level — continue simulations",
+    "simulations.recMediumClick": "Refresher training recommended",
+    "simulations.recommendation": "Recommendation",
+    "simulations.reported": "Reported",
+    "simulations.resultsByCampaign": "Results by campaign",
+    "simulations.sending": "Sending...",
+    "simulations.sent": "Sent",
+
+    // Extra training
+    "training.availableModules": "Available modules",
+    "training.avgCompletion": "Average completion",
+    "training.noModules": "No modules available",
+    "training.review": "Review",
+
+    // Extra reports
+    "reports.avgRiskScore": "Average risk score",
+    "reports.completionRate": "Completion rate",
+    "reports.description": "View and export security reports",
+    "reports.exported": "Report exported",
+    "reports.generating": "Generating...",
+    "reports.noDeptData": "No department data",
+    "reports.phishingClickRate": "Phishing click rate",
+    "reports.riskByDept": "Risk by department",
+    "reports.topModules": "Most completed modules",
+    "reports.totalEmployees": "Total employees",
+
+    // Extra settings
+    "settings.accountSecurity": "Account security",
+    "settings.adminPerms": "Admin permissions",
+    "settings.administrators": "Administrators",
+    "settings.campaignsMonth": "Campaigns / month",
+    "settings.city": "City",
+    "settings.contactEmail": "Contact email",
+    "settings.country": "Country",
+    "settings.employeeCount": "Number of employees",
+    "settings.employeePerms": "Employee permissions",
+    "settings.invite": "Invite",
+    "settings.noAdmins": "No administrators",
+    "settings.notifPreferences": "Notification preferences",
+    "settings.orgName": "Organization name",
+    "settings.planSubscription": "Plan & Subscription",
+    "settings.reportsStorage": "Report storage",
+    "settings.rolesPermissions": "Roles & Permissions",
+    "settings.sector": "Industry sector",
+    "settings.upTo": "Up to",
+    "settings.usedEmployees": "Employees used",
+
+    // Extra profile
+    "profile.fullName": "Full name",
+    "profile.2faDesc": "Add an extra layer of security to your account",
+    "profile.alertEmail": "Email alerts",
+    "profile.alertEmailDesc": "Receive alerts for suspicious activity",
+    "profile.campaignResults": "Campaign results",
+    "profile.campaignResultsDesc": "Get notified of your campaign results",
+    "profile.monthlyReports": "Monthly reports",
+    "profile.monthlyReportsDesc": "Receive a monthly summary by email",
+
+    // Extra email security
+    "emailSecurity.criticalThreats": "Critical threats",
+    "emailSecurity.noData": "No data available",
+    "emailSecurity.noIncidents": "No recent incidents",
+    "emailSecurity.noThreats": "No threats detected",
+    "emailSecurity.totalDetected": "Total detected",
+
+    // Extra encryption
+    "encryption.noAudits": "No audits available",
+
+    // Extra passwords
+    "passwords.noIssues": "No issues detected",
+
+    // Extra shadow IT
+    "shadowIt.highRiskApps": "High-risk applications",
+    "shadowIt.highRiskAppsDetected": "high-risk applications detected",
+    "shadowIt.noApps": "No applications detected",
+    "shadowIt.noData": "No data available",
+    "shadowIt.totalApps": "Applications detected",
 
     // Header notifications
     "header.notifications": "Notifications",

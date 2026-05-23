@@ -65,7 +65,7 @@ export default function EncryptionPage() {
   if (loading) {
     return (
       <div>
-        <Header title={t("encryption.title" as any)} />
+        <Header title={t("encryption.title")} />
         <div className="space-y-6 p-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
@@ -82,14 +82,14 @@ export default function EncryptionPage() {
   const stats = data?.stats || { overallScore: 0, totalZones: 0, compliantCount: 0, urgentActions: 0, totalFindings: 0 };
 
   const statusStyle: Record<string, { bg: string; text: string; label: string }> = {
-    non_compliant: { bg: "bg-cyber-red/10", text: "text-cyber-red", label: t("status.critical" as any) },
-    warning: { bg: "bg-rht-orange/10", text: "text-rht-orange", label: t("status.warning" as any) },
-    compliant: { bg: "bg-cyber-green/10", text: "text-cyber-green", label: t("status.good" as any) },
+    non_compliant: { bg: "bg-cyber-red/10", text: "text-cyber-red", label: t("status.critical") },
+    warning: { bg: "bg-rht-orange/10", text: "text-rht-orange", label: t("status.warning") },
+    compliant: { bg: "bg-cyber-green/10", text: "text-cyber-green", label: t("status.good") },
   };
 
   return (
     <div>
-      <Header title={t("encryption.title" as any)} />
+      <Header title={t("encryption.title")} />
       <div className="space-y-6 p-6">
         {/* Score global */}
         <FadeIn>
@@ -100,16 +100,16 @@ export default function EncryptionPage() {
                 <p className={`text-3xl font-bold ${stats.overallScore >= 70 ? "text-cyber-green" : stats.overallScore >= 50 ? "text-rht-orange" : "text-cyber-red"}`}>
                   {stats.overallScore}/100
                 </p>
-                <p className="mt-1 text-xs text-muted-foreground">{t("encryption.maturityScore" as any)}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{t("encryption.maturityScore")}</p>
                 <Badge className={`mt-2 ${stats.overallScore >= 70 ? "bg-cyber-green/10 text-cyber-green" : stats.overallScore >= 50 ? "bg-rht-orange/10 text-rht-orange" : "bg-cyber-red/10 text-cyber-red"}`}>
-                  {stats.overallScore >= 70 ? t("status.good" as any) : stats.overallScore >= 50 ? t("status.warning" as any) : t("status.critical" as any)}
+                  {stats.overallScore >= 70 ? t("status.good") : stats.overallScore >= 50 ? t("status.warning") : t("status.critical")}
                 </Badge>
               </CardContent>
             </Card>
             {[
-              { label: t("encryption.auditedZones" as any), value: `${stats.totalZones}/5`, color: "text-cyber-green" },
-              { label: t("encryption.compliantPoints" as any), value: `${stats.compliantCount}/${stats.totalZones}`, color: stats.compliantCount > 0 ? "text-cyber-green" : "text-rht-orange" },
-              { label: t("encryption.urgentActions" as any), value: String(stats.urgentActions), color: stats.urgentActions > 0 ? "text-cyber-red" : "text-cyber-green" },
+              { label: t("encryption.auditedZones"), value: `${stats.totalZones}/5`, color: "text-cyber-green" },
+              { label: t("encryption.compliantPoints"), value: `${stats.compliantCount}/${stats.totalZones}`, color: stats.compliantCount > 0 ? "text-cyber-green" : "text-rht-orange" },
+              { label: t("encryption.urgentActions"), value: String(stats.urgentActions), color: stats.urgentActions > 0 ? "text-cyber-red" : "text-cyber-green" },
             ].map((s) => (
               <Card key={s.label}>
                 <CardContent className="p-4">
@@ -125,11 +125,11 @@ export default function EncryptionPage() {
         <FadeIn delay={0.1}>
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("encryption.auditByZone" as any)}</CardTitle>
+              <CardTitle className="text-base">{t("encryption.auditByZone")}</CardTitle>
             </CardHeader>
             <CardContent>
               {zones.length === 0 ? (
-                <p className="py-8 text-center text-sm text-muted-foreground">{t("encryption.noAudits" as any)}</p>
+                <p className="py-8 text-center text-sm text-muted-foreground">{t("encryption.noAudits")}</p>
               ) : (
                 <StaggerContainer className="space-y-4">
                   {zones.map((zone) => {

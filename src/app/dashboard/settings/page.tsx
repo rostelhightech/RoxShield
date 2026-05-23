@@ -100,7 +100,7 @@ export default function SettingsPage() {
       });
       if (res.ok) {
         setSaved(true);
-        toast.success(t("common.saved" as any));
+        toast.success(t("common.saved"));
         await refetchUser();
         setTimeout(() => setSaved(false), 2000);
       } else {
@@ -115,7 +115,7 @@ export default function SettingsPage() {
 
   const handleSaveNotifs = () => {
     setSaved(true);
-    toast.success(t("common.saved" as any));
+    toast.success(t("common.saved"));
     setTimeout(() => setSaved(false), 2000);
   };
 
@@ -164,27 +164,27 @@ export default function SettingsPage() {
                 <CardContent className="space-y-4">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
-                      <Label>{t("settings.orgName" as any)}</Label>
+                      <Label>{t("settings.orgName")}</Label>
                       <Input value={orgForm?.name || ""} onChange={(e) => setOrgForm((f) => f ? { ...f, name: e.target.value } : f)} />
                     </div>
                     <div className="space-y-2">
-                      <Label>{t("settings.sector" as any)}</Label>
+                      <Label>{t("settings.sector")}</Label>
                       <Input value={orgForm?.sector || ""} onChange={(e) => setOrgForm((f) => f ? { ...f, sector: e.target.value } : f)} />
                     </div>
                     <div className="space-y-2">
-                      <Label>{t("settings.country" as any)}</Label>
+                      <Label>{t("settings.country")}</Label>
                       <Input value={orgForm?.country || ""} onChange={(e) => setOrgForm((f) => f ? { ...f, country: e.target.value } : f)} />
                     </div>
                     <div className="space-y-2">
-                      <Label>{t("settings.city" as any)}</Label>
+                      <Label>{t("settings.city")}</Label>
                       <Input value={orgForm?.city || ""} onChange={(e) => setOrgForm((f) => f ? { ...f, city: e.target.value } : f)} />
                     </div>
                     <div className="space-y-2">
-                      <Label>{t("settings.employeeCount" as any)}</Label>
+                      <Label>{t("settings.employeeCount")}</Label>
                       <Input value={orgForm?.size || ""} type="number" onChange={(e) => setOrgForm((f) => f ? { ...f, size: e.target.value } : f)} />
                     </div>
                     <div className="space-y-2">
-                      <Label>{t("settings.contactEmail" as any)}</Label>
+                      <Label>{t("settings.contactEmail")}</Label>
                       <Input value={orgForm?.contactEmail || ""} type="email" disabled className="opacity-60" />
                     </div>
                   </div>
@@ -198,7 +198,7 @@ export default function SettingsPage() {
                         {saved ? (
                           <span className="flex items-center gap-2">
                             <CheckCircle className="h-4 w-4" />
-                            {t("common.saved" as any)}
+                            {t("common.saved")}
                           </span>
                         ) : saving ? (
                           "Enregistrement..."
@@ -217,7 +217,7 @@ export default function SettingsPage() {
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4 text-rht-violet-light" />
-                    <CardTitle className="text-sm font-semibold">{t("settings.planSubscription" as any)}</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("settings.planSubscription")}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -225,19 +225,19 @@ export default function SettingsPage() {
                     <div>
                       <div className="flex items-center gap-2">
                         <h3 className="font-semibold">Plan {planLabel}</h3>
-                        <Badge className="border-0 bg-rht-violet/10 text-rht-violet-light">{t("common.active" as any)}</Badge>
+                        <Badge className="border-0 bg-rht-violet/10 text-rht-violet-light">{t("common.active")}</Badge>
                       </div>
                       <p className="mt-1 text-sm text-muted-foreground">
-                        {t("settings.upTo" as any)} {planLimit} {t("common.employees" as any)}
+                        {t("settings.upTo")} {planLimit} {t("common.employees")}
                       </p>
                     </div>
-                    <Button variant="outline" size="sm">{t("common.manage" as any)}</Button>
+                    <Button variant="outline" size="sm">{t("common.manage")}</Button>
                   </div>
                   <div className="mt-4 grid gap-3 sm:grid-cols-3">
                     {[
-                      { label: t("settings.usedEmployees" as any), value: `${totalEmployees}/${planLimit}` },
-                      { label: t("settings.campaignsMonth" as any), value: "—" },
-                      { label: t("settings.reportsStorage" as any), value: "—" },
+                      { label: t("settings.usedEmployees"), value: `${totalEmployees}/${planLimit}` },
+                      { label: t("settings.campaignsMonth"), value: "—" },
+                      { label: t("settings.reportsStorage"), value: "—" },
                     ].map((item) => (
                       <div key={item.label} className="rounded-xl border p-3 text-center">
                         <p className="text-lg font-bold">{item.value}</p>
@@ -256,7 +256,7 @@ export default function SettingsPage() {
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <Bell className="h-4 w-4 text-rht-orange" />
-                    <CardTitle className="text-sm font-semibold">{t("settings.notifPreferences" as any)}</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("settings.notifPreferences")}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
@@ -296,7 +296,7 @@ export default function SettingsPage() {
                         {saved ? (
                           <span className="flex items-center gap-2">
                             <CheckCircle className="h-4 w-4" />
-                            {t("common.saved" as any)}
+                            {t("common.saved")}
                           </span>
                         ) : (
                           t("common.save")
@@ -315,23 +315,23 @@ export default function SettingsPage() {
                 <CardHeader>
                   <div className="flex items-center gap-2">
                     <Lock className="h-4 w-4 text-rht-orange" />
-                    <CardTitle className="text-sm font-semibold">{t("settings.accountSecurity" as any)}</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("settings.accountSecurity")}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between rounded-xl border p-4">
                     <div>
                       <p className="text-sm font-medium">{t("profile.2fa")}</p>
-                      <p className="text-xs text-muted-foreground">{t("profile.2faDesc" as any)}</p>
+                      <p className="text-xs text-muted-foreground">{t("profile.2faDesc")}</p>
                     </div>
-                    <Badge className="border-0 bg-rht-orange/10 text-rht-orange text-[10px]">{t("common.soon" as any)}</Badge>
+                    <Badge className="border-0 bg-rht-orange/10 text-rht-orange text-[10px]">{t("common.soon")}</Badge>
                   </div>
                   <div className="flex items-center justify-between rounded-xl border p-4">
                     <div>
                       <p className="text-sm font-medium">SSO (Single Sign-On)</p>
                       <p className="text-xs text-muted-foreground">Google Workspace / Microsoft 365</p>
                     </div>
-                    <Badge variant="outline">{t("common.notConfigured" as any)}</Badge>
+                    <Badge variant="outline">{t("common.notConfigured")}</Badge>
                   </div>
                 </CardContent>
               </Card>
@@ -345,17 +345,17 @@ export default function SettingsPage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-rht-violet-light" />
-                      <CardTitle className="text-sm font-semibold">{t("settings.administrators" as any)}</CardTitle>
+                      <CardTitle className="text-sm font-semibold">{t("settings.administrators")}</CardTitle>
                     </div>
                     <Button size="sm" className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90">
                       <Plus className="mr-1 h-3 w-3" />
-                      {t("settings.invite" as any)}
+                      {t("settings.invite")}
                     </Button>
                   </div>
                 </CardHeader>
                 <CardContent>
                   {admins.length === 0 ? (
-                    <p className="py-8 text-center text-sm text-muted-foreground">{t("settings.noAdmins" as any)}</p>
+                    <p className="py-8 text-center text-sm text-muted-foreground">{t("settings.noAdmins")}</p>
                   ) : (
                     <div className="space-y-3">
                       {admins.map((admin: any) => (
@@ -386,13 +386,13 @@ export default function SettingsPage() {
             <FadeIn delay={0.1}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm font-semibold">{t("settings.rolesPermissions" as any)}</CardTitle>
+                  <CardTitle className="text-sm font-semibold">{t("settings.rolesPermissions")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {[
-                      { role: "Admin", perms: t("settings.adminPerms" as any), count: admins.length },
-                      { role: "Employe", perms: t("settings.employeePerms" as any), count: Math.max(0, totalEmployees - admins.length) },
+                      { role: "Admin", perms: t("settings.adminPerms"), count: admins.length },
+                      { role: "Employe", perms: t("settings.employeePerms"), count: Math.max(0, totalEmployees - admins.length) },
                     ].map((r) => (
                       <div key={r.role} className="flex items-center justify-between rounded-xl border p-4">
                         <div>

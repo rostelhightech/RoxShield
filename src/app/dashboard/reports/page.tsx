@@ -184,7 +184,7 @@ export default function ReportsPage() {
       <div className="space-y-6 p-6">
         <FadeIn>
           <div className="flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">{t("reports.description" as any)}</p>
+            <p className="text-sm text-muted-foreground">{t("reports.description")}</p>
             <div className="flex items-center gap-2">
               <Button variant="outline" onClick={handleCSV}>
                 <Download className="mr-2 h-4 w-4" />
@@ -197,9 +197,9 @@ export default function ReportsPage() {
                   disabled={exporting}
                 >
                   {exporting ? (
-                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t("reports.generating" as any)}</>
+                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />{t("reports.generating")}</>
                   ) : exported ? (
-                    <><CheckCircle className="mr-2 h-4 w-4" />{t("reports.exported" as any)}</>
+                    <><CheckCircle className="mr-2 h-4 w-4" />{t("reports.exported")}</>
                   ) : (
                     <><Download className="mr-2 h-4 w-4" />{t("reports.exportPDF")}</>
                   )}
@@ -211,10 +211,10 @@ export default function ReportsPage() {
 
         <StaggerContainer className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: Shield, label: t("reports.avgRiskScore" as any), value: dashData.avgRiskScore + "%", bg: "bg-rht-orange/10", text: "text-rht-orange" },
-            { icon: Users, label: t("reports.completionRate" as any), value: dashData.trainingRate + "%", bg: "bg-cyber-green/10", text: "text-cyber-green" },
-            { icon: AlertTriangle, label: t("reports.phishingClickRate" as any), value: clickRate + "%", bg: "bg-cyber-red/10", text: "text-cyber-red" },
-            { icon: FileBarChart, label: t("reports.totalEmployees" as any), value: String(dashData.totalEmployees), bg: "bg-rht-violet/10", text: "text-rht-violet" },
+            { icon: Shield, label: t("reports.avgRiskScore"), value: dashData.avgRiskScore + "%", bg: "bg-rht-orange/10", text: "text-rht-orange" },
+            { icon: Users, label: t("reports.completionRate"), value: dashData.trainingRate + "%", bg: "bg-cyber-green/10", text: "text-cyber-green" },
+            { icon: AlertTriangle, label: t("reports.phishingClickRate"), value: clickRate + "%", bg: "bg-cyber-red/10", text: "text-cyber-red" },
+            { icon: FileBarChart, label: t("reports.totalEmployees"), value: String(dashData.totalEmployees), bg: "bg-rht-violet/10", text: "text-rht-violet" },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <GlowCard>
@@ -238,8 +238,8 @@ export default function ReportsPage() {
 
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsList>
-            <TabsTrigger value="overview">{t("reports.overview" as any)}</TabsTrigger>
-            <TabsTrigger value="departments">{t("reports.departments" as any)}</TabsTrigger>
+            <TabsTrigger value="overview">{t("reports.overview")}</TabsTrigger>
+            <TabsTrigger value="departments">{t("reports.departments")}</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -247,7 +247,7 @@ export default function ReportsPage() {
               <FadeIn>
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-semibold">{t("reports.statusDistribution" as any)}</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("reports.statusDistribution")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="h-[220px]">
@@ -270,11 +270,11 @@ export default function ReportsPage() {
               <FadeIn delay={0.1} className="lg:col-span-2">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm font-semibold">{t("reports.topModules" as any)}</CardTitle>
+                    <CardTitle className="text-sm font-semibold">{t("reports.topModules")}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     {modules.length === 0 ? (
-                      <p className="py-8 text-center text-sm text-muted-foreground">{t("training.noModules" as any)}</p>
+                      <p className="py-8 text-center text-sm text-muted-foreground">{t("training.noModules")}</p>
                     ) : (
                       <div className="space-y-4">
                         {[...modules]
@@ -306,13 +306,13 @@ export default function ReportsPage() {
 
           <TabsContent value="departments" className="space-y-6">
             {dashData.deptRisk.length === 0 ? (
-              <Card><CardContent className="py-12 text-center text-sm text-muted-foreground">{t("reports.noDeptData" as any)}</CardContent></Card>
+              <Card><CardContent className="py-12 text-center text-sm text-muted-foreground">{t("reports.noDeptData")}</CardContent></Card>
             ) : (
               <>
                 <FadeIn>
                   <Card>
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-semibold">{t("reports.riskByDept" as any)}</CardTitle>
+                      <CardTitle className="text-sm font-semibold">{t("reports.riskByDept")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="h-[350px]">
@@ -341,7 +341,7 @@ export default function ReportsPage() {
                               {dept.avgRisk}%
                             </Badge>
                           </div>
-                          <p className="mt-1 text-xs text-muted-foreground">{dept.count} {t("common.employees" as any)}</p>
+                          <p className="mt-1 text-xs text-muted-foreground">{dept.count} {t("common.employees")}</p>
                           <Progress value={100 - dept.avgRisk} className="mt-3 h-2" />
                         </CardContent>
                       </Card>

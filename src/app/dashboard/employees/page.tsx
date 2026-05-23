@@ -230,7 +230,7 @@ export default function EmployeesPage() {
   const departments = data?.departments || [];
 
   const statuses = [
-    { value: "all", label: t("common.all" as any) },
+    { value: "all", label: t("common.all") },
     { value: "safe", label: t("employees.safe") },
     { value: "moderate", label: t("employees.moderate") },
     { value: "at-risk", label: t("employees.atRisk") },
@@ -326,7 +326,7 @@ export default function EmployeesPage() {
                 value={deptFilter}
                 onChange={(e) => setDeptFilter(e.target.value)}
               >
-                <option value="all">{t("common.allDepartments" as any)}</option>
+                <option value="all">{t("common.allDepartments")}</option>
                 {departments.map((d) => (
                   <option key={d} value={d}>{d}</option>
                 ))}
@@ -371,8 +371,8 @@ export default function EmployeesPage() {
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-semibold">
                 {filtered.length === employees.length
-                  ? `${t("employees.allEmployees" as any)} (${filtered.length})`
-                  : `${filtered.length} ${t("common.results" as any)} / ${employees.length}`}
+                  ? `${t("employees.allEmployees")} (${filtered.length})`
+                  : `${filtered.length} ${t("common.results")} / ${employees.length}`}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -447,7 +447,7 @@ export default function EmployeesPage() {
                 {filtered.length === 0 && (
                   <div className="py-12 text-center">
                     <Search className="mx-auto mb-3 h-8 w-8 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground">{t("employees.noResults" as any)}</p>
+                    <p className="text-sm text-muted-foreground">{t("employees.noResults")}</p>
                   </div>
                 )}
               </div>
@@ -472,7 +472,7 @@ export default function EmployeesPage() {
                   <p className="text-xs font-normal text-muted-foreground">{selectedEmployee.position || selectedEmployee.role}</p>
                 </div>
               </DialogTitle>
-              <DialogDescription>{t("employees.profileDesc" as any)}</DialogDescription>
+              <DialogDescription>{t("employees.profileDesc")}</DialogDescription>
             </DialogHeader>
 
             <div className="space-y-4">
@@ -516,7 +516,7 @@ export default function EmployeesPage() {
                     onClick={() => openAssignTraining(selectedEmployee)}
                   >
                     <GraduationCap className="mr-2 h-4 w-4" />
-                    {t("employees.assignTraining" as any)}
+                    {t("employees.assignTraining")}
                   </Button>
                 )}
                 <Button
@@ -526,7 +526,7 @@ export default function EmployeesPage() {
                   onClick={() => openIncludeCampaign(selectedEmployee)}
                 >
                   <Target className="mr-2 h-4 w-4" />
-                  {t("employees.includeCampaign" as any)}
+                  {t("employees.includeCampaign")}
                 </Button>
               </div>
               {selectedEmployee.role === "EMPLOYEE" && (

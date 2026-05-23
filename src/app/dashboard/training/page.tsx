@@ -40,9 +40,9 @@ interface TrainingResponse {
 
 function difficultyLabel(d: string, t: (key: any) => string): string {
   switch (d) {
-    case "beginner": return t("status.beginner" as any);
-    case "intermediate": return t("status.intermediate" as any);
-    case "advanced": return t("status.advanced" as any);
+    case "beginner": return t("status.beginner");
+    case "intermediate": return t("status.intermediate");
+    case "advanced": return t("status.advanced");
     default: return d;
   }
 }
@@ -101,9 +101,9 @@ export default function TrainingPage() {
       <div className="space-y-6 p-6">
         <StaggerContainer className="grid gap-3 sm:grid-cols-3">
           {[
-            { value: stats.total, label: t("training.availableModules" as any) },
-            { value: avgCompletion + "%", label: t("training.avgCompletion" as any), highlight: true },
-            { value: stats.completed, label: t("training.completed" as any) },
+            { value: stats.total, label: t("training.availableModules") },
+            { value: avgCompletion + "%", label: t("training.avgCompletion"), highlight: true },
+            { value: stats.completed, label: t("training.completed") },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <Card>
@@ -121,7 +121,7 @@ export default function TrainingPage() {
             <Card>
               <CardContent className="py-12 text-center">
                 <BookOpen className="mx-auto mb-3 h-8 w-8 text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground">{t("training.noModules" as any)}</p>
+                <p className="text-sm text-muted-foreground">{t("training.noModules")}</p>
               </CardContent>
             </Card>
           </FadeIn>
@@ -159,7 +159,7 @@ export default function TrainingPage() {
                       </div>
                       <div className="mb-4 space-y-1">
                         <div className="flex justify-between text-xs">
-                          <span className="text-muted-foreground">{t("common.completion" as any)}</span>
+                          <span className="text-muted-foreground">{t("common.completion")}</span>
                           <span className="font-medium">{module.progress.progressPercent}%</span>
                         </div>
                         <Progress value={module.progress.progressPercent} className="h-2" />
@@ -171,9 +171,9 @@ export default function TrainingPage() {
                           className="w-full transition-all duration-300 group-hover:bg-gradient-to-r group-hover:from-rht-violet group-hover:to-rht-violet-light group-hover:border-transparent group-hover:text-white"
                         >
                           {module.progress.status === "COMPLETED"
-                            ? t("training.review" as any)
+                            ? t("training.review")
                             : module.progress.status === "IN_PROGRESS"
-                            ? t("training.continue" as any)
+                            ? t("training.continue")
                             : t("training.start")}
                           <ArrowRight className="ml-2 h-3.5 w-3.5" />
                         </Button>

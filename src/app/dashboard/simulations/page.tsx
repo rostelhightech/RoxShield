@@ -146,7 +146,7 @@ export default function SimulationsPage() {
         <FadeIn>
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              {t("simulations.description" as any)}
+              {t("simulations.description")}
             </p>
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
               <Button
@@ -191,7 +191,7 @@ export default function SimulationsPage() {
           <FadeIn>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold">{t("simulations.resultsByCampaign" as any)}</CardTitle>
+                <CardTitle className="text-sm font-semibold">{t("simulations.resultsByCampaign")}</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="h-[300px]">
@@ -224,13 +224,13 @@ export default function SimulationsPage() {
         <FadeIn delay={0.1}>
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold">{t("simulations.campaignHistory" as any)}</CardTitle>
+              <CardTitle className="text-sm font-semibold">{t("simulations.campaignHistory")}</CardTitle>
             </CardHeader>
             <CardContent>
               {campaigns.length === 0 ? (
                 <div className="py-12 text-center">
                   <Send className="mx-auto mb-3 h-8 w-8 text-muted-foreground/30" />
-                  <p className="text-sm text-muted-foreground">{t("simulations.noCampaigns" as any)}</p>
+                  <p className="text-sm text-muted-foreground">{t("simulations.noCampaigns")}</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -260,21 +260,21 @@ export default function SimulationsPage() {
                           {clickRate > 40 && (
                             <Badge className="w-fit border-0 bg-cyber-red/10 text-cyber-red">
                               <AlertTriangle className="mr-1 h-3 w-3" />
-                              {t("simulations.highClickRate" as any)}
+                              {t("simulations.highClickRate")}
                             </Badge>
                           )}
                         </div>
                         <div className="grid gap-4 sm:grid-cols-3">
                           <div>
-                            <p className="text-xs text-muted-foreground">{t("simulations.clicked" as any)}</p>
+                            <p className="text-xs text-muted-foreground">{t("simulations.clicked")}</p>
                             <p className="text-lg font-bold text-cyber-red">{clickRate}%</p>
                           </div>
                           <div>
-                            <p className="text-xs text-muted-foreground">{t("simulations.reported" as any)}</p>
+                            <p className="text-xs text-muted-foreground">{t("simulations.reported")}</p>
                             <p className="text-lg font-bold text-cyber-green">{reportRate}%</p>
                           </div>
                           <div>
-                            <p className="text-xs text-muted-foreground">{t("simulations.sent" as any)}</p>
+                            <p className="text-xs text-muted-foreground">{t("simulations.sent")}</p>
                             <p className="text-lg font-bold text-muted-foreground">{cam.sentCount}</p>
                           </div>
                         </div>
@@ -293,8 +293,8 @@ export default function SimulationsPage() {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>{t("simulations.launchNewCampaign" as any)}</DialogTitle>
-            <DialogDescription>{t("simulations.chooseTemplate" as any)}</DialogDescription>
+            <DialogTitle>{t("simulations.launchNewCampaign")}</DialogTitle>
+            <DialogDescription>{t("simulations.chooseTemplate")}</DialogDescription>
           </DialogHeader>
 
           <AnimatePresence mode="wait">
@@ -308,8 +308,8 @@ export default function SimulationsPage() {
                 <div className="flex h-14 w-14 items-center justify-center rounded-full bg-cyber-green/10">
                   <CheckCircle2 className="h-7 w-7 text-cyber-green" />
                 </div>
-                <p className="font-semibold">{t("simulations.campaignLaunched" as any)}</p>
-                <p className="text-xs text-muted-foreground">{t("simulations.emailsSending" as any)}</p>
+                <p className="font-semibold">{t("simulations.campaignLaunched")}</p>
+                <p className="text-xs text-muted-foreground">{t("simulations.emailsSending")}</p>
               </motion.div>
             ) : (
               <motion.div key="form" className="space-y-3">
@@ -344,12 +344,12 @@ export default function SimulationsPage() {
                 {launching ? (
                   <>
                     <Clock className="mr-2 h-4 w-4 animate-spin" />
-                    {t("simulations.sending" as any)}
+                    {t("simulations.sending")}
                   </>
                 ) : (
                   <>
                     <Play className="mr-2 h-4 w-4" />
-                    {t("simulations.launch" as any)}
+                    {t("simulations.launch")}
                   </>
                 )}
               </Button>
@@ -377,7 +377,7 @@ export default function SimulationsPage() {
                 <div className="rounded-xl border p-3 text-center">
                   <div className="flex items-center justify-center gap-1.5">
                     <MousePointerClick className="h-4 w-4 text-cyber-red" />
-                    <span className="text-xs text-muted-foreground">{t("simulations.clicked" as any)}</span>
+                    <span className="text-xs text-muted-foreground">{t("simulations.clicked")}</span>
                   </div>
                   <p className="mt-1 text-2xl font-bold text-cyber-red">{detailCampaign.clickCount}</p>
                   <p className="text-xs text-muted-foreground">
@@ -387,7 +387,7 @@ export default function SimulationsPage() {
                 <div className="rounded-xl border p-3 text-center">
                   <div className="flex items-center justify-center gap-1.5">
                     <Flag className="h-4 w-4 text-cyber-green" />
-                    <span className="text-xs text-muted-foreground">{t("simulations.reported" as any)}</span>
+                    <span className="text-xs text-muted-foreground">{t("simulations.reported")}</span>
                   </div>
                   <p className="mt-1 text-2xl font-bold text-cyber-green">{detailCampaign.reportCount}</p>
                   <p className="text-xs text-muted-foreground">
@@ -397,13 +397,13 @@ export default function SimulationsPage() {
               </div>
 
               <div className="rounded-xl bg-accent/50 p-3">
-                <p className="text-xs font-medium text-muted-foreground">{t("simulations.recommendation" as any)}</p>
+                <p className="text-xs font-medium text-muted-foreground">{t("simulations.recommendation")}</p>
                 <p className="mt-1 text-sm">
                   {detailCampaign.sentCount > 0 && Math.round((detailCampaign.clickCount / detailCampaign.sentCount) * 100) > 40
-                    ? t("simulations.recHighClick" as any)
+                    ? t("simulations.recHighClick")
                     : detailCampaign.sentCount > 0 && Math.round((detailCampaign.clickCount / detailCampaign.sentCount) * 100) > 25
-                    ? t("simulations.recMediumClick" as any)
-                    : t("simulations.recLowClick" as any)}
+                    ? t("simulations.recMediumClick")
+                    : t("simulations.recLowClick")}
                 </p>
               </div>
             </div>
