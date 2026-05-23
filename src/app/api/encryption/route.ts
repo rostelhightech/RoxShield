@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionOrFail } from "@/lib/api-auth";
+import { getSessionOrFail, sessionUser } from "@/lib/api-auth";
 
 export async function GET() {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
+  const orgId = sessionUser(session).organizationId;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
 
   const audits = await db.encryptionAudit.findMany({
@@ -38,7 +38,8 @@ export async function GET() {
       compliantCount,
       urgentActions,
       totalFindings: zones.reduce((acc, z) => {
-        const findings = z.findings as any[];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- JSON field
+        const findings = z.findings as unknown[];
         return acc + (Array.isArray(findings) ? findings.length : 0);
       }, 0),
     },

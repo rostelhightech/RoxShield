@@ -29,7 +29,7 @@ async function main() {
     },
   });
 
-  const ucad = await prisma.organization.upsert({
+  const _ucad = await prisma.organization.upsert({
     where: { id: "org_ucad" },
     update: {},
     create: {
@@ -63,7 +63,7 @@ async function main() {
   const hashedDemo = await bcrypt.hash("demo1234", 12);
   const hashedAdmin = await bcrypt.hash("admin2024!", 12);
 
-  const adminRostel = await prisma.user.upsert({
+  const _adminRostel = await prisma.user.upsert({
     where: { email: "admin@rostelhightech.com" },
     update: {},
     create: {
@@ -106,7 +106,8 @@ async function main() {
     { email: "n.faye@safisenegal.com", name: "Ndèye Faye", dept: "Juridique", position: "Juriste", risk: 30 },
   ];
 
-  const createdEmployees: any[] = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- seed script
+  const createdEmployees: { id: string; email: string }[] = [];
   for (const emp of employees) {
     const user = await prisma.user.upsert({
       where: { email: emp.email },

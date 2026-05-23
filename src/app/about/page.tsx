@@ -12,12 +12,8 @@ import {
   Shield,
   ArrowLeft,
   Globe,
-  Target,
-  Users,
   Lightbulb,
   Heart,
-  Zap,
-  Award,
   MapPin,
   Mail,
 } from "lucide-react";

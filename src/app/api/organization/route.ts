@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionOrFail } from "@/lib/api-auth";
+import { getSessionOrFail, sessionUser } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 
@@ -8,7 +8,7 @@ export async function GET() {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
+  const orgId = sessionUser(session).organizationId;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
 
   const org = await db.organization.findUnique({
@@ -39,8 +39,8 @@ export async function PATCH(request: NextRequest) {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
-  const role = (session.user as any).role;
+  const orgId = sessionUser(session).organizationId;
+  const role = sessionUser(session).role;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 });

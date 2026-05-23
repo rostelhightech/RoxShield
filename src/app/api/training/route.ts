@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionOrFail } from "@/lib/api-auth";
+import { getSessionOrFail, sessionUser } from "@/lib/api-auth";
 
 export async function GET() {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
+  const orgId = sessionUser(session).organizationId;
   const userId = session.user.id;
 
   // Modules disponibles (globaux + spécifiques à l'org)
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
   if (session instanceof NextResponse) return session;
 
   const userId = session.user.id;
-  const orgId = (session.user as any).organizationId;
+  const orgId = sessionUser(session).organizationId;
   const body = await request.json();
   const { moduleId, progressPercent, quizScore } = body;
 

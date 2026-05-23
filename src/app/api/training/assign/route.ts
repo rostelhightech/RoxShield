@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionOrFail } from "@/lib/api-auth";
+import { getSessionOrFail, sessionUser } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 
@@ -9,8 +9,8 @@ export async function POST(request: NextRequest) {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
-  const role = (session.user as any).role;
+  const orgId = sessionUser(session).organizationId;
+  const role = sessionUser(session).role;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
@@ -31,11 +31,11 @@ export async function POST(request: NextRequest) {
   if (!employee) return NextResponse.json({ error: "Employé non trouvé" }, { status: 404 });
 
   // Vérifier que le module existe
-  const module = await db.trainingModule.findUnique({
+  const trainingModule = await db.trainingModule.findUnique({
     where: { id: moduleId },
     select: { id: true, title: true },
   });
-  if (!module) return NextResponse.json({ error: "Module non trouvé" }, { status: 404 });
+  if (!trainingModule) return NextResponse.json({ error: "Module non trouvé" }, { status: 404 });
 
   // Créer ou reset la progression
   const progress = await db.trainingProgress.upsert({
@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
   await db.notification.create({
     data: {
       type: "info",
-      title: `Formation assignée : ${module.title}`,
-      message: `L'administrateur vous a assigné la formation "${module.title}". Accédez à votre espace formation pour commencer.`,
+      title: `Formation assignée : ${trainingModule.title}`,
+      message: `L'administrateur vous a assigné la formation "${trainingModule.title}". Accédez à votre espace formation pour commencer.`,
       userId,
     },
   });
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "training_assigned",
-      description: `Formation "${module.title}" assignée à ${employee.name || employee.email}`,
+      description: `Formation "${trainingModule.title}" assignée à ${employee.name || employee.email}`,
       userId: session.user.id,
       organizationId: orgId,
     },

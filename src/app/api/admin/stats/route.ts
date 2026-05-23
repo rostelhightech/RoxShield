@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionOrFail } from "@/lib/api-auth";
+import { getSessionOrFail, sessionUser } from "@/lib/api-auth";
 
 export const runtime = "nodejs";
 
@@ -8,7 +8,7 @@ export async function GET() {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const role = (session.user as any).role;
+  const role = sessionUser(session).role;
   if (role !== "SUPER_ADMIN") {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
   }

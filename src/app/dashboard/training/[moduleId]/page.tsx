@@ -389,7 +389,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
   const [score, setScore] = useState(0);
   const [completedLessons, setCompletedLessons] = useState<number[]>([]);
 
-  const module = data?.modules.find((m) => m.id === moduleId);
+  const currentModule = data?.modules.find((m) => m.id === moduleId);
 
   if (loading) {
     return (
@@ -412,7 +412,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
     );
   }
 
-  if (!module) {
+  if (!currentModule) {
     return (
       <div>
         <Header title="Module introuvable" />
@@ -428,8 +428,8 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
     );
   }
 
-  const difficultyLabel = module.difficulty === "BEGINNER" ? "Débutant" : module.difficulty === "INTERMEDIATE" ? "Intermédiaire" : "Avancé";
-  const durationLabel = module.durationMinutes >= 60 ? `${Math.floor(module.durationMinutes / 60)}h${module.durationMinutes % 60 > 0 ? module.durationMinutes % 60 + "min" : ""}` : `${module.durationMinutes} min`;
+  const difficultyLabel = currentModule.difficulty === "BEGINNER" ? "Débutant" : currentModule.difficulty === "INTERMEDIATE" ? "Intermédiaire" : "Avancé";
+  const durationLabel = currentModule.durationMinutes >= 60 ? `${Math.floor(currentModule.durationMinutes / 60)}h${currentModule.durationMinutes % 60 > 0 ? currentModule.durationMinutes % 60 + "min" : ""}` : `${currentModule.durationMinutes} min`;
 
   const handleCompleteLesson = () => {
     const newCompleted = completedLessons.includes(currentLesson)
@@ -504,7 +504,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
 
   return (
     <div>
-      <Header title={module.title} />
+      <Header title={currentModule.title} />
       <div className="space-y-6 p-6">
         <Link href="/dashboard/training">
           <Button variant="ghost" size="sm">
@@ -519,14 +519,14 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
               <Card>
                 <CardContent className="p-6">
                   <div className="mb-4 flex items-center gap-3">
-                    <span className="text-3xl">{module.badgeIcon || "📚"}</span>
+                    <span className="text-3xl">{currentModule.badgeIcon || "📚"}</span>
                     <div>
-                      <h2 className="text-xl font-bold">{module.title}</h2>
-                      <p className="text-sm text-muted-foreground">{module.description}</p>
+                      <h2 className="text-xl font-bold">{currentModule.title}</h2>
+                      <p className="text-sm text-muted-foreground">{currentModule.description}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <Badge className="border-0 bg-rht-violet/10 text-rht-violet-light">{module.category}</Badge>
+                    <Badge className="border-0 bg-rht-violet/10 text-rht-violet-light">{currentModule.category}</Badge>
                     <span className="flex items-center gap-1">
                       <Clock className="h-4 w-4" />
                       {durationLabel}

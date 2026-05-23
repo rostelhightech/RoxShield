@@ -26,7 +26,6 @@ import {
   Shield,
   GraduationCap,
   Target,
-  Clock,
   Mail,
   Building2,
   Briefcase,
@@ -247,7 +246,7 @@ export default function EmployeesPage() {
   };
 
   const filtered = useMemo(() => {
-    let result = employees.filter((e) => {
+    const result = employees.filter((e) => {
       const matchSearch =
         !search ||
         (e.name || "").toLowerCase().includes(search.toLowerCase()) ||
@@ -259,15 +258,13 @@ export default function EmployeesPage() {
       return matchSearch && matchStatus && matchDept;
     });
 
-    result.sort((a, b) => {
+    return [...result].sort((a, b) => {
       const dir = sortDir === "asc" ? 1 : -1;
       if (sortKey === "name") return dir * (a.name || "").localeCompare(b.name || "");
       if (sortKey === "department") return dir * (a.department || "").localeCompare(b.department || "");
       if (sortKey === "trainingsCompleted") return dir * (a.trainingsCompleted - b.trainingsCompleted);
       return dir * (a.riskScore - b.riskScore);
     });
-
-    return result;
   }, [employees, search, statusFilter, deptFilter, sortKey, sortDir]);
 
   const SortIcon = ({ column }: { column: SortKey }) => {

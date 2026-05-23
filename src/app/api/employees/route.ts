@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSessionOrFail } from "@/lib/api-auth";
+import { getSessionOrFail, sessionUser } from "@/lib/api-auth";
 import { sendInvitationEmail } from "@/lib/email";
 import { hash } from "bcryptjs";
 
@@ -19,13 +19,14 @@ export async function GET(request: NextRequest) {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
+  const orgId = sessionUser(session).organizationId;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
 
   const { searchParams } = new URL(request.url);
   const search = searchParams.get("search") || "";
   const department = searchParams.get("department") || "";
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Prisma dynamic where
   const where: any = { organizationId: orgId };
   if (search) {
     where.OR = [
@@ -78,8 +79,8 @@ export async function POST(request: NextRequest) {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
-  const role = (session.user as any).role;
+  const orgId = sessionUser(session).organizationId;
+  const role = sessionUser(session).role;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 });
@@ -153,8 +154,8 @@ export async function DELETE(request: NextRequest) {
   const session = await getSessionOrFail();
   if (session instanceof NextResponse) return session;
 
-  const orgId = (session.user as any).organizationId;
-  const role = (session.user as any).role;
+  const orgId = sessionUser(session).organizationId;
+  const role = sessionUser(session).role;
   if (!orgId) return NextResponse.json({ error: "Aucune organisation" }, { status: 400 });
   if (role !== "ADMIN" && role !== "SUPER_ADMIN") {
     return NextResponse.json({ error: "Accès refusé" }, { status: 403 });

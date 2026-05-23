@@ -11,7 +11,6 @@ import {
   TrendingUp,
   DollarSign,
   Target,
-  GraduationCap,
   Globe,
   ArrowUpRight,
 } from "lucide-react";
