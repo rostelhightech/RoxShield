@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Shield, Eye, EyeOff, Lock, Mail, Crown, Building2, UserCircle, AlertCircle } from "lucide-react";
-import { FaApple, FaGoogle, FaXTwitter } from "react-icons/fa6";
+// OAuth providers removed — credentials-only for now
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -324,7 +324,7 @@ export default function LoginPage() {
               <HexagonIcon />
               <Shield className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 text-rht-violet-light" />
             </motion.div>
-            <h1 className="text-xl font-bold tracking-tight text-white">Welcome Back</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">Bon retour</h1>
             <p className="mt-1 text-sm text-white/40">Accédez à votre espace RoxShield</p>
           </div>
 
@@ -461,25 +461,7 @@ export default function LoginPage() {
             })}
           </div>
 
-          <div className="mt-5 flex justify-center gap-3">
-            {[
-              { icon: <FaApple className="h-4 w-4" />, label: "Apple" },
-              { icon: <FaGoogle className="h-4 w-4" />, label: "Google" },
-              { icon: <FaXTwitter className="h-4 w-4" />, label: "X" },
-            ].map((provider) => (
-              <motion.button
-                key={provider.label}
-                whileHover={{ scale: 1.05, borderColor: "rgba(156,30,153,0.3)" }}
-                whileTap={{ scale: 0.95 }}
-                type="button"
-                className="flex h-10 w-14 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03] text-white/40 transition-colors hover:bg-white/[0.06] hover:text-white/60"
-              >
-                {provider.icon}
-              </motion.button>
-            ))}
-          </div>
-
-          <p className="mt-4 text-center text-[11px] text-white/25">
+          <p className="mt-5 text-center text-[11px] text-white/25">
             Pas encore client ?{" "}
             <a href="/pricing" className="font-medium text-rht-violet-light/70 hover:text-rht-violet-light">
               Voir les tarifs &rarr;
