@@ -1,19 +1,19 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Clock, LogOut } from "lucide-react";
 import { useTranslation } from "@/lib/i18n";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
-const TIMEOUT_MS = 15 * 60 * 1000;
-const WARNING_MS = 2 * 60 * 1000;
+const TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+const WARNING_MS = 2 * 60 * 1000;  // 2 minutes warning
 
 export function SessionTimeout() {
   const [showWarning, setShowWarning] = useState(false);
   const [countdown, setCountdown] = useState(120);
+  const [loggingOut, setLoggingOut] = useState(false);
   const { locale } = useTranslation();
   const pathname = usePathname();
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null);
@@ -28,6 +28,12 @@ export function SessionTimeout() {
     if (countdownRef.current) clearInterval(countdownRef.current);
   }, []);
 
+  const doLogout = useCallback(() => {
+    setLoggingOut(true);
+    clearAllTimers();
+    signOut({ callbackUrl: "/login?reason=timeout" });
+  }, [clearAllTimers]);
+
   const resetTimers = useCallback(() => {
     if (!isAuthArea) return;
 
@@ -41,7 +47,7 @@ export function SessionTimeout() {
       countdownRef.current = setInterval(() => {
         setCountdown((prev) => {
           if (prev <= 1) {
-            signOut({ callbackUrl: "/login?reason=timeout" });
+            doLogout();
             return 0;
           }
           return prev - 1;
@@ -50,20 +56,23 @@ export function SessionTimeout() {
     }, TIMEOUT_MS - WARNING_MS);
 
     timeoutRef.current = setTimeout(() => {
-      signOut({ callbackUrl: "/login?reason=timeout" });
+      doLogout();
     }, TIMEOUT_MS);
-  }, [isAuthArea, clearAllTimers]);
+  }, [isAuthArea, clearAllTimers, doLogout]);
 
-  const handleStayConnected = () => {
+  const handleStayConnected = useCallback(() => {
     setShowWarning(false);
+    setCountdown(120);
     clearAllTimers();
-    resetTimers();
-  };
+    // Small delay to ensure state is clean before resetting
+    setTimeout(() => resetTimers(), 50);
+  }, [clearAllTimers, resetTimers]);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
+    setLoggingOut(true);
     clearAllTimers();
     signOut({ callbackUrl: "/login" });
-  };
+  }, [clearAllTimers]);
 
   useEffect(() => {
     if (!isAuthArea) return;
@@ -82,22 +91,26 @@ export function SessionTimeout() {
     };
   }, [isAuthArea, resetTimers, showWarning, clearAllTimers]);
 
-  if (!isAuthArea) return null;
+  if (!isAuthArea || !showWarning) return null;
 
   const minutes = Math.floor(countdown / 60);
   const seconds = countdown % 60;
 
   return (
-    <Dialog open={showWarning} onOpenChange={(open) => { if (!open) handleStayConnected(); }}>
-      <DialogContent className="sm:max-w-[400px]">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-destructive">
-            <Clock className="h-5 w-5" />
-            {locale === "en" ? "Session Expiring" : "Session expirante"}
-          </DialogTitle>
-        </DialogHeader>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
 
-        <div className="space-y-4 py-2">
+      {/* Modal */}
+      <div className="relative z-10 mx-4 w-full max-w-[400px] rounded-xl border border-border bg-popover p-6 shadow-2xl">
+        <div className="flex items-center gap-2 text-destructive">
+          <Clock className="h-5 w-5" />
+          <h2 className="text-lg font-semibold">
+            {locale === "en" ? "Session Expiring" : "Session expirante"}
+          </h2>
+        </div>
+
+        <div className="mt-4 space-y-4">
           <p className="text-sm text-muted-foreground">
             {locale === "en"
               ? "Your session will expire due to inactivity."
@@ -111,16 +124,25 @@ export function SessionTimeout() {
           </div>
 
           <div className="flex gap-3">
-            <Button variant="outline" className="flex-1 gap-2" onClick={handleLogout}>
+            <Button
+              variant="outline"
+              className="flex-1 gap-2"
+              onClick={handleLogout}
+              disabled={loggingOut}
+            >
               <LogOut className="h-4 w-4" />
               {locale === "en" ? "Log out" : "Déconnexion"}
             </Button>
-            <Button className="flex-1" onClick={handleStayConnected}>
+            <Button
+              className="flex-1 bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90"
+              onClick={handleStayConnected}
+              disabled={loggingOut}
+            >
               {locale === "en" ? "Stay connected" : "Rester connecté"}
             </Button>
           </div>
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 }
