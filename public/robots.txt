@@ -4,5 +4,6 @@ Disallow: /dashboard
 Disallow: /employee
 Disallow: /admin
 Disallow: /login
+Disallow: /api/
 
-Sitemap: https://roxshield.rostelhightech.com/sitemap.xml
+Sitemap: https://roxshield.vercel.app/sitemap.xml
