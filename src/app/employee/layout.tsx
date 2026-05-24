@@ -22,7 +22,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +32,7 @@ import { useApi } from "@/hooks/use-api";
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { t } = useTranslation();
-  const { data: me } = useApi<{ name: string | null; email: string; organization: { name: string } | null }>("/api/me");
+  const { data: me } = useApi<{ name: string | null; email: string; image: string | null; organization: { name: string } | null }>("/api/me");
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
@@ -165,6 +165,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
         <div className="p-3">
           <div className={`flex items-center gap-3 rounded-xl px-3 py-2.5 ${collapsed ? "justify-center" : ""}`}>
             <Avatar className="h-8 w-8 shrink-0">
+              {me?.image && <AvatarImage src={me.image} alt={userName} />}
               <AvatarFallback className="bg-gradient-to-br from-cyber-green/80 to-cyber-green text-[11px] text-white">
                 {initials}
               </AvatarFallback>

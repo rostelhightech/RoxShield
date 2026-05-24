@@ -23,10 +23,11 @@ import {
   X,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useTranslation } from "@/lib/i18n";
+import { useApi } from "@/hooks/use-api";
 
 function getInitials(name?: string | null, email?: string | null): string {
   if (name) {
@@ -43,10 +44,12 @@ export function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  const { data: meData } = useApi<{ image: string | null; organization: { name: string } | null }>("/api/me");
   const user = session?.user;
   const userName = user?.name || user?.email || "";
   const userEmail = user?.email || "";
-  const orgName = (user as any)?.organizationName || "Organisation";
+  const orgName = meData?.organization?.name || (user as any)?.organizationName || "Organisation";
+  const userImage = meData?.image;
 
   const navItems = [
     { label: t("nav.dashboard"), href: "/dashboard", icon: LayoutDashboard },
@@ -158,6 +161,7 @@ export function Sidebar() {
           <div className={`flex items-center gap-3 rounded-xl px-3 py-2.5 ${collapsed ? "justify-center" : ""}`}>
             <Link href="/dashboard/profile">
               <Avatar className="h-8 w-8 shrink-0 cursor-pointer transition-opacity hover:opacity-80">
+                {userImage && <AvatarImage src={userImage} alt={userName} />}
                 <AvatarFallback className="bg-gradient-to-br from-rht-violet to-rht-violet-light text-[11px] text-white">
                   {getInitials(user?.name, user?.email)}
                 </AvatarFallback>
