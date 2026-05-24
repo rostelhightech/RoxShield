@@ -26,6 +26,7 @@ import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/mo
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useApi } from "@/hooks/use-api";
+import { useTranslation } from "@/lib/i18n";
 
 interface AdminStats {
   totalOrganizations: number;
@@ -57,12 +58,13 @@ function formatCFA(amount: number) {
 }
 
 export default function AdminDashboardPage() {
+  const { t } = useTranslation();
   const { data, loading } = useApi<AdminStats>("/api/admin/stats");
 
   if (loading || !data) {
     return (
       <div>
-        <Header title="Super Admin — RoxShield" />
+        <Header title={t("admin.title")} />
         <div className="space-y-6 p-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {[1, 2, 3, 4].map((i) => (
@@ -85,7 +87,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-3">
             <Badge className="border-0 bg-rht-orange/10 text-rht-orange">Rostel High-Tech</Badge>
             <p className="text-sm text-muted-foreground">
-              Vue globale de la plateforme RoxShield
+              {t("admin.platformOverview")}
             </p>
           </div>
         </FadeIn>
@@ -94,33 +96,33 @@ export default function AdminDashboardPage() {
           {[
             {
               icon: DollarSign,
-              label: "MRR",
+              label: t("admin.mrr"),
               value: formatCFA(data.mrrTotal),
-              sub: data.mrrGrowth > 0 ? `+${data.mrrGrowth}% ce mois` : "—",
+              sub: data.mrrGrowth > 0 ? `+${data.mrrGrowth}% ${t("admin.thisMonth")}` : "—",
               bg: "bg-rht-orange/10",
               text: "text-rht-orange",
             },
             {
               icon: Building2,
-              label: "Organisations",
+              label: t("admin.organizations"),
               value: data.totalOrganizations.toString(),
-              sub: `${data.activeOrganizations} actives`,
+              sub: `${data.activeOrganizations} ${t("admin.active")}`,
               bg: "bg-rht-violet/10",
               text: "text-rht-violet",
             },
             {
               icon: Users,
-              label: "Employés totaux",
+              label: t("admin.totalEmployees"),
               value: data.totalEmployees.toString(),
-              sub: "sur toutes les orgs",
+              sub: t("admin.allOrgs"),
               bg: "bg-rht-violet-light/10",
               text: "text-rht-violet-light",
             },
             {
               icon: Target,
-              label: "Campagnes lancées",
+              label: t("admin.campaignsLaunched"),
               value: data.totalCampaigns.toString(),
-              sub: `Score moyen : ${data.avgRiskScore}%`,
+              sub: `${t("admin.avgScore")} : ${data.avgRiskScore}%`,
               bg: "bg-cyber-green/10",
               text: "text-cyber-green",
             },
@@ -154,10 +156,10 @@ export default function AdminDashboardPage() {
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-semibold">Organisations récentes</CardTitle>
+                  <CardTitle className="text-sm font-semibold">{t("admin.recentOrgs")}</CardTitle>
                   <Link href="/admin/organizations">
                     <Badge variant="outline" className="cursor-pointer text-[10px] hover:bg-accent">
-                      Voir tout <ArrowUpRight className="ml-1 h-3 w-3" />
+                      {t("admin.viewAll")} <ArrowUpRight className="ml-1 h-3 w-3" />
                     </Badge>
                   </Link>
                 </div>
@@ -165,7 +167,7 @@ export default function AdminDashboardPage() {
               <CardContent>
                 <div className="space-y-3">
                   {recentOrgs.length === 0 ? (
-                    <p className="py-8 text-center text-sm text-muted-foreground">Aucune organisation</p>
+                    <p className="py-8 text-center text-sm text-muted-foreground">{t("admin.noOrgs")}</p>
                   ) : (
                     recentOrgs.map((org, i) => (
                       <motion.div
@@ -189,7 +191,7 @@ export default function AdminDashboardPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Badge className="border-0 bg-cyber-green/10 text-cyber-green text-[10px]">
-                            Actif
+                            {t("admin.statusActive")}
                           </Badge>
                           <Badge variant="outline" className="text-[10px]">{org.plan}</Badge>
                         </div>
@@ -204,11 +206,11 @@ export default function AdminDashboardPage() {
           <FadeIn delay={0.1}>
             <Card className="h-full">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-semibold">Répartition des plans</CardTitle>
+                <CardTitle className="text-sm font-semibold">{t("admin.planDistribution")}</CardTitle>
               </CardHeader>
               <CardContent>
                 {data.planDistribution.length === 0 ? (
-                  <p className="py-8 text-center text-sm text-muted-foreground">Aucune donnée</p>
+                  <p className="py-8 text-center text-sm text-muted-foreground">{t("admin.noData")}</p>
                 ) : (
                   <>
                     <div className="h-[200px]">
@@ -251,7 +253,7 @@ export default function AdminDashboardPage() {
                             <div className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: p.color }} />
                             <span>{p.name}</span>
                           </div>
-                          <span className="font-semibold">{p.value} orgs</span>
+                          <span className="font-semibold">{p.value} {t("admin.orgs")}</span>
                         </div>
                       ))}
                     </div>
@@ -265,13 +267,13 @@ export default function AdminDashboardPage() {
         <FadeIn delay={0.2}>
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold">Métriques clés</CardTitle>
+              <CardTitle className="text-sm font-semibold">{t("admin.keyMetrics")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {[
-                { label: "Taux de churn", value: `${data.churnRate}%`, progress: data.churnRate * 10 },
-                { label: "Formations complétées", value: data.totalTrainingsCompleted.toString(), progress: 72 },
-                { label: "Score de risque moyen", value: `${data.avgRiskScore}%`, progress: data.avgRiskScore },
+                { label: t("admin.churnRate"), value: `${data.churnRate}%`, progress: data.churnRate * 10 },
+                { label: t("admin.trainingsCompleted"), value: data.totalTrainingsCompleted.toString(), progress: 72 },
+                { label: t("admin.avgRiskScore"), value: `${data.avgRiskScore}%`, progress: data.avgRiskScore },
               ].map((m) => (
                 <div key={m.label}>
                   <div className="flex items-center justify-between text-sm">

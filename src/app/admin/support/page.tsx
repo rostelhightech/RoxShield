@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
+import { useTranslation } from "@/lib/i18n";
 
 // Données de support (fonctionnalité à venir — pas de modèle DB)
 const supportTickets = [
@@ -24,38 +25,51 @@ const supportTickets = [
   { id: "TK-005", subject: "Question sur la facturation Enterprise", org: "SenFinance SA", date: "18 mai 2025", priority: "low", status: "resolved" },
 ];
 
-const priorityStyle = {
-  low: { label: "Basse", style: "bg-cyber-green/10 text-cyber-green" },
-  medium: { label: "Moyenne", style: "bg-rht-orange/10 text-rht-orange" },
-  high: { label: "Haute", style: "bg-cyber-red/10 text-cyber-red" },
-} as const;
+const priorityKeys = {
+  low: "support.priorityLow" as const,
+  medium: "support.priorityMedium" as const,
+  high: "support.priorityHigh" as const,
+};
 
-const statusStyle = {
-  open: { label: "Ouvert", style: "bg-rht-violet/10 text-rht-violet-light", icon: Clock },
-  "in-progress": { label: "En cours", style: "bg-rht-orange/10 text-rht-orange", icon: AlertTriangle },
-  resolved: { label: "Résolu", style: "bg-cyber-green/10 text-cyber-green", icon: CheckCircle },
-} as const;
+const priorityStyleMap = {
+  low: "bg-cyber-green/10 text-cyber-green",
+  medium: "bg-rht-orange/10 text-rht-orange",
+  high: "bg-cyber-red/10 text-cyber-red",
+};
+
+const statusKeys = {
+  open: "support.statusOpen" as const,
+  "in-progress": "support.statusInProgress" as const,
+  resolved: "support.statusResolved" as const,
+};
+
+const statusStyleMap = {
+  open: { style: "bg-rht-violet/10 text-rht-violet-light", icon: Clock },
+  "in-progress": { style: "bg-rht-orange/10 text-rht-orange", icon: AlertTriangle },
+  resolved: { style: "bg-cyber-green/10 text-cyber-green", icon: CheckCircle },
+};
 
 export default function SupportPage() {
-  const open = supportTickets.filter((t) => t.status === "open").length;
-  const inProgress = supportTickets.filter((t) => t.status === "in-progress").length;
-  const resolved = supportTickets.filter((t) => t.status === "resolved").length;
+  const { t } = useTranslation();
+  const open = supportTickets.filter((tk) => tk.status === "open").length;
+  const inProgress = supportTickets.filter((tk) => tk.status === "in-progress").length;
+  const resolved = supportTickets.filter((tk) => tk.status === "resolved").length;
 
   return (
     <div>
-      <Header title="Support" />
+      <Header title={t("support.title")} />
       <div className="space-y-6 p-6">
         <FadeIn>
           <p className="text-sm text-muted-foreground">
-            Gérez les demandes de support des organisations clientes
+            {t("support.description")}
           </p>
         </FadeIn>
 
         <StaggerContainer className="grid gap-4 sm:grid-cols-3">
           {[
-            { icon: Clock, label: "Tickets ouverts", value: open, bg: "bg-rht-violet/10", text: "text-rht-violet" },
-            { icon: AlertTriangle, label: "En cours", value: inProgress, bg: "bg-rht-orange/10", text: "text-rht-orange" },
-            { icon: CheckCircle, label: "Résolus", value: resolved, bg: "bg-cyber-green/10", text: "text-cyber-green" },
+            { icon: Clock, label: t("support.openTickets"), value: open, bg: "bg-rht-violet/10", text: "text-rht-violet" },
+            { icon: AlertTriangle, label: t("support.inProgress"), value: inProgress, bg: "bg-rht-orange/10", text: "text-rht-orange" },
+            { icon: CheckCircle, label: t("support.resolved"), value: resolved, bg: "bg-cyber-green/10", text: "text-cyber-green" },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <GlowCard>
@@ -83,20 +97,22 @@ export default function SupportPage() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <HeadphonesIcon className="h-4 w-4 text-rht-orange" />
-                  <CardTitle className="text-sm font-semibold">Tous les tickets</CardTitle>
+                  <CardTitle className="text-sm font-semibold">{t("support.allTickets")}</CardTitle>
                 </div>
                 <Button size="sm" className="bg-gradient-to-r from-rht-orange to-rht-orange-light text-white hover:opacity-90">
                   <MessageSquare className="mr-2 h-4 w-4" />
-                  Nouveau ticket
+                  {t("support.newTicket")}
                 </Button>
               </div>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 {supportTickets.map((ticket, i) => {
-                  const status = statusStyle[ticket.status as keyof typeof statusStyle];
-                  const priority = priorityStyle[ticket.priority as keyof typeof priorityStyle];
-                  const StatusIcon = status.icon;
+                  const statusInfo = statusStyleMap[ticket.status as keyof typeof statusStyleMap];
+                  const statusKey = statusKeys[ticket.status as keyof typeof statusKeys];
+                  const priorityKey = priorityKeys[ticket.priority as keyof typeof priorityKeys];
+                  const priorityClass = priorityStyleMap[ticket.priority as keyof typeof priorityStyleMap];
+                  const StatusIcon = statusInfo.icon;
 
                   return (
                     <motion.div
@@ -108,7 +124,7 @@ export default function SupportPage() {
                     >
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-3">
-                          <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${status.style}`}>
+                          <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${statusInfo.style}`}>
                             <StatusIcon className="h-4 w-4" />
                           </div>
                           <div>
@@ -126,14 +142,14 @@ export default function SupportPage() {
                         </div>
 
                         <div className="flex items-center gap-2">
-                          <Badge className={`border-0 text-[10px] ${priority.style}`}>
-                            {priority.label}
+                          <Badge className={`border-0 text-[10px] ${priorityClass}`}>
+                            {t(priorityKey)}
                           </Badge>
-                          <Badge className={`border-0 text-[10px] ${status.style}`}>
-                            {status.label}
+                          <Badge className={`border-0 text-[10px] ${statusInfo.style}`}>
+                            {t(statusKey)}
                           </Badge>
                           <Button variant="ghost" size="sm" className="text-xs">
-                            Voir
+                            {t("support.view")}
                           </Button>
                         </div>
                       </div>
@@ -148,19 +164,19 @@ export default function SupportPage() {
         <FadeIn delay={0.2}>
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold">Temps de réponse moyen</CardTitle>
+              <CardTitle className="text-sm font-semibold">{t("support.avgResponseTime")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-3">
                 {[
-                  { label: "Première réponse", value: "2h 15min", target: "< 4h" },
-                  { label: "Résolution", value: "18h 30min", target: "< 24h" },
-                  { label: "Satisfaction client", value: "4.6/5", target: "> 4.0" },
+                  { label: t("support.firstResponse"), value: "2h 15min", target: "< 4h" },
+                  { label: t("support.resolution"), value: "18h 30min", target: "< 24h" },
+                  { label: t("support.clientSatisfaction"), value: "4.6/5", target: "> 4.0" },
                 ].map((m) => (
                   <div key={m.label} className="rounded-xl border p-4 text-center">
                     <p className="text-2xl font-bold text-rht-orange">{m.value}</p>
                     <p className="text-xs font-medium">{m.label}</p>
-                    <p className="mt-1 text-[10px] text-muted-foreground">Objectif : {m.target}</p>
+                    <p className="mt-1 text-[10px] text-muted-foreground">{t("admin.goal")} : {m.target}</p>
                   </div>
                 ))}
               </div>

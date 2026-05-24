@@ -24,6 +24,7 @@ import {
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
 import { useApi } from "@/hooks/use-api";
+import { useTranslation } from "@/lib/i18n";
 
 interface OrgItem {
   id: string;
@@ -58,10 +59,10 @@ const statusStyle: Record<string, string> = {
   expired: "bg-cyber-red/10 text-cyber-red",
 };
 
-const statusLabel: Record<string, string> = {
-  active: "Actif",
-  trial: "Essai",
-  expired: "Expiré",
+const statusLabelKeys: Record<string, "admin.statusActive" | "admin.statusTrial" | "admin.statusExpired"> = {
+  active: "admin.statusActive",
+  trial: "admin.statusTrial",
+  expired: "admin.statusExpired",
 };
 
 const planStyle: Record<string, string> = {
@@ -72,6 +73,7 @@ const planStyle: Record<string, string> = {
 };
 
 export default function OrganizationsPage() {
+  const { t } = useTranslation();
   const { data, loading } = useApi<OrgsResponse>("/api/admin/organizations");
   const [search, setSearch] = useState("");
   const [filterPlan, setFilterPlan] = useState<string>("all");
@@ -79,7 +81,7 @@ export default function OrganizationsPage() {
   if (loading || !data) {
     return (
       <div>
-        <Header title="Organisations" />
+        <Header title={t("admin.organizations")} />
         <div className="space-y-6 p-6">
           <Skeleton className="h-10 w-full max-w-xs" />
           <div className="grid gap-3 sm:grid-cols-3">
@@ -116,7 +118,7 @@ export default function OrganizationsPage() {
               <div className="relative flex-1 sm:max-w-xs">
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
-                  placeholder="Rechercher une organisation..."
+                  placeholder={t("admin.searchOrg")}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   className="pl-9"
@@ -131,7 +133,7 @@ export default function OrganizationsPage() {
                     onClick={() => setFilterPlan(plan)}
                     className={filterPlan === plan ? "bg-rht-violet text-white hover:bg-rht-violet/90" : ""}
                   >
-                    {plan === "all" ? "Tous" : plan}
+                    {plan === "all" ? t("admin.all") : plan}
                   </Button>
                 ))}
               </div>
@@ -139,7 +141,7 @@ export default function OrganizationsPage() {
             <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
               <Button className="bg-gradient-to-r from-rht-orange to-rht-orange-light text-white hover:opacity-90">
                 <Plus className="mr-2 h-4 w-4" />
-                Ajouter
+                {t("admin.add")}
               </Button>
             </motion.div>
           </div>
@@ -147,9 +149,9 @@ export default function OrganizationsPage() {
 
         <StaggerContainer className="grid gap-3 sm:grid-cols-3">
           {[
-            { label: "Total organisations", value: organizations.length },
-            { label: "MRR total", value: formatCFA(organizations.reduce((a, o) => a + o.mrr, 0)), highlight: true },
-            { label: "Employés couverts", value: organizations.reduce((a, o) => a + o.employees, 0) },
+            { label: t("admin.totalOrgs"), value: organizations.length },
+            { label: t("admin.totalMrr"), value: formatCFA(organizations.reduce((a, o) => a + o.mrr, 0)), highlight: true },
+            { label: t("admin.coveredEmployees"), value: organizations.reduce((a, o) => a + o.employees, 0) },
           ].map((s) => (
             <StaggerItem key={s.label}>
               <Card>
@@ -182,7 +184,7 @@ export default function OrganizationsPage() {
                           <div className="flex items-center gap-2">
                             <h3 className="font-semibold">{org.name}</h3>
                             <Badge className={`border-0 text-[10px] ${statusStyle[org.status] || statusStyle.active}`}>
-                              {statusLabel[org.status] || "Actif"}
+                              {t(statusLabelKeys[org.status] || "admin.statusActive")}
                             </Badge>
                             <Badge className={`border-0 text-[10px] ${planStyle[org.plan] || ""}`}>
                               {org.plan}
@@ -196,7 +198,7 @@ export default function OrganizationsPage() {
                             <span>{org.sector}</span>
                             <span className="flex items-center gap-1">
                               <Calendar className="h-3 w-3" />
-                              Inscrit le {org.joinedDate}
+                              {t("admin.registeredOn")} {org.joinedDate}
                             </span>
                           </div>
                           <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
@@ -208,11 +210,11 @@ export default function OrganizationsPage() {
 
                       <div className="flex shrink-0 items-center gap-2 text-right">
                         {org.mrr > 0 && (
-                          <span className="text-lg font-bold text-rht-orange">{formatCFA(org.mrr)}<span className="text-xs font-normal text-muted-foreground">/mois</span></span>
+                          <span className="text-lg font-bold text-rht-orange">{formatCFA(org.mrr)}<span className="text-xs font-normal text-muted-foreground">{t("admin.perMonth")}</span></span>
                         )}
                         <Link href={`/admin/organizations/${org.id}`}>
                           <Button variant="ghost" size="sm" className="text-xs">
-                            Voir <ArrowUpRight className="ml-1 h-3 w-3" />
+                            {t("admin.view")} <ArrowUpRight className="ml-1 h-3 w-3" />
                           </Button>
                         </Link>
                       </div>
@@ -223,26 +225,26 @@ export default function OrganizationsPage() {
                         <Users className="h-4 w-4 text-muted-foreground" />
                         <div>
                           <p className="text-sm font-semibold">{org.employees}<span className="text-xs font-normal text-muted-foreground">/{org.maxEmployees}</span></p>
-                          <p className="text-[10px] text-muted-foreground">Employés</p>
+                          <p className="text-[10px] text-muted-foreground">{t("admin.employees")}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <GraduationCap className="h-4 w-4 text-muted-foreground" />
                         <div>
                           <p className="text-sm font-semibold">{org.trainingsCompleted}</p>
-                          <p className="text-[10px] text-muted-foreground">Formations</p>
+                          <p className="text-[10px] text-muted-foreground">{t("admin.trainings")}</p>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
                         <Target className="h-4 w-4 text-muted-foreground" />
                         <div>
                           <p className="text-sm font-semibold">{org.campaignsRun}</p>
-                          <p className="text-[10px] text-muted-foreground">Campagnes</p>
+                          <p className="text-[10px] text-muted-foreground">{t("admin.campaigns")}</p>
                         </div>
                       </div>
                       <div>
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-muted-foreground">Score de risque</span>
+                          <span className="text-muted-foreground">{t("admin.riskScore")}</span>
                           <span className={`font-semibold ${
                             org.riskScore < 35 ? "text-cyber-green" : org.riskScore < 55 ? "text-rht-orange" : "text-cyber-red"
                           }`}>{org.riskScore}%</span>
@@ -259,7 +261,7 @@ export default function OrganizationsPage() {
           {filtered.length === 0 && (
             <div className="py-12 text-center text-muted-foreground">
               <Building2 className="mx-auto mb-3 h-10 w-10 opacity-20" />
-              <p>Aucune organisation trouvée</p>
+              <p>{t("admin.noOrgFound")}</p>
             </div>
           )}
         </div>

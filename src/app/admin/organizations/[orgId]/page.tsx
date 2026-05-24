@@ -26,6 +26,7 @@ import {
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
 import { useApi } from "@/hooks/use-api";
+import { useTranslation } from "@/lib/i18n";
 
 interface OrgDetail {
   id: string;
@@ -62,7 +63,7 @@ function formatCFA(amount: number) {
   return new Intl.NumberFormat("fr-FR").format(amount) + " F";
 }
 
-const statusLabel: Record<string, string> = { active: "Actif", trial: "Essai", expired: "Expiré" };
+const statusLabelKeys: Record<string, "admin.statusActive" | "admin.statusTrial" | "admin.statusExpired"> = { active: "admin.statusActive", trial: "admin.statusTrial", expired: "admin.statusExpired" };
 const statusStyle: Record<string, string> = {
   active: "bg-cyber-green/10 text-cyber-green",
   trial: "bg-rht-orange/10 text-rht-orange",
@@ -75,12 +76,13 @@ export default function OrganizationDetailPage({
   params: Promise<{ orgId: string }>;
 }) {
   const { orgId } = use(params);
+  const { t } = useTranslation();
   const { data, loading } = useApi<OrgsResponse>("/api/admin/organizations");
 
   if (loading || !data) {
     return (
       <div>
-        <Header title="Chargement..." />
+        <Header title={t("common.loading")} />
         <div className="space-y-6 p-6">
           <Skeleton className="h-10 w-48" />
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -99,12 +101,12 @@ export default function OrganizationDetailPage({
   if (!org) {
     return (
       <div>
-        <Header title="Organisation introuvable" />
+        <Header title={t("admin.orgNotFound")} />
         <div className="p-6">
           <Link href="/admin/organizations">
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour
+              {t("admin.back")}
             </Button>
           </Link>
         </div>
@@ -133,7 +135,7 @@ export default function OrganizationDetailPage({
                 <div className="flex items-center gap-2">
                   <h2 className="text-xl font-bold">{org.name}</h2>
                   <Badge className={`border-0 text-[10px] ${statusStyle[org.status] || statusStyle.active}`}>
-                    {statusLabel[org.status] || "Actif"}
+                    {t(statusLabelKeys[org.status] || "admin.statusActive")}
                   </Badge>
                 </div>
                 <div className="flex items-center gap-3 text-xs text-muted-foreground">
@@ -149,10 +151,10 @@ export default function OrganizationDetailPage({
               <Badge variant="outline" className="text-xs">{org.plan}</Badge>
               <Button variant="outline" size="sm">
                 <Mail className="mr-2 h-3 w-3" />
-                Contacter
+                {t("admin.contact")}
               </Button>
               <Button size="sm" className="bg-gradient-to-r from-rht-orange to-rht-orange-light text-white hover:opacity-90">
-                Gérer
+                {t("admin.manage")}
               </Button>
             </div>
           </div>
@@ -162,7 +164,7 @@ export default function OrganizationDetailPage({
           {[
             {
               icon: DollarSign,
-              label: "MRR",
+              label: t("admin.mrr"),
               value: formatCFA(org.mrr),
               sub: org.plan,
               bg: "bg-rht-orange/10",
@@ -170,25 +172,25 @@ export default function OrganizationDetailPage({
             },
             {
               icon: Users,
-              label: "Employés",
+              label: t("admin.employees"),
               value: `${org.employees}/${org.maxEmployees}`,
-              sub: `${Math.round((org.employees / org.maxEmployees) * 100)}% utilisé`,
+              sub: `${Math.round((org.employees / org.maxEmployees) * 100)}% ${t("admin.used")}`,
               bg: "bg-rht-violet/10",
               text: "text-rht-violet-light",
             },
             {
               icon: Target,
-              label: "Campagnes",
+              label: t("admin.campaigns"),
               value: org.campaignsRun.toString(),
-              sub: "lancées",
+              sub: t("admin.launched"),
               bg: "bg-rht-violet-light/10",
               text: "text-rht-violet-light",
             },
             {
               icon: GraduationCap,
-              label: "Formations",
+              label: t("admin.trainings"),
               value: org.trainingsCompleted.toString(),
-              sub: `${completionRate}% complétion`,
+              sub: `${completionRate}% ${t("admin.completion")}`,
               bg: "bg-cyber-green/10",
               text: "text-cyber-green",
             },
@@ -219,16 +221,16 @@ export default function OrganizationDetailPage({
             <Card>
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-sm font-semibold">Employés récents</CardTitle>
+                  <CardTitle className="text-sm font-semibold">{t("admin.recentEmployees")}</CardTitle>
                   <Badge variant="outline" className="text-[10px]">
-                    {org.employees} total
+                    {org.employees} {t("admin.total")}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {org.recentEmployees.length === 0 ? (
-                    <p className="py-8 text-center text-sm text-muted-foreground">Aucun employé</p>
+                    <p className="py-8 text-center text-sm text-muted-foreground">{t("admin.noEmployees")}</p>
                   ) : (
                     org.recentEmployees.map((emp, i) => (
                       <motion.div
@@ -271,17 +273,17 @@ export default function OrganizationDetailPage({
           <FadeIn delay={0.1}>
             <Card className="h-full">
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-semibold">Informations</CardTitle>
+                <CardTitle className="text-sm font-semibold">{t("admin.info")}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   {[
-                    { icon: Mail, label: "Contact", value: org.contactName },
-                    { icon: Mail, label: "Email", value: org.contactEmail },
-                    { icon: Phone, label: "Téléphone", value: "—" },
-                    { icon: Calendar, label: "Inscription", value: org.joinedDate },
-                    { icon: Globe, label: "Localisation", value: `${org.city}, ${org.country}` },
-                    { icon: Shield, label: "Secteur", value: org.sector },
+                    { icon: Mail, label: t("admin.contactLabel"), value: org.contactName },
+                    { icon: Mail, label: t("admin.emailLabel"), value: org.contactEmail },
+                    { icon: Phone, label: t("admin.phoneLabel"), value: "—" },
+                    { icon: Calendar, label: t("admin.registrationLabel"), value: org.joinedDate },
+                    { icon: Globe, label: t("admin.locationLabel"), value: `${org.city}, ${org.country}` },
+                    { icon: Shield, label: t("admin.sectorLabel"), value: org.sector },
                   ].map((item) => (
                     <div key={item.label} className="flex items-center gap-3 text-sm">
                       <item.icon className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -300,14 +302,14 @@ export default function OrganizationDetailPage({
         <FadeIn delay={0.25}>
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold">Score de risque par métrique</CardTitle>
+              <CardTitle className="text-sm font-semibold">{t("admin.riskByMetric")}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid gap-4 sm:grid-cols-3">
                 {[
-                  { label: "Taux de clic phishing", value: org.riskScore, target: "< 20%", status: org.riskScore < 20 },
-                  { label: "Formations complétées", value: completionRate, target: "> 80%", status: completionRate > 80 },
-                  { label: "Signalements suspects", value: 0, target: "> 50%", status: false },
+                  { label: t("admin.phishingClickRate"), value: org.riskScore, target: "< 20%", status: org.riskScore < 20 },
+                  { label: t("admin.trainingsCompletedRate"), value: completionRate, target: "> 80%", status: completionRate > 80 },
+                  { label: t("admin.suspiciousReports"), value: 0, target: "> 50%", status: false },
                 ].map((m) => (
                   <div key={m.label} className="rounded-xl border p-4">
                     <div className="flex items-center justify-between">
@@ -320,7 +322,7 @@ export default function OrganizationDetailPage({
                     </div>
                     <p className="mt-1 text-2xl font-bold">{m.value}%</p>
                     <Progress value={m.value} className="mt-2 h-2" />
-                    <p className="mt-1 text-[10px] text-muted-foreground">Objectif : {m.target}</p>
+                    <p className="mt-1 text-[10px] text-muted-foreground">{t("admin.goal")} : {m.target}</p>
                   </div>
                 ))}
               </div>
