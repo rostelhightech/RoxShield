@@ -275,7 +275,11 @@ export default function LoginPage() {
     });
 
     if (result?.error) {
-      setError("Email ou mot de passe incorrect");
+      setError(
+        result.error.includes("Trop de tentatives")
+          ? "Trop de tentatives. Reessayez dans une minute."
+          : "Email ou mot de passe incorrect"
+      );
       setIsLoading(false);
       return;
     }
