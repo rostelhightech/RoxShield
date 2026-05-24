@@ -24,6 +24,7 @@ import { FadeIn } from "@/components/motion";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useApi } from "@/hooks/use-api";
+import { useTranslation } from "@/lib/i18n";
 
 type Lesson = {
   title: string;
@@ -378,6 +379,7 @@ interface TrainingResponse {
 
 export default function ModulePage({ params }: { params: Promise<{ moduleId: string }> }) {
   const { moduleId } = use(params);
+  const { t } = useTranslation();
   const { data, loading } = useApi<TrainingResponse>("/api/training");
   const content = moduleContent[moduleId] || defaultContent;
 
@@ -394,7 +396,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
   if (loading) {
     return (
       <div>
-        <Header title="Chargement..." />
+        <Header title={t("common.loading")} />
         <div className="space-y-6 p-6">
           <Skeleton className="h-10 w-48" />
           <div className="grid gap-6 lg:grid-cols-3">
@@ -415,12 +417,12 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
   if (!currentModule) {
     return (
       <div>
-        <Header title="Module introuvable" />
+        <Header title={t("training.moduleNotFound")} />
         <div className="p-6">
           <Link href="/dashboard/training">
             <Button variant="outline">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Retour aux formations
+              {t("training.backToTraining")}
             </Button>
           </Link>
         </div>
@@ -428,7 +430,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
     );
   }
 
-  const difficultyLabel = currentModule.difficulty === "BEGINNER" ? "Débutant" : currentModule.difficulty === "INTERMEDIATE" ? "Intermédiaire" : "Avancé";
+  const difficultyLabel = currentModule.difficulty === "BEGINNER" ? t("status.beginner") : currentModule.difficulty === "INTERMEDIATE" ? t("status.intermediate") : t("status.advanced");
   const durationLabel = currentModule.durationMinutes >= 60 ? `${Math.floor(currentModule.durationMinutes / 60)}h${currentModule.durationMinutes % 60 > 0 ? currentModule.durationMinutes % 60 + "min" : ""}` : `${currentModule.durationMinutes} min`;
 
   const handleCompleteLesson = () => {
@@ -480,7 +482,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
           quizScore: Math.round((finalScore / content.quiz.length) * 100),
         }),
       })
-        .then((res) => { if (res.ok) toast.success("Progression enregistrée !"); })
+        .then((res) => { if (res.ok) toast.success(t("training.progressSaved")); })
         .catch(() => {});
     }
   };
@@ -509,7 +511,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
         <Link href="/dashboard/training">
           <Button variant="ghost" size="sm">
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Retour aux formations
+            {t("training.backToTraining")}
           </Button>
         </Link>
 
@@ -543,10 +545,10 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-sm">
-                          Leçon {currentLesson + 1}/{content.lessons.length}
+                          {t("training.lesson")} {currentLesson + 1}/{content.lessons.length}
                         </CardTitle>
                         <Badge variant="outline" className="border-rht-violet/30 text-rht-violet-light">
-                          Apprentissage
+                          {t("training.learning")}
                         </Badge>
                       </div>
                       <Progress
@@ -602,7 +604,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                           onClick={() => setCurrentLesson(currentLesson - 1)}
                         >
                           <ArrowLeft className="mr-2 h-4 w-4" />
-                          Précédent
+                          {t("training.previous")}
                         </Button>
                         <Button
                           className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90"
@@ -610,12 +612,12 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                         >
                           {currentLesson < content.lessons.length - 1 ? (
                             <>
-                              Suivant
+                              {t("training.next")}
                               <ArrowRight className="ml-2 h-4 w-4" />
                             </>
                           ) : (
                             <>
-                              Passer au Quiz
+                              {t("training.startQuiz")}
                               <Play className="ml-2 h-4 w-4" />
                             </>
                           )}
@@ -632,10 +634,10 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-sm">
-                          Question {currentQuestion + 1}/{content.quiz.length}
+                          {t("training.question")} {currentQuestion + 1}/{content.quiz.length}
                         </CardTitle>
                         <Badge variant="outline" className="border-rht-orange/30 text-rht-orange">
-                          Quiz interactif
+                          {t("training.interactiveQuiz")}
                         </Badge>
                       </div>
                       <Progress
@@ -689,7 +691,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                           animate={{ opacity: 1, height: "auto" }}
                           className="mt-4 rounded-xl bg-accent/50 p-4"
                         >
-                          <p className="text-xs font-medium text-muted-foreground">Explication</p>
+                          <p className="text-xs font-medium text-muted-foreground">{t("training.explanation")}</p>
                           <p className="mt-1 text-sm">{content.quiz[currentQuestion].explanation}</p>
                         </motion.div>
                       )}
@@ -699,7 +701,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                         disabled={!answered}
                         onClick={handleNextQuestion}
                       >
-                        {currentQuestion < content.quiz.length - 1 ? "Question suivante" : "Voir les résultats"}
+                        {currentQuestion < content.quiz.length - 1 ? t("training.nextQuestion") : t("training.viewResults")}
                         <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </CardContent>
@@ -714,28 +716,28 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                       <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 2, repeat: Infinity }}>
                         <Trophy className="mx-auto mb-4 h-16 w-16 text-rht-orange" />
                       </motion.div>
-                      <h3 className="mb-2 text-2xl font-bold">Module terminé !</h3>
+                      <h3 className="mb-2 text-2xl font-bold">{t("training.moduleComplete")}</h3>
                       <p className="mb-2 text-lg">
-                        Score au quiz :{" "}
+                        {t("training.quizScore")}{" "}
                         <span className="font-bold text-rht-violet-light">
                           {score}/{content.quiz.length}
                         </span>
                       </p>
                       <p className="mb-6 text-sm text-muted-foreground">
                         {score === content.quiz.length
-                          ? "Excellent ! Vous maîtrisez parfaitement ce sujet."
+                          ? t("training.resultPerfect")
                           : score >= content.quiz.length * 0.66
-                          ? "Bon travail ! Vous avez bien compris les concepts clés."
-                          : "Continuez à vous former. Refaites le module pour améliorer votre score."}
+                          ? t("training.resultGood")
+                          : t("training.resultRetry")}
                       </p>
                       <div className="flex justify-center gap-3">
                         <Button variant="outline" onClick={handleRestart}>
                           <RotateCcw className="mr-2 h-4 w-4" />
-                          Recommencer
+                          {t("training.restart")}
                         </Button>
                         <Link href="/dashboard/training">
                           <Button className="bg-gradient-to-r from-rht-violet to-rht-violet-light text-white hover:opacity-90">
-                            Retour aux formations
+                            {t("training.backToTraining")}
                           </Button>
                         </Link>
                       </div>
@@ -750,12 +752,12 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
             <FadeIn delay={0.2}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm">Progression</CardTitle>
+                  <CardTitle className="text-sm">{t("training.progression")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">Complété</span>
+                      <span className="text-muted-foreground">{t("training.completedLabel")}</span>
                       <span className="font-semibold">{totalProgress}%</span>
                     </div>
                     <Progress value={totalProgress} className="h-3" />
@@ -767,7 +769,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
             <FadeIn delay={0.25}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm">Sommaire</CardTitle>
+                  <CardTitle className="text-sm">{t("training.summary")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-2">
@@ -796,7 +798,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                       ) : (
                         <Circle className="h-4 w-4 shrink-0 text-muted-foreground/30" />
                       )}
-                      <span>Quiz final ({content.quiz.length} questions)</span>
+                      <span>{t("training.finalQuiz")} ({content.quiz.length} {t("training.questions")})</span>
                     </div>
                   </div>
                 </CardContent>
@@ -806,23 +808,23 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
             <FadeIn delay={0.3}>
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-sm">Informations</CardTitle>
+                  <CardTitle className="text-sm">{t("training.info")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Difficulté</span>
+                    <span className="text-muted-foreground">{t("training.difficulty")}</span>
                     <span className="font-medium">{difficultyLabel}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Durée</span>
+                    <span className="text-muted-foreground">{t("training.durationLabel")}</span>
                     <span className="font-medium">{durationLabel}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Leçons</span>
+                    <span className="text-muted-foreground">{t("training.lessonsLabel")}</span>
                     <span className="font-medium">{content.lessons.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground">Questions</span>
+                    <span className="text-muted-foreground">{t("training.questionsLabel")}</span>
                     <span className="font-medium">{content.quiz.length}</span>
                   </div>
                 </CardContent>
