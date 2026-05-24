@@ -322,6 +322,9 @@ export default function ProfilePage() {
                         <p className="text-xs text-muted-foreground">{item.desc}</p>
                       </div>
                       <button
+                        role="switch"
+                        aria-checked={item.state}
+                        aria-label={item.label}
                         onClick={() => item.toggle(!item.state)}
                         className={`relative h-6 w-11 rounded-full transition-colors ${
                           item.state ? "bg-rht-violet" : "bg-muted"
