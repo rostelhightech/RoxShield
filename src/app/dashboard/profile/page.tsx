@@ -277,7 +277,24 @@ export default function ProfilePage() {
                   <Label className="text-xs">{t("profile.language")}</Label>
                   <div className="flex items-center gap-2">
                     <Globe className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{user.locale === "en" ? "English" : "Français"}</span>
+                    <select
+                      value={user.locale}
+                      onChange={async (e) => {
+                        const newLocale = e.target.value;
+                        await fetch("/api/me", {
+                          method: "PATCH",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({ locale: newLocale }),
+                        });
+                        toast.success(newLocale === "en" ? "Language updated" : "Langue mise à jour");
+                        await refetch();
+                        window.location.reload();
+                      }}
+                      className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-xs"
+                    >
+                      <option value="fr">Français</option>
+                      <option value="en">English</option>
+                    </select>
                   </div>
                 </div>
               </CardContent>
