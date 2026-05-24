@@ -20,6 +20,7 @@ import {
   Search,
   UserPlus,
   Download,
+  Upload,
   ArrowUpDown,
   ChevronUp,
   ChevronDown,
@@ -94,6 +95,7 @@ export default function EmployeesPage() {
   const [addForm, setAddForm] = useState({ name: "", email: "", department: "", position: "" });
   const [adding, setAdding] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [importing, setImporting] = useState(false);
   const [showAssignDialog, setShowAssignDialog] = useState(false);
   const [showCampaignDialog, setShowCampaignDialog] = useState(false);
   const [assignTarget, setAssignTarget] = useState<Employee | null>(null);
@@ -158,6 +160,37 @@ export default function EmployeesPage() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Export CSV téléchargé");
+  };
+
+  const handleImportCSV = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv,.txt";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      setImporting(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/employees/import", { method: "POST", body: formData });
+        const result = await res.json();
+        if (res.ok) {
+          toast.success(`Import terminé : ${result.created} créé(s), ${result.skipped} ignoré(s)`);
+          if (result.errors?.length > 0) {
+            toast.info(result.errors.slice(0, 3).join(", ") + (result.errors.length > 3 ? "..." : ""));
+          }
+          await refetch();
+        } else {
+          toast.error(result.error || "Erreur d'import");
+        }
+      } catch {
+        toast.error("Erreur réseau");
+      } finally {
+        setImporting(false);
+      }
+    };
+    input.click();
   };
 
   const openAssignTraining = async (emp: Employee) => {
@@ -331,6 +364,10 @@ export default function EmployeesPage() {
                   <option key={d} value={d}>{d}</option>
                 ))}
               </select>
+              <Button variant="outline" size="sm" className="h-10" onClick={handleImportCSV} disabled={importing}>
+                <Upload className="mr-2 h-4 w-4" />
+                {importing ? "Import..." : "Importer CSV"}
+              </Button>
               <Button variant="outline" size="sm" className="h-10" onClick={handleExportCSV}>
                 <Download className="mr-2 h-4 w-4" />
                 {t("common.export")}

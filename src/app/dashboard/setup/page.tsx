@@ -51,6 +51,7 @@ export default function SetupPage() {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [addedMembers, setAddedMembers] = useState(0);
   const [campaignCreated, setCampaignCreated] = useState(false);
+  const [importingCSV, setImportingCSV] = useState(false);
 
   const progress = ((step + 1) / steps.length) * 100;
 
@@ -60,6 +61,34 @@ export default function SetupPage() {
 
   const removeMember = (i: number) => {
     setMembers(members.filter((_, idx) => idx !== i));
+  };
+
+  const handleCSVImport = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".csv,.txt";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      setImportingCSV(true);
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        const res = await fetch("/api/employees/import", { method: "POST", body: formData });
+        const result = await res.json();
+        if (res.ok) {
+          toast.success(`${result.created} employé(s) importé(s)`);
+          setAddedMembers((prev) => prev + result.created);
+        } else {
+          toast.error(result.error || "Erreur d'import");
+        }
+      } catch {
+        toast.error("Erreur réseau");
+      } finally {
+        setImportingCSV(false);
+      }
+    };
+    input.click();
   };
 
   const updateMember = (i: number, field: string, value: string) => {
@@ -322,9 +351,9 @@ export default function SetupPage() {
                       <Plus className="mr-1 h-3 w-3" />
                       Ajouter
                     </Button>
-                    <Button variant="outline" size="sm" disabled>
+                    <Button variant="outline" size="sm" onClick={handleCSVImport} disabled={importingCSV}>
                       <Upload className="mr-1 h-3 w-3" />
-                      Importer CSV (bientôt)
+                      {importingCSV ? "Import..." : "Importer CSV"}
                     </Button>
                   </div>
 
