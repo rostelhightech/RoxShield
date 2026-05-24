@@ -3,6 +3,7 @@ import Credentials from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
+import { rateLimit } from "@/lib/rate-limit";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
@@ -22,6 +23,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return null;
         }
 
+        // Rate limit: 10 login attempts per minute per email
+        const email = (credentials.email as string).toLowerCase().trim();
+        const { success: rlOk } = rateLimit(`login:${email}`, { maxRequests: 10, windowMs: 60_000 });
+        if (!rlOk) {
+          throw new Error("Trop de tentatives. Reessayez dans une minute.");
+        }
+
         const user = await db.user.findUnique({
           where: { email: credentials.email as string },
           include: { organization: true },
@@ -38,6 +46,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!isValid) {
           return null;
+        }
+
+        // Log login activity (non-blocking)
+        if (user.organizationId) {
+          db.activityLog.create({
+            data: {
+              action: "login",
+              description: `Connexion de ${user.name || user.email}`,
+              userId: user.id,
+              organizationId: user.organizationId,
+            },
+          }).catch(() => {});
         }
 
         return {

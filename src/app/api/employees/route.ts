@@ -192,17 +192,17 @@ export async function DELETE(request: NextRequest) {
   // Vérifier que l'employé appartient à l'org
   const user = await db.user.findFirst({
     where: { id, organizationId: orgId },
-    select: { id: true, name: true, email: true },
+    select: { id: true, name: true, email: true, role: true },
   });
   if (!user) return NextResponse.json({ error: "Employé non trouvé" }, { status: 404 });
 
   // Ne pas permettre de supprimer un admin
-  const target = await db.user.findUnique({ where: { id }, select: { role: true } });
-  if (target?.role === "ADMIN" || target?.role === "SUPER_ADMIN") {
+  if (user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
     return NextResponse.json({ error: "Impossible de supprimer un administrateur" }, { status: 403 });
   }
 
   // Supprimer les données liées puis l'utilisateur
+  await db.userBadge.deleteMany({ where: { userId: id } });
   await db.phishingResult.deleteMany({ where: { userId: id } });
   await db.trainingProgress.deleteMany({ where: { userId: id } });
   await db.activityLog.deleteMany({ where: { userId: id } });
