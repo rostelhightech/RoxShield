@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Shield, Eye, EyeOff, Lock, Mail, Crown, Building2, UserCircle, AlertCircle, CheckCircle, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -226,9 +226,17 @@ const demoRoles = [
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [timeoutMessage, setTimeoutMessage] = useState("");
+
+  useEffect(() => {
+    if (searchParams.get("reason") === "timeout") {
+      setTimeoutMessage("Votre session a expiré pour cause d'inactivité. Veuillez vous reconnecter.");
+    }
+  }, [searchParams]);
   const [selectedRole, setSelectedRole] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -389,6 +397,17 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            {timeoutMessage && !error && (
+              <motion.div
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 rounded-lg border border-rht-orange/20 bg-rht-orange/10 px-3 py-2 text-sm text-rht-orange"
+              >
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                {timeoutMessage}
+              </motion.div>
+            )}
 
             {error && (
               <motion.div
