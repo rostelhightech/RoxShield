@@ -80,6 +80,7 @@ export async function GET() {
     })),
     phishing: phishingResults.map((r) => ({
       id: r.id,
+      campaignId: r.campaignId,
       campaignName: r.campaign.name,
       templateType: r.campaign.templateType,
       action: r.action,

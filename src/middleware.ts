@@ -41,8 +41,11 @@ export default auth((req) => {
     }
 
     // /dashboard — ADMIN and SUPER_ADMIN only (not employees)
+    // Exception: employees can access /dashboard/training/* for learning modules
     if (pathname.startsWith("/dashboard") && role === "EMPLOYEE") {
-      return NextResponse.redirect(new URL("/employee", req.url));
+      if (!pathname.startsWith("/dashboard/training")) {
+        return NextResponse.redirect(new URL("/employee", req.url));
+      }
     }
 
     // /employee — EMPLOYEE only (admins go to dashboard)

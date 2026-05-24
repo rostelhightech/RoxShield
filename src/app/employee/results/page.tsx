@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
 import { Header } from "@/components/layout/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -13,9 +15,11 @@ import {
   XCircle,
   AlertTriangle,
   BarChart3,
+  Flag,
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 import { useTranslation } from "@/lib/i18n";
 import { useApi } from "@/hooks/use-api";
 
@@ -43,6 +47,7 @@ interface ResultsResponse {
   }[];
   phishing: {
     id: string;
+    campaignId: string;
     campaignName: string;
     templateType: string;
     action: string;
@@ -68,7 +73,26 @@ const actionStyle = {
 
 export default function EmployeeResultsPage() {
   const { t } = useTranslation();
-  const { data, loading } = useApi<ResultsResponse>("/api/employee/results");
+  const { data, loading, refetch } = useApi<ResultsResponse>("/api/employee/results");
+  const [reporting, setReporting] = useState<string | null>(null);
+
+  const handleReport = async (campaignId: string) => {
+    setReporting(campaignId);
+    try {
+      const res = await fetch(`/api/campaigns/${campaignId}/report`, { method: "POST" });
+      if (res.ok) {
+        toast.success("Email signale ! Votre score de risque a ete ameliore.");
+        await refetch();
+      } else {
+        const body = await res.json().catch(() => ({}));
+        toast.error(body.error || "Erreur lors du signalement");
+      }
+    } catch {
+      toast.error("Erreur reseau");
+    } finally {
+      setReporting(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -181,7 +205,21 @@ export default function EmployeeResultsPage() {
                                 </p>
                               </div>
                             </div>
-                            <Badge className={`shrink-0 border-0 text-[10px] ${res.style}`}>{res.label}</Badge>
+                            <div className="flex items-center gap-2">
+                              {(sim.action === "SENT" || sim.action === "OPENED") && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-7 border-cyber-green/30 text-cyber-green text-[10px] hover:bg-cyber-green/10"
+                                  disabled={reporting === sim.campaignId}
+                                  onClick={() => handleReport(sim.campaignId)}
+                                >
+                                  <Flag className="mr-1 h-3 w-3" />
+                                  {reporting === sim.campaignId ? "..." : "Signaler"}
+                                </Button>
+                              )}
+                              <Badge className={`shrink-0 border-0 text-[10px] ${res.style}`}>{res.label}</Badge>
+                            </div>
                           </div>
                         </motion.div>
                       );
