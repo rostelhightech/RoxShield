@@ -25,6 +25,7 @@ import {
 import { toast } from "sonner";
 import { Combobox } from "@/components/ui/combobox";
 import { COUNTRIES, SECTORS } from "@/lib/constants";
+import { useTranslation } from "@/lib/i18n";
 
 const countryOptions = COUNTRIES.map((c) => ({
   value: c.name,
@@ -38,22 +39,23 @@ const sectorOptions = SECTORS.map((s) => ({
   label: s,
 }));
 
-const steps = [
-  { id: "org", label: "Organisation", icon: Building2 },
-  { id: "team", label: "Équipe", icon: Users },
-  { id: "campaign", label: "Campagne", icon: Target },
-  { id: "done", label: "Terminé", icon: Rocket },
+const stepsMeta = [
+  { id: "org", labelKey: "setup.step.org" as const, icon: Building2 },
+  { id: "team", labelKey: "setup.step.team" as const, icon: Users },
+  { id: "campaign", labelKey: "setup.step.campaign" as const, icon: Target },
+  { id: "done", labelKey: "setup.step.done" as const, icon: Rocket },
 ];
 
-const templates = [
-  { id: "urgent-transfer", label: "Virement urgent", desc: "Email du PDG demandant un virement en urgence", type: "Email", templateType: "bank" },
-  { id: "password-reset", label: "Réinitialisation mot de passe", desc: "Faux email de réinitialisation de mot de passe", type: "Email", templateType: "internal" },
-  { id: "mobile-money", label: "Vérification Mobile Money", desc: "SMS de vérification de compte Mobile Money", type: "SMS", templateType: "mobile_money" },
-  { id: "invoice", label: "Facture fournisseur", desc: "Fausse facture avec lien de paiement", type: "Email", templateType: "delivery" },
+const templatesMeta = [
+  { id: "urgent-transfer", labelKey: "setup.tpl.urgentTransfer" as const, descKey: "setup.tpl.urgentTransferDesc" as const, type: "Email", templateType: "bank" },
+  { id: "password-reset", labelKey: "setup.tpl.passwordReset" as const, descKey: "setup.tpl.passwordResetDesc" as const, type: "Email", templateType: "internal" },
+  { id: "mobile-money", labelKey: "setup.tpl.mobileMoney" as const, descKey: "setup.tpl.mobileMoneyDesc" as const, type: "SMS", templateType: "mobile_money" },
+  { id: "invoice", labelKey: "setup.tpl.invoice" as const, descKey: "setup.tpl.invoiceDesc" as const, type: "Email", templateType: "delivery" },
 ];
 
 export default function SetupPage() {
   const router = useRouter();
+  const { t } = useTranslation();
   const [step, setStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [orgName, setOrgName] = useState("");
@@ -67,6 +69,8 @@ export default function SetupPage() {
   const [campaignCreated, setCampaignCreated] = useState(false);
   const [importingCSV, setImportingCSV] = useState(false);
 
+  const steps = stepsMeta.map((s) => ({ ...s, label: t(s.labelKey) }));
+  const templates = templatesMeta.map((tpl) => ({ ...tpl, label: t(tpl.labelKey), desc: t(tpl.descKey) }));
   const progress = ((step + 1) / steps.length) * 100;
 
   const addMember = () => {
@@ -91,13 +95,13 @@ export default function SetupPage() {
         const res = await fetch("/api/employees/import", { method: "POST", body: formData });
         const result = await res.json();
         if (res.ok) {
-          toast.success(`${result.created} employé(s) importé(s)`);
+          toast.success(`${result.created} ${t("setup.importedEmployees")}`);
           setAddedMembers((prev) => prev + result.created);
         } else {
-          toast.error(result.error || "Erreur d'import");
+          toast.error(result.error || t("setup.importError"));
         }
       } catch {
-        toast.error("Erreur réseau");
+        toast.error(t("profile.networkError"));
       } finally {
         setImportingCSV(false);
       }
@@ -113,7 +117,7 @@ export default function SetupPage() {
 
   const saveOrganization = async () => {
     if (!orgName.trim()) {
-      toast.error("Le nom de l'organisation est requis");
+      toast.error(t("setup.orgNameRequired"));
       return false;
     }
     setSaving(true);
@@ -124,13 +128,13 @@ export default function SetupPage() {
         body: JSON.stringify({ name: orgName, country: orgCountry, sector: orgSector }),
       });
       if (!res.ok) {
-        toast.error("Erreur lors de la sauvegarde");
+        toast.error(t("setup.saveError"));
         return false;
       }
-      toast.success("Organisation mise à jour");
+      toast.success(t("setup.orgUpdated"));
       return true;
     } catch {
-      toast.error("Erreur réseau");
+      toast.error(t("profile.networkError"));
       return false;
     } finally {
       setSaving(false);
@@ -153,10 +157,10 @@ export default function SetupPage() {
         if (res.ok) count++;
       }
       setAddedMembers(count);
-      if (count > 0) toast.success(`${count} membre(s) ajouté(s)`);
+      if (count > 0) toast.success(`${count} ${t("setup.membersAdded")}`);
       return true;
     } catch {
-      toast.error("Erreur réseau");
+      toast.error(t("profile.networkError"));
       return false;
     } finally {
       setSaving(false);
@@ -166,7 +170,7 @@ export default function SetupPage() {
   const saveCampaign = async () => {
     if (!selectedTemplate) return true; // skip if none selected
 
-    const tpl = templates.find((t) => t.id === selectedTemplate);
+    const tpl = templates.find((item) => item.id === selectedTemplate);
     if (!tpl) return true;
 
     setSaving(true);
@@ -182,11 +186,11 @@ export default function SetupPage() {
       });
       if (res.ok) {
         setCampaignCreated(true);
-        toast.success("Campagne créée en brouillon");
+        toast.success(t("setup.campaignCreated"));
       }
       return res.ok;
     } catch {
-      toast.error("Erreur réseau");
+      toast.error(t("profile.networkError"));
       return false;
     } finally {
       setSaving(false);
@@ -223,9 +227,9 @@ export default function SetupPage() {
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-rht-violet to-rht-violet-light">
             <Shield className="h-6 w-6 text-white" />
           </div>
-          <h1 className="text-2xl font-bold">Configurez votre espace</h1>
+          <h1 className="text-2xl font-bold">{t("setup.configureSpace")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            Quelques étapes pour démarrer avec RoxShield
+            {t("setup.fewSteps")}
           </p>
         </motion.div>
 
@@ -275,37 +279,37 @@ export default function SetupPage() {
                 <CardContent className="space-y-5 p-6">
                   <div className="text-center">
                     <Building2 className="mx-auto mb-2 h-8 w-8 text-rht-violet-light" />
-                    <h2 className="text-lg font-bold">Votre organisation</h2>
-                    <p className="text-sm text-muted-foreground">Renseignez les informations de base</p>
+                    <h2 className="text-lg font-bold">{t("setup.yourOrg")}</h2>
+                    <p className="text-sm text-muted-foreground">{t("setup.basicInfo")}</p>
                   </div>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label className="text-xs">Nom de l&apos;organisation *</Label>
+                      <Label className="text-xs">{t("setup.orgName")}</Label>
                       <Input
-                        placeholder="Ex: Safi Sénégal SARL"
+                        placeholder={t("setup.orgNamePlaceholder")}
                         value={orgName}
                         onChange={(e) => setOrgName(e.target.value)}
                       />
                     </div>
                     <div className="grid gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
-                        <Label className="text-xs">Pays</Label>
+                        <Label className="text-xs">{t("setup.country")}</Label>
                         <Combobox
                           options={countryOptions}
                           value={orgCountry}
                           onChange={setOrgCountry}
-                          placeholder="Sélectionner un pays..."
-                          searchPlaceholder="Rechercher un pays..."
+                          placeholder={t("setup.countryPlaceholder")}
+                          searchPlaceholder={t("setup.countrySearch")}
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label className="text-xs">Secteur d&apos;activité</Label>
+                        <Label className="text-xs">{t("setup.sector")}</Label>
                         <Combobox
                           options={sectorOptions}
                           value={orgSector}
                           onChange={setOrgSector}
-                          placeholder="Sélectionner un secteur..."
-                          searchPlaceholder="Rechercher..."
+                          placeholder={t("setup.sectorPlaceholder")}
+                          searchPlaceholder={t("setup.sectorSearch")}
                           allowCustom
                         />
                       </div>
@@ -320,8 +324,8 @@ export default function SetupPage() {
                 <CardContent className="space-y-5 p-6">
                   <div className="text-center">
                     <Users className="mx-auto mb-2 h-8 w-8 text-rht-violet-light" />
-                    <h2 className="text-lg font-bold">Ajoutez votre équipe</h2>
-                    <p className="text-sm text-muted-foreground">Invitez vos collaborateurs — ils recevront un email d&apos;invitation</p>
+                    <h2 className="text-lg font-bold">{t("setup.addTeam")}</h2>
+                    <p className="text-sm text-muted-foreground">{t("setup.teamDesc")}</p>
                   </div>
 
                   <div className="space-y-3">
@@ -335,18 +339,18 @@ export default function SetupPage() {
                       >
                         <div className="grid flex-1 gap-2 sm:grid-cols-3">
                           <Input
-                            placeholder="Nom complet"
+                            placeholder={t("setup.fullName")}
                             value={m.name}
                             onChange={(e) => updateMember(i, "name", e.target.value)}
                           />
                           <Input
-                            placeholder="Email"
+                            placeholder={t("setup.email")}
                             type="email"
                             value={m.email}
                             onChange={(e) => updateMember(i, "email", e.target.value)}
                           />
                           <Input
-                            placeholder="Département"
+                            placeholder={t("setup.department")}
                             value={m.department}
                             onChange={(e) => updateMember(i, "department", e.target.value)}
                           />
@@ -368,16 +372,16 @@ export default function SetupPage() {
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" onClick={addMember}>
                       <Plus className="mr-1 h-3 w-3" />
-                      Ajouter
+                      {t("setup.add")}
                     </Button>
                     <Button variant="outline" size="sm" onClick={handleCSVImport} disabled={importingCSV}>
                       <Upload className="mr-1 h-3 w-3" />
-                      {importingCSV ? "Import..." : "Importer CSV"}
+                      {importingCSV ? t("setup.importing") : t("setup.importCSV")}
                     </Button>
                   </div>
 
                   <p className="text-center text-xs text-muted-foreground">
-                    {members.filter((m) => m.email).length} membre(s) à inviter — vous pourrez en ajouter d&apos;autres plus tard
+                    {members.filter((m) => m.email).length} {t("setup.membersToInvite")}
                   </p>
                 </CardContent>
               </Card>
@@ -388,29 +392,29 @@ export default function SetupPage() {
                 <CardContent className="space-y-5 p-6">
                   <div className="text-center">
                     <Target className="mx-auto mb-2 h-8 w-8 text-rht-violet-light" />
-                    <h2 className="text-lg font-bold">Première simulation</h2>
-                    <p className="text-sm text-muted-foreground">Choisissez un template pour votre première campagne de phishing</p>
+                    <h2 className="text-lg font-bold">{t("setup.firstSimulation")}</h2>
+                    <p className="text-sm text-muted-foreground">{t("setup.chooseTemplate")}</p>
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-2">
-                    {templates.map((t) => (
+                    {templates.map((tpl) => (
                       <motion.button
-                        key={t.id}
+                        key={tpl.id}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => setSelectedTemplate(t.id)}
+                        onClick={() => setSelectedTemplate(tpl.id)}
                         className={`rounded-xl border p-4 text-left transition-all ${
-                          selectedTemplate === t.id
+                          selectedTemplate === tpl.id
                             ? "border-rht-violet/40 bg-rht-violet/5"
                             : "hover:border-muted-foreground/20 hover:bg-accent"
                         }`}
                       >
                         <div className="flex items-center justify-between">
-                          <p className="text-sm font-semibold">{t.label}</p>
-                          <Badge variant="outline" className="text-[10px]">{t.type}</Badge>
+                          <p className="text-sm font-semibold">{tpl.label}</p>
+                          <Badge variant="outline" className="text-[10px]">{tpl.type}</Badge>
                         </div>
-                        <p className="mt-1 text-xs text-muted-foreground">{t.desc}</p>
-                        {selectedTemplate === t.id && (
+                        <p className="mt-1 text-xs text-muted-foreground">{tpl.desc}</p>
+                        {selectedTemplate === tpl.id && (
                           <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}
@@ -424,7 +428,7 @@ export default function SetupPage() {
                   </div>
 
                   <p className="text-center text-xs text-muted-foreground">
-                    La campagne sera créée en brouillon — vous pourrez la personnaliser avant de l&apos;envoyer
+                    {t("setup.draftNote")}
                   </p>
                 </CardContent>
               </Card>
@@ -443,17 +447,17 @@ export default function SetupPage() {
                         <CheckCircle className="h-8 w-8 text-white" />
                       </div>
                     </motion.div>
-                    <h2 className="text-lg font-bold">Configuration terminée !</h2>
+                    <h2 className="text-lg font-bold">{t("setup.configDone")}</h2>
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Votre espace RoxShield est prêt à utiliser
+                      {t("setup.spaceReady")}
                     </p>
                   </div>
 
                   <div className="space-y-3">
                     {[
-                      { icon: Building2, label: "Organisation", value: orgName || "Non renseigné", color: "text-rht-violet-light", bg: "bg-rht-violet/10" },
-                      { icon: Users, label: "Membres", value: `${addedMembers} invité(s)`, color: "text-rht-orange", bg: "bg-rht-orange/10" },
-                      { icon: Target, label: "Campagne", value: campaignCreated ? templates.find((t) => t.id === selectedTemplate)?.label ?? "—" : "Aucune", color: "text-cyber-green", bg: "bg-cyber-green/10" },
+                      { icon: Building2, label: t("setup.orgLabel"), value: orgName || t("setup.notProvided"), color: "text-rht-violet-light", bg: "bg-rht-violet/10" },
+                      { icon: Users, label: t("setup.membersLabel"), value: `${addedMembers} ${t("setup.invited")}`, color: "text-rht-orange", bg: "bg-rht-orange/10" },
+                      { icon: Target, label: t("setup.campaignLabel"), value: campaignCreated ? templates.find((tpl) => tpl.id === selectedTemplate)?.label ?? "—" : t("setup.none"), color: "text-cyber-green", bg: "bg-cyber-green/10" },
                     ].map((item) => (
                       <div key={item.label} className="flex items-center gap-3 rounded-xl border p-3">
                         <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${item.bg}`}>
@@ -476,11 +480,11 @@ export default function SetupPage() {
           {step > 0 ? (
             <Button variant="outline" onClick={() => setStep(step - 1)} disabled={saving}>
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Précédent
+              {t("setup.previous")}
             </Button>
           ) : (
             <Button variant="ghost" onClick={() => router.push("/dashboard")} className="text-muted-foreground">
-              Passer
+              {t("setup.skip")}
             </Button>
           )}
 
@@ -496,16 +500,16 @@ export default function SetupPage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                   </svg>
-                  Enregistrement...
+                  {t("setup.saving")}
                 </span>
               ) : step === steps.length - 1 ? (
                 <>
-                  Accéder au dashboard
+                  {t("setup.goToDashboard")}
                   <Rocket className="ml-2 h-4 w-4" />
                 </>
               ) : (
                 <>
-                  Continuer
+                  {t("setup.continue")}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </>
               )}

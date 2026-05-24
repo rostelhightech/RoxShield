@@ -116,6 +116,7 @@ export default function ReportsPage() {
   ];
 
   const clickRate = campData?.stats.clickRate || 0;
+  const modules = trainData?.modules || [];
 
   const handleExport = () => {
     setExporting(true);
@@ -179,8 +180,6 @@ export default function ReportsPage() {
     URL.revokeObjectURL(url);
     toast.success(locale === "en" ? "CSV export downloaded" : "Export CSV téléchargé");
   };
-
-  const modules = trainData?.modules || [];
 
   return (
     <div>
