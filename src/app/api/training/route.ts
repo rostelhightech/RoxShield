@@ -99,15 +99,15 @@ export async function POST(request: NextRequest) {
     await db.activityLog.create({
       data: {
         action: "training_completed",
-        description: `Formation "${mod?.title}" complétée`,
+        description: mod?.title || null,
         userId,
         organizationId: orgId,
       },
     });
     await db.notification.create({
       data: {
-        title: "Formation terminee !",
-        message: `Vous avez complete "${mod?.title}"${quizScore ? ` avec un score de ${quizScore}%` : ""}. Continuez ainsi !`,
+        title: "notif.training_completed",
+        message: `${mod?.title || ""}${quizScore ? `|${quizScore}` : ""}`,
         type: "success",
         link: "/employee/results",
         userId,

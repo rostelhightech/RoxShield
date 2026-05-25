@@ -183,7 +183,7 @@ export async function POST(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "employees_imported",
-      description: `Import CSV: ${results.created} crees, ${results.skipped} ignores sur ${results.total}`,
+      description: `${results.created}|${results.skipped}|${results.total}`,
       userId: session.user.id,
       organizationId: orgId,
     },

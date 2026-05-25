@@ -109,6 +109,20 @@ function getActivityIcon(action: string) {
   }
 }
 
+function translateActivity(action: string, description: string | null, t: (key: any) => string): string {
+  const key = `activityLog.${action}` as any;
+  const template = t(key);
+  // If key wasn't found (returns the key itself), fall back to description
+  if (template === key) return description || action;
+  if (!description) return template.replace(/\s*\{0\}/g, "");
+  const parts = description.split("|");
+  let result = template;
+  parts.forEach((part: string, i: number) => {
+    result = result.replace(`{${i}}`, part);
+  });
+  return result;
+}
+
 function timeAgo(dateStr: string, locale: string = "fr") {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);
@@ -338,7 +352,7 @@ export default function DashboardPage() {
                         <p className="text-sm">
                           <span className="font-medium">{activity.user?.name || t("dashboard.system")}</span>
                           {" — "}
-                          <span className="text-muted-foreground">{activity.description}</span>
+                          <span className="text-muted-foreground">{translateActivity(activity.action, activity.description, t)}</span>
                         </p>
                       </div>
                       <span className="shrink-0 text-[11px] text-muted-foreground">{timeAgo(activity.createdAt, locale)}</span>

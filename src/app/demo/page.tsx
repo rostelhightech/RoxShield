@@ -27,11 +27,11 @@ import {
   GraduationCap,
 } from "lucide-react";
 
-const demoFeatures = [
-  { icon: Crosshair, title: "Simulations de phishing", desc: "Campagnes personnalisées avec templates africains" },
-  { icon: GraduationCap, title: "Modules de formation", desc: "Cours interactifs gamifiés avec quiz" },
-  { icon: BarChart3, title: "Dashboard analytics", desc: "Score de risque, tendances, comparaison" },
-  { icon: Users, title: "Gestion d'équipe", desc: "Multi-départements, import bulk, rôles" },
+const demoFeaturesMeta = [
+  { icon: Crosshair, titleFr: "Simulations de phishing", titleEn: "Phishing simulations", descFr: "Campagnes personnalisées avec templates africains", descEn: "Customized campaigns with African templates" },
+  { icon: GraduationCap, titleFr: "Modules de formation", titleEn: "Training modules", descFr: "Cours interactifs gamifiés avec quiz", descEn: "Interactive gamified courses with quizzes" },
+  { icon: BarChart3, titleFr: "Dashboard analytics", titleEn: "Analytics dashboard", descFr: "Score de risque, tendances, comparaison", descEn: "Risk score, trends, comparison" },
+  { icon: Users, titleFr: "Gestion d'équipe", titleEn: "Team management", descFr: "Multi-départements, import bulk, rôles", descEn: "Multi-departments, bulk import, roles" },
 ];
 
 const countryOptions = COUNTRIES.map((c) => ({
@@ -155,14 +155,14 @@ export default function DemoPage() {
                 {locale === "en" ? "What you'll see" : "Ce que vous verrez"}
               </h3>
               <div className="grid gap-3 sm:grid-cols-2">
-                {demoFeatures.map((feat) => (
-                  <div key={feat.title} className="flex items-start gap-3 rounded-xl border p-3">
+                {demoFeaturesMeta.map((feat) => (
+                  <div key={feat.titleEn} className="flex items-start gap-3 rounded-xl border p-3">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rht-violet/10">
                       <feat.icon className="h-4 w-4 text-rht-violet" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium">{feat.title}</p>
-                      <p className="text-[11px] text-muted-foreground">{feat.desc}</p>
+                      <p className="text-sm font-medium">{locale === "en" ? feat.titleEn : feat.titleFr}</p>
+                      <p className="text-[11px] text-muted-foreground">{locale === "en" ? feat.descEn : feat.descFr}</p>
                     </div>
                   </div>
                 ))}

@@ -58,8 +58,8 @@ export async function POST(request: NextRequest) {
   await db.notification.create({
     data: {
       type: "info",
-      title: `Formation assignée : ${trainingModule.title}`,
-      message: `L'administrateur vous a assigné la formation "${trainingModule.title}". Accédez à votre espace formation pour commencer.`,
+      title: "notif.training_assigned",
+      message: trainingModule.title,
       userId,
     },
   });
@@ -68,7 +68,7 @@ export async function POST(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "training_assigned",
-      description: `Formation "${trainingModule.title}" assignée à ${employee.name || employee.email}`,
+      description: `${trainingModule.title}|${employee.name || employee.email}`,
       userId: session.user.id,
       organizationId: orgId,
     },

@@ -47,8 +47,8 @@ export async function GET(
     // Notification for the employee
     await db.notification.create({
       data: {
-        title: "Simulation de phishing",
-        message: "Vous avez clique sur un lien de simulation. Consultez la page de sensibilisation pour apprendre a vous proteger.",
+        title: "notif.phishing_clicked",
+        message: null,
         type: "warning",
         link: "/employee/results",
         userId: uid,

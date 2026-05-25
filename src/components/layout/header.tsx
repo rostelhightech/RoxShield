@@ -55,6 +55,31 @@ function timeAgo(dateStr: string, locale: string): string {
   return locale === "en" ? `${days}d ago` : `Il y a ${days}j`;
 }
 
+function translateNotif(raw: string, params: string | null, t: (key: any) => string): string {
+  const translated = t(raw as any);
+  // If key was found in dictionary (doesn't return itself), it's a template key
+  if (translated !== raw) return translated;
+  return raw;
+}
+
+function translateNotifMsg(title: string, params: string | null, t: (key: any) => string): string | null {
+  const msgKey = `${title}.msg` as any;
+  const template = t(msgKey);
+  if (template === msgKey) return params; // Not a known template, return raw
+  if (!params) return template.replace(/\s*\{0\}/g, "").replace(/\s*\{1\}/g, "").replace(/\s*\{2\}/g, "");
+  const parts = params.split("|");
+  let result = template;
+  // Handle special training_completed score interpolation
+  if (title === "notif.training_completed" && parts[1]) {
+    const scoreTemplate = t("notif.training_completed.score" as any);
+    result = result.replace("{1}", scoreTemplate.replace("{0}", parts[1]));
+  }
+  parts.forEach((part: string, i: number) => {
+    result = result.replace(`{${i}}`, part);
+  });
+  return result;
+}
+
 export function Header({ title }: { title: string }) {
   const { t, locale } = useTranslation();
   const { data: notifData, refetch } = useApi<NotifResponse>("/api/notifications");
@@ -180,7 +205,7 @@ export function Header({ title }: { title: string }) {
                           <div className="flex-1 overflow-hidden">
                             <div className="flex items-start justify-between gap-2">
                               <p className={`text-sm ${!notif.isRead ? "font-semibold" : "font-medium text-muted-foreground"}`}>
-                                {notif.title}
+                                {translateNotif(notif.title, notif.message, t)}
                               </p>
                               {!notif.isRead && (
                                 <div className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-rht-orange" />
@@ -188,7 +213,7 @@ export function Header({ title }: { title: string }) {
                             </div>
                             {notif.message && (
                               <p className="mt-0.5 text-xs text-muted-foreground line-clamp-2">
-                                {notif.message}
+                                {translateNotifMsg(notif.title, notif.message, t)}
                               </p>
                             )}
                             <p className="mt-1 text-[10px] text-muted-foreground/60">

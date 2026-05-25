@@ -160,7 +160,7 @@ export async function POST(request: NextRequest) {
     to: email,
     employeeName: name || "",
     organizationName: org?.name || "votre organisation",
-    invitedBy: inviter?.name || "L'administrateur",
+    invitedBy: inviter?.name || "Admin",
     tempPassword,
   });
 
@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "employee_added",
-      description: `Employé "${name || email}" ajouté${emailResult.success ? " — invitation envoyée" : ""}`,
+      description: name || email,
       userId: session.user.id,
       organizationId: orgId,
     },
@@ -177,8 +177,8 @@ export async function POST(request: NextRequest) {
   // Welcome notification for the new employee
   await db.notification.create({
     data: {
-      title: "Bienvenue sur RoxShield !",
-      message: `Vous avez ete ajoute a ${org?.name || "votre organisation"}. Commencez par explorer vos formations.`,
+      title: "notif.welcome",
+      message: org?.name || null,
       type: "info",
       link: "/employee/training",
       userId: user.id,
@@ -226,7 +226,7 @@ export async function DELETE(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "employee_removed",
-      description: `Employé "${user.name || user.email}" supprimé`,
+      description: user.name || user.email,
       userId: session.user.id,
       organizationId: orgId,
     },

@@ -64,8 +64,8 @@ export async function POST(request: NextRequest) {
   await db.notification.create({
     data: {
       type: "info",
-      title: "Campagne de sensibilisation",
-      message: `Vous avez été inclus dans la campagne "${campaign.name}". Restez vigilant face aux emails suspects.`,
+      title: "notif.campaign_included",
+      message: campaign.name,
       userId,
     },
   });
@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "campaign_target_added",
-      description: `${employee.name || employee.email} ajouté à la campagne "${campaign.name}"`,
+      description: `${employee.name || employee.email}|${campaign.name}`,
       userId: session.user.id,
       organizationId: orgId,
     },

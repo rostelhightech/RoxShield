@@ -58,7 +58,7 @@ export async function POST(
     await db.activityLog.create({
       data: {
         action: "phishing_reported",
-        description: `Email de simulation "${campaign.name}" signale`,
+        description: campaign.name,
         userId: session.user.id,
         organizationId: campaign.organizationId,
       },
@@ -67,8 +67,8 @@ export async function POST(
     // Reward notification for the employee
     await db.notification.create({
       data: {
-        title: "Bien joue !",
-        message: "Vous avez correctement identifie et signale un email de simulation. Votre score de risque a ete ameliore.",
+        title: "notif.phishing_reported",
+        message: null,
         type: "success",
         link: "/employee/results",
         userId: session.user.id,

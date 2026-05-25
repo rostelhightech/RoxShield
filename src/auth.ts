@@ -53,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           db.activityLog.create({
             data: {
               action: "login",
-              description: `Connexion de ${user.name || user.email}`,
+              description: user.name || user.email,
               userId: user.id,
               organizationId: user.organizationId,
             },

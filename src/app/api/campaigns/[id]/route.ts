@@ -226,7 +226,7 @@ export async function PATCH(
     await db.activityLog.create({
       data: {
         action: "campaign_launched",
-        description: `Campagne "${campaign.name}" lancee — ${sentCount} emails envoyes`,
+        description: `${campaign.name}|${sentCount}`,
         userId: session.user.id,
         organizationId: orgId!,
       },
@@ -235,8 +235,8 @@ export async function PATCH(
     // Notification for the admin who launched
     await db.notification.create({
       data: {
-        title: "Campagne lancee",
-        message: `"${campaign.name}" — ${sentCount} emails envoyes a ${targets.length} employes`,
+        title: "notif.campaign_launched",
+        message: `${campaign.name}|${sentCount}|${targets.length}`,
         type: "success",
         link: "/dashboard/simulations",
         userId: session.user.id,

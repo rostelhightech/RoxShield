@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "campaign_created",
-      description: `Campagne "${name}" créée`,
+      description: name,
       userId: session.user.id,
       organizationId: orgId,
     },

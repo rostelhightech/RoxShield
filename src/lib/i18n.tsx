@@ -1008,6 +1008,36 @@ const dictionaries = {
     "simulations.emailsSent": "emails envoyés",
     "chart.now": "Actuel",
 
+    // Notification templates (server stores keys, client translates)
+    "notif.campaign_launched": "Campagne lancée",
+    "notif.campaign_launched.msg": "« {0} » — {1} emails envoyés à {2} employés",
+    "notif.phishing_reported": "Bien joué !",
+    "notif.phishing_reported.msg": "Vous avez correctement identifié et signalé un email de simulation. Votre score de risque a été amélioré.",
+    "notif.phishing_clicked": "Simulation de phishing",
+    "notif.phishing_clicked.msg": "Vous avez cliqué sur un lien de simulation. Consultez la page de sensibilisation pour apprendre à vous protéger.",
+    "notif.welcome": "Bienvenue sur RoxShield !",
+    "notif.welcome.msg": "Vous avez été ajouté à {0}. Commencez par explorer vos formations.",
+    "notif.training_assigned": "Formation assignée",
+    "notif.training_assigned.msg": "L'administrateur vous a assigné la formation « {0} ». Accédez à votre espace formation pour commencer.",
+    "notif.training_completed": "Formation terminée !",
+    "notif.training_completed.msg": "Vous avez complété « {0} »{1}. Continuez ainsi !",
+    "notif.training_completed.score": " avec un score de {0}%",
+    "notif.campaign_included": "Campagne de sensibilisation",
+    "notif.campaign_included.msg": "Vous avez été inclus dans la campagne « {0} ». Restez vigilant face aux emails suspects.",
+
+    // Activity log descriptions (client-side translation)
+    "activityLog.login": "Connexion de {0}",
+    "activityLog.organization_updated": "Informations de l'organisation mises à jour",
+    "activityLog.training_completed": "Formation « {0} » complétée",
+    "activityLog.training_assigned": "Formation « {0} » assignée à {1}",
+    "activityLog.campaign_created": "Campagne « {0} » créée",
+    "activityLog.campaign_launched": "Campagne « {0} » lancée — {1} emails envoyés",
+    "activityLog.campaign_target_added": "{0} ajouté à la campagne « {1} »",
+    "activityLog.phishing_reported": "Email de simulation « {0} » signalé",
+    "activityLog.employee_added": "Employé « {0} » ajouté",
+    "activityLog.employee_removed": "Employé « {0} » supprimé",
+    "activityLog.employees_imported": "Import CSV : {0} créés, {1} ignorés sur {2}",
+
     // Footer
     "footer.about": "À propos",
     "footer.pricing": "Tarifs",
@@ -2049,6 +2079,36 @@ const dictionaries = {
     // Misc remaining
     "simulations.emailsSent": "emails sent",
     "chart.now": "Now",
+
+    // Notification templates (server stores keys, client translates)
+    "notif.campaign_launched": "Campaign launched",
+    "notif.campaign_launched.msg": "\"{0}\" — {1} emails sent to {2} employees",
+    "notif.phishing_reported": "Well done!",
+    "notif.phishing_reported.msg": "You correctly identified and reported a simulation email. Your risk score has been improved.",
+    "notif.phishing_clicked": "Phishing simulation",
+    "notif.phishing_clicked.msg": "You clicked on a simulation link. Check the awareness page to learn how to protect yourself.",
+    "notif.welcome": "Welcome to RoxShield!",
+    "notif.welcome.msg": "You have been added to {0}. Start by exploring your training modules.",
+    "notif.training_assigned": "Training assigned",
+    "notif.training_assigned.msg": "Your administrator assigned you the training \"{0}\". Go to your training space to begin.",
+    "notif.training_completed": "Training completed!",
+    "notif.training_completed.msg": "You completed \"{0}\"{1}. Keep it up!",
+    "notif.training_completed.score": " with a score of {0}%",
+    "notif.campaign_included": "Awareness campaign",
+    "notif.campaign_included.msg": "You have been included in campaign \"{0}\". Stay vigilant against suspicious emails.",
+
+    // Activity log descriptions (client-side translation)
+    "activityLog.login": "Login by {0}",
+    "activityLog.organization_updated": "Organization information updated",
+    "activityLog.training_completed": "Training \"{0}\" completed",
+    "activityLog.training_assigned": "Training \"{0}\" assigned to {1}",
+    "activityLog.campaign_created": "Campaign \"{0}\" created",
+    "activityLog.campaign_launched": "Campaign \"{0}\" launched — {1} emails sent",
+    "activityLog.campaign_target_added": "{0} added to campaign \"{1}\"",
+    "activityLog.phishing_reported": "Simulation email \"{0}\" reported",
+    "activityLog.employee_added": "Employee \"{0}\" added",
+    "activityLog.employee_removed": "Employee \"{0}\" removed",
+    "activityLog.employees_imported": "CSV import: {0} created, {1} skipped out of {2}",
 
     // Footer
     "footer.about": "About",

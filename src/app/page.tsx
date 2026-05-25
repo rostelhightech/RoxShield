@@ -229,9 +229,9 @@ export default function LandingPage() {
           </FadeIn>
           <FadeIn delay={0.4}>
             <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground">
-              <span className="flex items-center gap-2"><Building2 className="h-4 w-4" />Entreprises & Écoles</span>
-              <span className="flex items-center gap-2"><Shield className="h-4 w-4" />Cybersécurité humaine</span>
-              <span className="flex items-center gap-2"><Globe className="h-4 w-4" />Contexte africain</span>
+              <span className="flex items-center gap-2"><Building2 className="h-4 w-4" />{locale === "en" ? "Companies & Schools" : "Entreprises & Écoles"}</span>
+              <span className="flex items-center gap-2"><Shield className="h-4 w-4" />{locale === "en" ? "Human cybersecurity" : "Cybersécurité humaine"}</span>
+              <span className="flex items-center gap-2"><Globe className="h-4 w-4" />{locale === "en" ? "African context" : "Contexte africain"}</span>
             </div>
           </FadeIn>
           <FadeIn delay={0.5}>
@@ -305,7 +305,7 @@ export default function LandingPage() {
                     <item.icon className="h-7 w-7 text-white" />
                   </motion.div>
                   <span className="mb-2 block text-xs font-bold uppercase tracking-widest text-muted-foreground/40">
-                    Étape {item.step}
+                    {locale === "en" ? "Step" : "Étape"} {item.step}
                   </span>
                   <h3 className="mb-2 text-lg font-semibold">{item.title}</h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">{item.description}</p>
@@ -469,37 +469,40 @@ export default function LandingPage() {
           <StaggerContainer className="grid gap-6 md:grid-cols-3">
             {[
               {
-                quote: "En 3 mois, notre taux de clic sur les emails de phishing est passé de 45% à 12%. Impressionnant.",
+                quoteFr: "En 3 mois, notre taux de clic sur les emails de phishing est passé de 45% à 12%. Impressionnant.",
+                quoteEn: "In 3 months, our phishing email click rate dropped from 45% to 12%. Impressive.",
                 name: "Fatou Sow",
-                role: "DSI, Banque Atlantique Sénégal",
+                role: locale === "en" ? "CIO, Banque Atlantique Senegal" : "DSI, Banque Atlantique Sénégal",
                 initials: "FS",
               },
               {
-                quote: "Les modules de formation sont courts et ludiques — nos employés les adorent. Le dashboard nous donne une vue claire.",
+                quoteFr: "Les modules de formation sont courts et ludiques — nos employés les adorent. Le dashboard nous donne une vue claire.",
+                quoteEn: "The training modules are short and engaging — our employees love them. The dashboard gives us a clear overview.",
                 name: "Kouamé Assi",
                 role: "RSSI, Moov Africa CI",
                 initials: "KA",
               },
               {
-                quote: "RoxShield nous a permis d'identifier nos départements les plus vulnérables et de cibler les formations.",
+                quoteFr: "RoxShield nous a permis d'identifier nos départements les plus vulnérables et de cibler les formations.",
+                quoteEn: "RoxShield helped us identify our most vulnerable departments and target training accordingly.",
                 name: "Amina Diallo",
-                role: "DRH, Port Autonome de Dakar",
+                role: locale === "en" ? "HR Director, Port Autonome de Dakar" : "DRH, Port Autonome de Dakar",
                 initials: "AD",
               },
-            ].map((t, i) => (
+            ].map((testimonial, i) => (
               <StaggerItem key={i}>
                 <Card className="h-full transition-all duration-300 hover:border-rht-violet/20">
                   <CardContent className="flex h-full flex-col p-6">
                     <p className="flex-1 text-sm italic text-muted-foreground">
-                      &ldquo;{t.quote}&rdquo;
+                      &ldquo;{locale === "en" ? testimonial.quoteEn : testimonial.quoteFr}&rdquo;
                     </p>
                     <div className="mt-4 flex items-center gap-3 border-t pt-4">
                       <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-rht-violet to-rht-violet-light text-xs font-bold text-white">
-                        {t.initials}
+                        {testimonial.initials}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold">{t.name}</p>
-                        <p className="text-xs text-muted-foreground">{t.role}</p>
+                        <p className="text-sm font-semibold">{testimonial.name}</p>
+                        <p className="text-xs text-muted-foreground">{testimonial.role}</p>
                       </div>
                     </div>
                   </CardContent>

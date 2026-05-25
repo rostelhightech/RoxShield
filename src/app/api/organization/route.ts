@@ -87,7 +87,7 @@ export async function PATCH(request: NextRequest) {
   await db.activityLog.create({
     data: {
       action: "organization_updated",
-      description: "Informations de l'organisation mises à jour",
+      description: null,
       userId: session.user.id,
       organizationId: orgId,
     },
