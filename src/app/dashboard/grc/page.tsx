@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import {
   RadialBarChart,
   RadialBar,
@@ -231,7 +232,7 @@ export default function GRCPage() {
                     <tbody className="divide-y">
                       {risks.map((r) => (
                         <tr key={r.id} className="hover:bg-accent/30">
-                          <td className="py-3 pr-4 font-medium">{r.title}</td>
+                          <td className="py-3 pr-4 font-medium">{translateDb(r.title, locale)}</td>
                           <td className="py-3 pr-4 text-center">{r.impact}/5</td>
                           <td className="py-3 pr-4 text-center">{r.likelihood}/5</td>
                           <td className="py-3 pr-4">
@@ -239,7 +240,7 @@ export default function GRCPage() {
                               {r.riskScore}
                             </Badge>
                           </td>
-                          <td className="py-3 pr-4 text-xs text-muted-foreground max-w-[200px]">{r.mitigation || "—"}</td>
+                          <td className="py-3 pr-4 text-xs text-muted-foreground max-w-[200px]">{translateDb(r.mitigation, locale) || "—"}</td>
                           <td className="py-3">
                             <Badge variant="outline" className="text-[10px]">{statusLabels[r.status] || r.status}</Badge>
                           </td>

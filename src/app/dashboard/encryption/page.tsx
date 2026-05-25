@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import { useApi } from "@/hooks/use-api";
 import type { LucideIcon } from "lucide-react";
 
@@ -172,7 +173,7 @@ export default function EncryptionPage() {
                                   ) : (
                                     <XCircle className="h-3.5 w-3.5 shrink-0 text-cyber-red" />
                                   )}
-                                  <span className={f.ok ? "text-muted-foreground" : ""}>{f.text}</span>
+                                  <span className={f.ok ? "text-muted-foreground" : ""}>{translateDb(f.text, locale)}</span>
                                 </div>
                               ))}
                             </div>

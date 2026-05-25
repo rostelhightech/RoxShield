@@ -36,6 +36,7 @@ import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/mo
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import { useApi } from "@/hooks/use-api";
 import { generatePdfReport } from "@/lib/export-pdf";
 
@@ -133,7 +134,7 @@ export default function ReportsPage() {
 
       generatePdfReport({
         organizationName: orgData?.name || t("reports.myOrg"),
-        date: new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
+        date: new Date().toLocaleDateString(locale === "en" ? "en-US" : "fr-FR", { day: "numeric", month: "long", year: "numeric" }),
         avgRiskScore: dashData.avgRiskScore,
         totalEmployees: dashData.totalEmployees,
         trainingRate: dashData.trainingRate,
@@ -291,7 +292,7 @@ export default function ReportsPage() {
                             >
                               <div className="flex-1">
                                 <div className="flex items-center justify-between text-sm">
-                                  <span className="font-medium">{m.title}</span>
+                                  <span className="font-medium">{translateDb(m.title, locale)}</span>
                                   <span className="text-muted-foreground">{m.progress.progressPercent}%</span>
                                 </div>
                                 <Progress value={m.progress.progressPercent} className="mt-1 h-2" />
@@ -324,7 +325,7 @@ export default function ReportsPage() {
                             <XAxis type="number" domain={[0, 100]} tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} />
                             <YAxis dataKey="department" type="category" tick={{ fill: "var(--muted-foreground)", fontSize: 12 }} width={100} />
                             <Tooltip contentStyle={{ backgroundColor: "var(--card)", border: "1px solid var(--border)", borderRadius: "12px", fontSize: "12px", color: "var(--foreground)" }} />
-                            <Bar dataKey="avgRisk" name="Risque %" fill="#ef4444" radius={[0, 4, 4, 0]} />
+                            <Bar dataKey="avgRisk" name={t("reports.riskPercent")} fill="#ef4444" radius={[0, 4, 4, 0]} />
                           </BarChart>
                         </ResponsiveContainer>
                       </div>

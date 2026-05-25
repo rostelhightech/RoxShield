@@ -22,6 +22,7 @@ import { Confetti } from "@/components/confetti";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import { useApi } from "@/hooks/use-api";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -126,8 +127,8 @@ export default function BadgesPage() {
                           <div className={`flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${badge.color} shadow-lg`}>
                             <Icon className="h-7 w-7 text-white" />
                           </div>
-                          <h4 className="mt-3 font-semibold text-sm">{badge.name}</h4>
-                          <p className="mt-1 text-xs text-muted-foreground">{badge.description}</p>
+                          <h4 className="mt-3 font-semibold text-sm">{translateDb(badge.name, locale)}</h4>
+                          <p className="mt-1 text-xs text-muted-foreground">{translateDb(badge.description, locale)}</p>
                           {badge.earnedAt && (
                             <Badge className="mt-3 border-0 bg-cyber-green/10 text-cyber-green text-[10px]">
                               {t("badges.earnedOn")} {new Date(badge.earnedAt).toLocaleDateString(locale === "en" ? "en-US" : "fr-FR", { day: "numeric", month: "short" })}
@@ -160,8 +161,8 @@ export default function BadgesPage() {
                         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
                           <Icon className="h-7 w-7 text-muted-foreground" />
                         </div>
-                        <h4 className="mt-3 font-semibold text-sm">{badge.name}</h4>
-                        <p className="mt-1 text-xs text-muted-foreground">{badge.description}</p>
+                        <h4 className="mt-3 font-semibold text-sm">{translateDb(badge.name, locale)}</h4>
+                        <p className="mt-1 text-xs text-muted-foreground">{translateDb(badge.description, locale)}</p>
                         <Badge className="mt-3 border-0 bg-muted text-muted-foreground text-[10px]">
                           🔒 {t("badges.locked")}
                         </Badge>

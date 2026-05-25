@@ -16,6 +16,7 @@ import {
 import { FadeIn, StaggerContainer, StaggerItem } from "@/components/motion";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import Link from "next/link";
 import { useApi } from "@/hooks/use-api";
 
@@ -133,13 +134,13 @@ export default function EmployeeTrainingPage() {
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
                               <h3 className={`font-semibold ${isCompleted ? "text-muted-foreground line-through" : ""}`}>
-                                {mod.title}
+                                {translateDb(mod.title, locale)}
                               </h3>
                               <Badge className={`border-0 text-[10px] ${difficultyStyle[mod.difficulty] || ""}`}>
                                 {difficultyLabel[mod.difficulty] || mod.difficulty}
                               </Badge>
                             </div>
-                            <p className="mt-1 text-sm text-muted-foreground">{mod.description}</p>
+                            <p className="mt-1 text-sm text-muted-foreground">{translateDb(mod.description, locale)}</p>
                             <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
                               <span>{durationLabel(mod.durationMinutes)}</span>
                               <span>·</span>

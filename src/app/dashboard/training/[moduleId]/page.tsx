@@ -25,6 +25,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { useApi } from "@/hooks/use-api";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 
 type Lesson = {
   title: string;
@@ -357,7 +358,7 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
 
   return (
     <div>
-      <Header title={currentModule.title} />
+      <Header title={translateDb(currentModule.title, locale)} />
       <div className="space-y-6 p-6">
         <Link href="/dashboard/training">
           <Button variant="ghost" size="sm">
@@ -374,8 +375,8 @@ export default function ModulePage({ params }: { params: Promise<{ moduleId: str
                   <div className="mb-4 flex items-center gap-3">
                     <span className="text-3xl">{currentModule.badgeIcon || "📚"}</span>
                     <div>
-                      <h2 className="text-xl font-bold">{currentModule.title}</h2>
-                      <p className="text-sm text-muted-foreground">{currentModule.description}</p>
+                      <h2 className="text-xl font-bold">{translateDb(currentModule.title, locale)}</h2>
+                      <p className="text-sm text-muted-foreground">{translateDb(currentModule.description, locale)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">

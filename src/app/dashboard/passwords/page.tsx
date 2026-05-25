@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { FadeIn } from "@/components/motion";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { useApi } from "@/hooks/use-api";
 
@@ -30,7 +31,7 @@ interface PasswordsResponse {
 }
 
 export default function PasswordsPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { data, loading } = useApi<PasswordsResponse>("/api/passwords");
 
   if (loading) {
@@ -153,7 +154,7 @@ export default function PasswordsPage() {
                           ) : (
                             <AlertTriangle className={`h-4 w-4 shrink-0 ${issue.severity === "high" ? "text-rht-orange" : "text-yellow-500"}`} />
                           )}
-                          <span className="text-sm">{issue.issue}</span>
+                          <span className="text-sm">{translateDb(issue.issue, locale)}</span>
                         </div>
                         <Badge className={`text-[10px] ${sevStyle[issue.severity as keyof typeof sevStyle] || sevStyle.medium}`}>
                           {issue.count} {t("common.employees")}

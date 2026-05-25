@@ -11,6 +11,7 @@ import Link from "next/link";
 import { FadeIn, StaggerContainer, StaggerItem, GlowCard } from "@/components/motion";
 import { motion } from "framer-motion";
 import { useTranslation } from "@/lib/i18n";
+import { translateDb } from "@/lib/db-translations";
 import { useApi } from "@/hooks/use-api";
 
 interface TrainingModule {
@@ -66,7 +67,7 @@ const categoryIcons: Record<string, string> = {
 };
 
 export default function TrainingPage() {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const { data, loading } = useApi<TrainingResponse>("/api/training");
 
   if (loading) {
@@ -143,9 +144,9 @@ export default function TrainingPage() {
                           {difficultyLabel(module.difficulty, t)}
                         </Badge>
                       </div>
-                      <h3 className="mb-1 text-base font-semibold">{module.title}</h3>
+                      <h3 className="mb-1 text-base font-semibold">{translateDb(module.title, locale)}</h3>
                       <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
-                        {module.description || ""}
+                        {translateDb(module.description, locale)}
                       </p>
                       <div className="mb-4 flex items-center gap-4 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1">
