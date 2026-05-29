@@ -1,7 +1,8 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
-export const runtime = "nodejs";
+// Note: middleware s'exécute toujours en Edge runtime — "nodejs" est invalide ici
+// Ne pas ajouter export const runtime = "nodejs" dans ce fichier
 
 const protectedPaths = ["/dashboard", "/employee", "/admin"];
 const publicPaths = ["/", "/login", "/pricing", "/about", "/demo", "/contact", "/legal"];

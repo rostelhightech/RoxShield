@@ -308,7 +308,10 @@ function LoginContent() {
       return;
     }
 
-    router.push(role?.route || "/dashboard");
+    // Priorité : callbackUrl dans l'URL (ex: après expiration de session), puis route du rôle démo, puis /dashboard
+    const callbackUrl = searchParams.get("callbackUrl");
+    const destination = callbackUrl && callbackUrl.startsWith("/") ? callbackUrl : (role?.route || "/dashboard");
+    router.push(destination);
     router.refresh();
   };
 

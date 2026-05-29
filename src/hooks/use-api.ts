@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { signOut } from "next-auth/react";
 
 interface UseApiOptions {
   /** Ne pas fetch automatiquement au mount */
@@ -18,6 +19,7 @@ export function useApi<T = any>(url: string, options?: UseApiOptions): UseApiRes
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(!options?.manual);
   const [error, setError] = useState<string | null>(null);
+  const signingOut = useRef(false);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -25,8 +27,12 @@ export function useApi<T = any>(url: string, options?: UseApiOptions): UseApiRes
     try {
       const res = await fetch(url);
       if (res.status === 401) {
-        // Session expired — redirect to login
-        window.location.href = "/login";
+        // Session expirée — signOut pour effacer le cookie avant de rediriger
+        // Sans ça, le middleware renverrait l'utilisateur vers la page protégée → boucle infinie
+        if (!signingOut.current) {
+          signingOut.current = true;
+          signOut({ callbackUrl: "/login" });
+        }
         return;
       }
       if (!res.ok) {
