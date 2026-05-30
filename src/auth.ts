@@ -1,15 +1,13 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { rateLimit } from "@/lib/rate-limit";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  adapter: PrismaAdapter(db),
+  // PrismaAdapter retiré : inutile avec JWT + Credentials et cause des appels DB
+  // superflus à chaque login (source de timeouts sur Neon free tier).
   session: { strategy: "jwt" },
-  // Requis pour les domaines personnalisés (rostelhightech.com) sans AUTH_URL fixe.
-  // Sans ça, NextAuth v5 rejette silencieusement les POST de credentials → spinner infini.
   trustHost: true,
   pages: {
     signIn: "/login",
