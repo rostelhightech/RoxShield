@@ -8,6 +8,9 @@ import { rateLimit } from "@/lib/rate-limit";
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
+  // Requis pour les domaines personnalisés (rostelhightech.com) sans AUTH_URL fixe.
+  // Sans ça, NextAuth v5 rejette silencieusement les POST de credentials → spinner infini.
+  trustHost: true,
   pages: {
     signIn: "/login",
   },
