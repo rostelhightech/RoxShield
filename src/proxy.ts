@@ -1,17 +1,16 @@
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
-// Note: middleware s'exécute toujours en Edge runtime — "nodejs" est invalide ici
-// Ne pas ajouter export const runtime = "nodejs" dans ce fichier
+// Next.js 16 : le fichier s'appelle proxy.ts (middleware.ts est déprécié)
+// Le proxy s'exécute en Node.js runtime par défaut — pas besoin de "export const runtime"
 
 const protectedPaths = ["/dashboard", "/employee", "/admin"];
-const publicPaths = ["/", "/login", "/pricing", "/about", "/demo", "/contact", "/legal"];
 
-export default auth((req) => {
+export const proxy = auth((req) => {
   const { pathname } = req.nextUrl;
   const isAuthenticated = !!req.auth;
 
-  // Check if the path is protected
+  // Paths protégés — rediriger vers login si non authentifié
   const isProtected = protectedPaths.some((p) => pathname.startsWith(p));
 
   if (isProtected && !isAuthenticated) {
@@ -20,7 +19,7 @@ export default auth((req) => {
     return NextResponse.redirect(loginUrl);
   }
 
-  // Redirect logged-in users from login page to their home
+  // Rediriger les utilisateurs connectés hors de la page login
   if (pathname === "/login" && isAuthenticated) {
     const role = (req.auth as any)?.user?.role;
     if (role === "SUPER_ADMIN") {
@@ -32,24 +31,24 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/dashboard", req.url));
   }
 
-  // Role-based access control
+  // Contrôle d'accès par rôle
   if (isAuthenticated) {
     const role = (req.auth as any)?.user?.role;
 
-    // /admin — only SUPER_ADMIN
+    // /admin — SUPER_ADMIN uniquement
     if (pathname.startsWith("/admin") && role !== "SUPER_ADMIN") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
 
-    // /dashboard — ADMIN and SUPER_ADMIN only (not employees)
-    // Exception: employees can access /dashboard/training/* for learning modules
+    // /dashboard — ADMIN et SUPER_ADMIN uniquement
+    // Exception : les employés peuvent accéder à /dashboard/training/*
     if (pathname.startsWith("/dashboard") && role === "EMPLOYEE") {
       if (!pathname.startsWith("/dashboard/training")) {
         return NextResponse.redirect(new URL("/employee", req.url));
       }
     }
 
-    // /employee — EMPLOYEE only (admins go to dashboard)
+    // /employee — EMPLOYEE uniquement
     if (pathname.startsWith("/employee") && role !== "EMPLOYEE") {
       return NextResponse.redirect(new URL("/dashboard", req.url));
     }
